@@ -4,11 +4,12 @@ import { useRouter } from 'next/router';
 
 function Header() {
     const router = useRouter();
-    return <Container maxWidth="xl" >
+    return <Container maxWidth="lg" >
         <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
+            gap={2}
             height={{ md: '130px', xs: '65px' }}
         >
             <Box
@@ -36,7 +37,7 @@ function Header() {
 }
 
 const Footer = () => (
-    <Container maxWidth="xl" >
+    <Container maxWidth="lg" >
         <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -96,9 +97,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Header />
         <CssBaseline />
         <Container></Container>
-        <Container maxWidth="xl" sx={{
-            minHeight: 'calc(100vh - 130px)',
-        }} >
+        <Container maxWidth="lg">
             {children}
         </Container>
         <Divider />
