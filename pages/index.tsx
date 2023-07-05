@@ -58,7 +58,7 @@ export default function Home() {
           <Box sx={{ display: 'flex', flexDirection: { xs: "column", lg: "row" }, gap: { xs: 1, md: 3 } }}>
             <Button
               onClick={() => {
-                router.push('/donate');
+                router.push('/create');
               }}
               sx={{
                 width: '208px',

@@ -242,7 +242,10 @@ function formatTimestamp(timestamp: number) {
 }
 export default function Dashboard() {
   const { address } = useAccount();
-  console.log(address)
+  const [addressStr, setAddressStr] = useState<string>('');
+  useEffect(() => {
+    setAddressStr(address as string)
+  }, [address])
 
   const coinType: ChainList = {
     '80001': {
@@ -418,7 +421,6 @@ export default function Dashboard() {
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
-      // onClick={handleClose}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -427,10 +429,14 @@ export default function Dashboard() {
           Cumulative Donation
         </Typography>
         <Stack direction={'row'}>
-          <Typography variant="body2" color="#858686" mr="11px">
-            {address}
+          <Typography variant="body2" color="#858686" sx={{
+            wordBreak: 'break-all',
+            display: "flex"
+          }}>
+            {addressStr}
+            <Box sx={{ display: 'inline-block', ml: '10px' }} component="img" src="/icons/copy2.svg" />
+
           </Typography>
-          <Box component="img" src="/icons/copy2.svg" />
         </Stack>
         {Object.keys(total).map((key, index) => {
           return (

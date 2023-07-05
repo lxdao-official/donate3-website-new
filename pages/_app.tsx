@@ -18,6 +18,7 @@ import {
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import Script from 'next/script';
 
 const { chains, publicClient } = configureChains(
   [mainnet, polygon, optimism, arbitrum, zora],
@@ -63,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <RainbowKitProvider chains={chains}>
           {/* <CssBaseline /> */}
           <Component {...pageProps} />
+          <Script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.1/dist/webpack/bundle.js" />
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>
