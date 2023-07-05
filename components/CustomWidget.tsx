@@ -220,7 +220,7 @@ export default function CustomWidget() {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         <Box>
           <Typography variant="h4" color="#44443F">
-            Custom Widget
+            Create Custom Widget
           </Typography>
           <Typography variant="body1" color="#858686">
             Through simple settings, you can produce a piece of code and put

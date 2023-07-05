@@ -1,5 +1,5 @@
 import SettingLayout from '@/components/SettingLayout';
-
-export default function Dashboard() {
-    return < SettingLayout > 123</SettingLayout >
+import Dashboard from '@/components/Dashboard';
+export default function DashboardPage() {
+    return < SettingLayout ><Dashboard /></SettingLayout >
 }
