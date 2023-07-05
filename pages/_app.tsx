@@ -1,5 +1,6 @@
 // import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -38,11 +39,32 @@ const wagmiConfig = createConfig({
   publicClient
 })
 
+const theme = createTheme({
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        // maxWidthMd: {
+        //   maxWidth: 320,
+        // },
+        maxWidthLg: {
+          maxWidth: 1300,
+        },
+      },
+    },
+  },
+});
+
+
+
 export default function App({ Component, pageProps }: AppProps) {
-  return <WagmiConfig config={wagmiConfig}>
-    <RainbowKitProvider chains={chains}>
-      {/* <CssBaseline /> */}
-      <Component {...pageProps} />
-    </RainbowKitProvider>
-  </WagmiConfig>
+  return (
+    <ThemeProvider theme={theme}>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains}>
+          {/* <CssBaseline /> */}
+          <Component {...pageProps} />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </ThemeProvider>
+  )
 }

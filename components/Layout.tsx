@@ -1,10 +1,17 @@
-import { Box, Container, CssBaseline, Divider, Typography, Link } from '@mui/material';
+import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@mui/material';
 import { ConnectBtn } from '@/components/ConnectBtn';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+
+function MyContainer({ children }: { children: React.ReactNode }) {
+    return < Container maxWidth={false} sx={{ maxWidth: '1320px' }}>
+        {children}
+    </Container >
+}
 
 function Header() {
     const router = useRouter();
-    return <Container maxWidth="lg" >
+    return <MyContainer>
         <Box
             display="flex"
             alignItems="center"
@@ -33,11 +40,11 @@ function Header() {
                 <ConnectBtn />
             </Box>
         </Box>
-    </Container>
+    </MyContainer>
 }
 
 const Footer = () => (
-    <Container maxWidth="lg" >
+    <MyContainer >
         <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -86,21 +93,23 @@ const Footer = () => (
             </Box>
         </Box>
 
-    </Container >
+    </MyContainer >
 );
-export function Layout({ children }: { children: React.ReactNode }) {
+
+
+export function Layout({ children, bgColor = 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);' }: { children: React.ReactNode, bgColor?: string }) {
     return <Box
         sx={{
-            background: 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);',
+            background: bgColor,
         }}
     >
         <Header />
         <CssBaseline />
-        <Container></Container>
-        <Container maxWidth="lg">
+        <MyContainer>
             {children}
-        </Container>
+        </MyContainer>
         <Divider />
         <Footer />
     </Box >
+
 }

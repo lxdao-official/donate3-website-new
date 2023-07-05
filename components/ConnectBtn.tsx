@@ -35,14 +35,14 @@ export const ConnectBtn = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <Donate3Btn onClick={openConnectModal}>
+                  <Donate3Btn sx={{ height: '43px' }} onClick={openConnectModal}>
                     Connect Wallet
                   </Donate3Btn>
                 );
               }
               if (chain.unsupported) {
                 return (
-                  <Donate3Btn onClick={openChainModal}>
+                  <Donate3Btn sx={{ height: '43px' }} onClick={openChainModal}>
                     Wrong network
                   </Donate3Btn>
                 );
@@ -76,7 +76,7 @@ export const ConnectBtn = () => {
                     )}
                     {chain.name}
                   </Donate3Btn> */}
-                  <Donate3Btn onClick={openAccountModal}>
+                  <Donate3Btn sx={{ height: '43px' }} onClick={openAccountModal}>
                     {account.displayName}
                     {/* {account.displayBalance
                       ? ` (${account.displayBalance})`
