@@ -12,6 +12,8 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   mainnet,
   polygon,
+  polygonMumbai,
+  goerli,
   optimism,
   arbitrum,
   zora,
@@ -21,7 +23,8 @@ import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, zora],
+  [goerli, polygon, polygonMumbai],
+  // [mainnet, polygon, optimism, arbitrum, zora],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider()

@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@mui/material';
 import { ConnectBtn } from '@/components/ConnectBtn';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -98,19 +99,60 @@ const Footer = () => (
 );
 
 
-export function Layout({ children, bgColor = 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);' }: { children: React.ReactNode, bgColor?: string }) {
-    return <Box
-        sx={{
-            background: bgColor,
-        }}
-    >
-        <Header />
-        <CssBaseline />
-        <MyContainer>
-            {children}
-        </MyContainer>
-        <Divider />
-        <Footer />
-    </Box >
+export function Layout({ children, title = "Donate3 - Make donate in web3 so easy", bgColor = 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);' }: { children: React.ReactNode, title?: string, bgColor?: string }) {
+    return <>
+        <Head>
+            <meta charSet="utf-8" />
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            />
+            <link rel="icon" href="/icons/favicon.png" />
+            <title>{title}</title>
+            <meta
+                name="description"
+                content="LXDAO is an R&amp;D-focused DAO in Web3.
+Our mission: Bringing together buidlers to buidl and maintain LX projects for Web3, in a sustainable manner."/>
+            <meta property="og:locale" content="en_US" />
+            <meta property="og:type" content="website" />
+            <meta property="og:image" content="/images/logo.svg" />
+            <meta property="og:title" content={title} />
+            <meta
+                property="og:description"
+                content="Donate3 is a simple and convenient multi-chain multi-currency donation method that aggregates donor and recipient information. It is a highly scalable public welfare project and is committed to issuing the donation standard agreement in Web3, becoming the infrastructure to help the construction of web3 public goods."
+            />
+            <meta property="og:url" content="https://lxdao.io/" />
+
+            {/* Global Site Tag (gtag.js) - Google Analytics */}
+            <script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+            />
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+                page_path: window.location.pathname,
+              });
+            `,
+                }}
+            />
+        </Head>
+        <Box
+            sx={{
+                background: bgColor,
+            }}
+        >
+            <Header />
+            <CssBaseline />
+            <MyContainer>
+                {children}
+            </MyContainer>
+            <Divider />
+            <Footer />
+        </Box ></>
 
 }
