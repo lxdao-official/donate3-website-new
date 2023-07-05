@@ -18,6 +18,7 @@ function Header() {
             justifyContent="space-between"
             gap={2}
             height={{ md: '130px', xs: '65px' }}
+            mb={{ xs: '20px', md: '0px' }}
         >
             <Box
                 onClick={() => {
@@ -40,7 +41,7 @@ function Header() {
                 <ConnectBtn />
             </Box>
         </Box>
-    </MyContainer>
+    </MyContainer >
 }
 
 const Footer = () => (
