@@ -1,23 +1,12 @@
 // import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import '@rainbow-me/rainbowkit/styles.css';
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-} from '@rainbow-me/rainbowkit';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import {
-  mainnet,
-  polygon,
-  polygonMumbai,
-  goerli,
-  optimism,
-  arbitrum,
-  zora,
-} from 'wagmi/chains';
+import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
@@ -27,21 +16,21 @@ const { chains, publicClient } = configureChains(
   // [mainnet, polygon, optimism, arbitrum, zora],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
-    publicProvider()
+    publicProvider(),
   ]
 );
 
 const { connectors } = getDefaultWallets({
   appName: 'Donate3',
   projectId: '489bba152ca535ae826ee62070ffcdfc',
-  chains
+  chains,
 });
 
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
-  publicClient
-})
+  publicClient,
+});
 
 const theme = createTheme({
   components: {
@@ -58,8 +47,6 @@ const theme = createTheme({
   },
 });
 
-
-
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
@@ -71,5 +58,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>
-  )
+  );
 }

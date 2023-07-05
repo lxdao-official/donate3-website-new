@@ -3,22 +3,11 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 
-import {
-  Box,
-  FormControl,
-  InputBase,
-  Radio,
-  Tooltip,
-  Typography,
-  styled,
-} from '@mui/material';
+import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled } from '@mui/material';
 
 import Donate3Btn from './Donate3Btn';
 
-function throttle<F extends (...args: any[]) => void>(
-  func: F,
-  wait: number,
-): (this: ThisParameterType<F>, ...args: Parameters<F>) => void {
+function throttle<F extends (...args: any[]) => void>(func: F, wait: number): (this: ThisParameterType<F>, ...args: Parameters<F>) => void {
   let timer: NodeJS.Timeout | null = null;
 
   return function (this: ThisParameterType<F>, ...args: Parameters<F>) {
@@ -93,10 +82,7 @@ const BpIcon = styled('span')(({ theme }) => ({
   },
   'input:disabled ~ &': {
     boxShadow: 'none',
-    background:
-      theme.palette.mode === 'dark'
-        ? 'rgba(57,75,89,.5)'
-        : 'rgba(206,217,224,.5)',
+    background: theme.palette.mode === 'dark' ? 'rgba(57,75,89,.5)' : 'rgba(206,217,224,.5)',
   },
 }));
 
@@ -116,15 +102,7 @@ const BpCheckedIcon = styled(BpIcon)({
 
 // Inspired by blueprintjs
 function BpRadio(props: any) {
-  return (
-    <Radio
-      disableRipple
-      color="default"
-      checkedIcon={<BpCheckedIcon />}
-      icon={<BpIcon />}
-      {...props}
-    />
-  );
+  return <Radio disableRipple color="default" checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} {...props} />;
 }
 
 function RadioBox({ onChange, value, title, imgurl, current }: any) {
@@ -152,7 +130,6 @@ function RadioBox({ onChange, value, title, imgurl, current }: any) {
     </Box>
   );
 }
-
 
 export default function CustomWidget() {
   const { address } = useAccount();
@@ -186,19 +163,11 @@ export default function CustomWidget() {
   }, 300);
 
   const [url, setUrl] = useState(
-    `<div data-donate3-type="${config.type ? 'embed' : 'float'
-    }" data-donate3-color="${config.color}" data-donate3-title="${config.name
-    }" data-donate3-to-address="${config.address
-    }"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.30/dist/webpack/bundle.js "></script>`,
+    `<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.30/dist/webpack/bundle.js "></script>`
   );
 
   useEffect(() => {
-    setUrl(
-      `<div data-donate3-type="${config.type ? 'embed' : 'float'
-      }" data-donate3-color="${config.color}" data-donate3-title="${config.name
-      }" data-donate3-to-address="${config.address
-      }"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script>`,
-    );
+    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script>`);
   }, [config]);
 
   useEffect(() => {
@@ -210,22 +179,22 @@ export default function CustomWidget() {
   }, [address]);
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: { xs: "column-reverse", md: "row" },
-      justifyContent: { xs: "start", md: "space-between" },
-      alignItems: { xs: "center", md: 'start' },
-      gap: 4
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column-reverse', md: 'row' },
+        justifyContent: { xs: 'start', md: 'space-between' },
+        alignItems: { xs: 'center', md: 'start' },
+        gap: 4,
+      }}
+    >
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         <Box>
           <Typography variant="h4" color="#44443F">
             Create Custom Widget
           </Typography>
           <Typography variant="body1" color="#858686">
-            Through simple settings, you can produce a piece of code and put
-            the four seas, and anyone can send you a cross-chain
-            cryptocurrency.
+            Through simple settings, you can produce a piece of code and put the four seas, and anyone can send you a cross-chain cryptocurrency.
           </Typography>
         </Box>
         <Controller
@@ -234,10 +203,7 @@ export default function CustomWidget() {
           rules={{ required: true }}
           render={({ field: { onChange, value } }) => {
             return (
-              <FormInput
-                title="Stylein your website"
-                error={errors.type?.type}
-              >
+              <FormInput title="Stylein your website" error={errors.type?.type}>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                   <RadioBox
                     onChange={(e: number) => {
@@ -389,10 +355,7 @@ export default function CustomWidget() {
                 fontWeight: '500',
               }}
             >
-              {`<div data-donate3-type="${config.type ? 'embed' : 'float'
-                }" data-donate3-color="${config.color}" data-donate3-title="${config.name
-                }" data-donate3-to-address="${config.address
-                }"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script>`}
+              {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script>`}
             </Box>
           </FormInput>
           <Box display="flex" gap={2}>
@@ -408,7 +371,7 @@ export default function CustomWidget() {
                     },
                     function (e) {
                       console.error(e);
-                    },
+                    }
                   );
                 }}
               >
@@ -434,15 +397,14 @@ export default function CustomWidget() {
                 fontWeight: '500',
               }}
             >
-              {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split("#")[1]}&title=${config.name}`}
+              {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}`}
             </Box>
           </FormInput>
           <Box display="flex" gap={2}>
             <Tooltip title={copied && 'copied!'}>
               <Donate3Btn
                 onClick={() => {
-
-                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split("#")[1]}&title=${config.name}`
+                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}`;
                   navigator.clipboard.writeText(link).then(
                     function () {
                       setCopied(true);
@@ -452,7 +414,7 @@ export default function CustomWidget() {
                     },
                     function (e) {
                       console.error(e);
-                    },
+                    }
                   );
                 }}
               >
@@ -461,11 +423,11 @@ export default function CustomWidget() {
               </Donate3Btn>
             </Tooltip>
           </Box>
-
         </Box>
       </Box>
-      <Box sx={{ position: "relative", minWidth: { xs: '280px', sm: '400px' }, height: { xs: "490px", sm: '700px' } }}>
-        <Box component="iframe"
+      <Box sx={{ position: 'relative', minWidth: { xs: '280px', sm: '400px' }, height: { xs: '490px', sm: '700px' } }}>
+        <Box
+          component="iframe"
           sx={{
             top: { xs: '-105px', sm: 0 },
             left: { xs: '-60px', sm: 0 },
@@ -475,18 +437,13 @@ export default function CustomWidget() {
             height: '700px',
             borderRadius: '22px',
             position: 'absolute',
-            scale: { xs: "0.7", sm: "1" },
+            scale: { xs: '0.7', sm: '1' },
           }}
           srcDoc={`<html><head></head><body style="padding-top: 30px;"><div 
           data-donate3-demo="true"
-          data-donate3-type="${config.type ? 'embed' : 'float'
-            }" data-donate3-color="${config.color}" data-donate3-title="${config.name
-            }" data-donate3-to-address="${config.address
-            }"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script></body></html>`}
+          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script></body></html>`}
         ></Box>
       </Box>
-
-
     </Box>
   );
 }

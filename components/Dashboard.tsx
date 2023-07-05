@@ -1,30 +1,17 @@
-'use client'
+'use client';
 
 import type { NextPage } from 'next';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import Donate3Btn from './Donate3Btn';
-import xlsx, { IJsonSheet } from "json-as-xlsx"
+import xlsx, { IJsonSheet } from 'json-as-xlsx';
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import {
-  Box,
-  Grid,
-  Paper,
-  Stack,
-  TableFooter,
-  TablePagination,
-  Tooltip,
-  Link,
-  Typography,
-  styled,
-  Backdrop,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Grid, Paper, Stack, TableFooter, TablePagination, Tooltip, Link, Typography, styled, Backdrop, CircularProgress } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -53,21 +40,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function formatData(
-  chainType: string = '1',
-  coinType: number = 0,
-  createTime: number[] = [],
-  fromAddress: string,
-  id: string,
-  message: string = '0',
-  status: number = 1,
-  toAddress: string,
-  updateTime: number[] = [],
-  usdValue: string = '0',
-  userId: string = '',
-  value: number = 0,
-  hash: string = '',
-) {
+function formatData(chainType: string = '1', coinType: number = 0, createTime: number[] = [], fromAddress: string, id: string, message: string = '0', status: number = 1, toAddress: string, updateTime: number[] = [], usdValue: string = '0', userId: string = '', value: number = 0, hash: string = '') {
   return {
     chainType,
     coinType,
@@ -129,47 +102,18 @@ function TablePaginationActions(props: any) {
 
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
+      <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label="first page">
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === 'rtl' ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
-      <input
-        style={{ width: '2rem', textAlign: 'center' }}
-        value={pagei + 1}
-        onChange={handlePageInput}
-        onKeyDown={handlePageInputConfirm}
-      ></input>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === 'rtl' ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
+      <input style={{ width: '2rem', textAlign: 'center' }} value={pagei + 1} onChange={handlePageInput} onKeyDown={handlePageInputConfirm}></input>
+      <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="next page">
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
 
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
+      <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="last page">
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
@@ -218,15 +162,7 @@ interface TotalList {
 
 function convertToTimestamp(dateArray: number[]): number {
   const [year, month, day, hours, minutes, seconds, milliseconds] = dateArray;
-  const date = new Date(
-    year,
-    month - 1,
-    day,
-    hours,
-    minutes,
-    seconds,
-    milliseconds,
-  );
+  const date = new Date(year, month - 1, day, hours, minutes, seconds, milliseconds);
   return date.getTime();
 }
 function formatTimestamp(timestamp: number) {
@@ -244,8 +180,8 @@ export default function Dashboard() {
   const { address } = useAccount();
   const [addressStr, setAddressStr] = useState<string>('');
   useEffect(() => {
-    setAddressStr(address as string)
-  }, [address])
+    setAddressStr(address as string);
+  }, [address]);
 
   const coinType: ChainList = {
     '80001': {
@@ -297,8 +233,7 @@ export default function Dashboard() {
   const [rows, setRows] = useState<DonateDetail[]>([]);
   // let rows: any[] = [];
 
-  const emptyRows =
-    page >= 0 ? Math.max(0, (1 + page) * perPage - rows.length) : 0;
+  const emptyRows = page >= 0 ? Math.max(0, (1 + page) * perPage - rows.length) : 0;
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
@@ -308,30 +243,13 @@ export default function Dashboard() {
     setPage(0);
   };
 
-
   //get params from url
 
   const readData = async () => {
-    const data = await API.get(
-      `/api/v1/donate/queryDonateDetailsByParam?pageNo=${page}&pageSize=${perPage}&toAddress=${address}`,
-    );
+    const data = await API.get(`/api/v1/donate/queryDonateDetailsByParam?pageNo=${page}&pageSize=${perPage}&toAddress=${address}`);
     const res: DonateDetail[] = data?.data?.result?.records;
     const tmp = res.map((value) => {
-      const formated = formatData(
-        value?.chainType,
-        value?.coinType,
-        value?.createTime,
-        value?.fromAddress,
-        value?.id,
-        value?.message,
-        value?.status,
-        value?.toAddress,
-        value?.updateTime,
-        value?.usdValue,
-        value?.userId,
-        value?.value,
-        value?.hash,
-      );
+      const formated = formatData(value?.chainType, value?.coinType, value?.createTime, value?.fromAddress, value?.id, value?.message, value?.status, value?.toAddress, value?.updateTime, value?.usdValue, value?.userId, value?.value, value?.hash);
 
       return formated;
     });
@@ -341,7 +259,7 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       if (!address) {
-        return
+        return;
       }
       setOpen(true);
       const tmp = await readData();
@@ -356,7 +274,7 @@ export default function Dashboard() {
       const initialTotalList: TotalList = {
         '80001': 0.0,
         '137': 0.0,
-        '5': 0.0
+        '5': 0.0,
       };
       const totalc = rows.reduce((pre, cur) => {
         pre[cur.chainType] = pre[cur.chainType] + cur.value;
@@ -369,12 +287,9 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(
-          `https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API_KEY}`,
-          {
-            method: 'GET',
-          },
-        );
+        const res = await fetch(`https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API_KEY}`, {
+          method: 'GET',
+        });
         const data = await res.json();
         setPrice(data.result.ethusd);
       } catch (error) {
@@ -385,43 +300,40 @@ export default function Dashboard() {
   const downloadFile = () => {
     let data = [
       {
-        sheet: "DonationDetail",
+        sheet: 'DonationDetail',
         columns: [
-          { label: "chainId", value: "chainType" },
-          { label: "chain", value: (row: any) => coinType[row.chainType].name },
-          { label: "symbol", value: (row: any) => coinType[row.chainType].coin[0].name },
-          { label: "createTime", value: (row: any) => formatTimestamp(convertToTimestamp(row.createTime)) },
-          { label: "message", value: "message" },
-          { label: "tx", value: "hash" },
-          { label: "from", value: "fromAddress" }, // Top level data
+          { label: 'chainId', value: 'chainType' },
+          { label: 'chain', value: (row: any) => coinType[row.chainType].name },
+          { label: 'symbol', value: (row: any) => coinType[row.chainType].coin[0].name },
+          { label: 'createTime', value: (row: any) => formatTimestamp(convertToTimestamp(row.createTime)) },
+          { label: 'message', value: 'message' },
+          { label: 'tx', value: 'hash' },
+          { label: 'from', value: 'fromAddress' }, // Top level data
         ],
         content: rows,
       },
       {
-        sheet: "Children",
+        sheet: 'Children',
         columns: [
-          { label: "User", value: "user" }, // Top level data
-          { label: "Age", value: "age", format: '# "years"' }, // Custom format
-          { label: "Phone", value: (row: any) => row?.more?.phone ?? "" }, // Run functions
+          { label: 'User', value: 'user' }, // Top level data
+          { label: 'Age', value: 'age', format: '# "years"' }, // Custom format
+          { label: 'Phone', value: (row: any) => row?.more?.phone ?? '' }, // Run functions
         ],
         content: [
-          { user: "Manuel", age: 16, more: { phone: "99999999" } },
-          { user: "Ana", age: 17, more: { phone: "87654321" } },
+          { user: 'Manuel', age: 16, more: { phone: '99999999' } },
+          { user: 'Ana', age: 17, more: { phone: '87654321' } },
         ],
       },
-    ]
+    ];
     let settings = {
-      fileName: "MySpreadsheet",
-    }
-    xlsx(data as IJsonSheet[], settings)
-  }
+      fileName: 'MySpreadsheet',
+    };
+    xlsx(data as IJsonSheet[], settings);
+  };
 
   return (
     <Grid item xs={8} mb="40px">
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-      >
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <Stack mt="30px">
@@ -429,24 +341,22 @@ export default function Dashboard() {
           Cumulative Donation
         </Typography>
         <Stack direction={'row'}>
-          <Typography variant="body2" color="#858686" sx={{
-            wordBreak: 'break-all',
-            display: "flex"
-          }}>
+          <Typography
+            variant="body2"
+            color="#858686"
+            sx={{
+              wordBreak: 'break-all',
+              display: 'flex',
+            }}
+          >
             {addressStr}
             <Box sx={{ display: 'inline-block', ml: '10px' }} component="img" src="/icons/copy2.svg" />
-
           </Typography>
         </Stack>
         {Object.keys(total).map((key, index) => {
           return (
             <Stack key={index} direction="row" mt="10px" alignItems="center">
-              <Box
-                component="img"
-                src={coinType[key]?.icon}
-                height="24px"
-                mr="6px"
-              />
+              <Box component="img" src={coinType[key]?.icon} height="24px" mr="6px" />
               <Typography fontSize="28px" fontWeight="600" lineHeight="34px">
                 {total[key].toFixed(4)}
               </Typography>
@@ -455,18 +365,18 @@ export default function Dashboard() {
         })}
       </Stack>
       <Stack mt="60px">
-        <Stack
-          justifyContent="space-between"
-          alignItems="center"
-          direction="row"
-          mb="26px"
-        >
+        <Stack justifyContent="space-between" alignItems="center" direction="row" mb="26px">
           <Typography color="#3E4343" fontWeight="600">
             Details
           </Typography>
-          <Donate3Btn sx={{
-            width: '100px',
-          }} onClick={downloadFile}>Export</Donate3Btn>
+          <Donate3Btn
+            sx={{
+              width: '100px',
+            }}
+            onClick={downloadFile}
+          >
+            Export
+          </Donate3Btn>
         </Stack>
         <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -483,20 +393,16 @@ export default function Dashboard() {
             <TableBody>
               {(perPage > 0
                 ? rows
-                  .filter((row) => {
-                    const chainIds = Object.keys(coinType);
-                    if (chainIds.includes(row?.chainType)) {
-                      return row;
-                    }
-                  })
-                  .sort((a, b) => {
-                    return (
-                      (sort ? 1 : -1) *
-                      (convertToTimestamp(a.createTime) -
-                        convertToTimestamp(b.createTime))
-                    );
-                  })
-                  .slice(page * perPage, page * perPage + perPage)
+                    .filter((row) => {
+                      const chainIds = Object.keys(coinType);
+                      if (chainIds.includes(row?.chainType)) {
+                        return row;
+                      }
+                    })
+                    .sort((a, b) => {
+                      return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
+                    })
+                    .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateDetail, index) => (
                 <TableRow
@@ -508,101 +414,47 @@ export default function Dashboard() {
                   }}
                 >
                   <StyledTableCell align="center" component="th" scope="row">
-                    <Stack
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                      gap={1.5}
-                    >
+                    <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
                       {/* <Box width={40} component="img" src={row?.avatar} /> */}
                       <Tooltip title={row?.fromAddress} placement="bottom">
-                        <Link
-                          underline="none"
-                          href={
-                            coinType[row?.chainType as string]?.coin[0]
-                              .explorer + row?.fromAddress
-                          }
-                          target="_blank"
-                        >
-                          <Typography>
-                            {row?.fromAddress.slice(0, 6) +
-                              '...' +
-                              row?.fromAddress.slice(-5, -1)}
-                          </Typography>
+                        <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + row?.fromAddress} target="_blank">
+                          <Typography>{row?.fromAddress.slice(0, 6) + '...' + row?.fromAddress.slice(-5, -1)}</Typography>
                         </Link>
                       </Tooltip>
                     </Stack>
                   </StyledTableCell>
 
                   <StyledTableCell align="center" component="th" scope="row">
-                    <Stack
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                      gap={1.5}
-                    >
-                      <Typography>
-
-                        {formatTimestamp(convertToTimestamp(row?.createTime))}
-                      </Typography>
+                    <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
+                      <Typography>{formatTimestamp(convertToTimestamp(row?.createTime))}</Typography>
                     </Stack>
                   </StyledTableCell>
 
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
-                      <Typography
-                        whiteSpace="pre"
-                        align="right"
-                        lineHeight={'14px'}
-                      >
-                        {`${row?.value} ${coinType[row?.chainType as string]?.coin[
-                          row?.coinType as number
-                        ]?.name
-                          }\n`}
+                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                        {`${row?.value} ${coinType[row?.chainType as string]?.coin[row?.coinType as number]?.name}\n`}
                       </Typography>
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Stack direction="row" gap={1.5} justifyContent="center">
-                      <Box
-                        width="24px"
-                        component={'img'}
-                        src={coinType[row?.chainType as string]?.icon}
-                      />
-                      <Typography>
-                        {coinType[row?.chainType as string]?.name}
-                      </Typography>
+                      <Box width="24px" component={'img'} src={coinType[row?.chainType as string]?.icon} />
+                      <Typography>{coinType[row?.chainType as string]?.name}</Typography>
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
-                      <Typography
-                        whiteSpace="pre"
-                        align="right"
-                        lineHeight={'14px'}
-                      >
+                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
                         {row?.message}
                       </Typography>
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
-                      <Typography
-                        whiteSpace="pre"
-                        align="right"
-                        lineHeight={'14px'}
-                      >
-                        <Link
-                          underline="none"
-                          href={
-                            coinType[row?.chainType as string]?.coin[0]
-                              .explorer + row?.hash
-                          }
-                          target="_blank"
-                        >
-                          {row?.hash.slice(0, 5) +
-                            '...' +
-                            row?.hash.slice(-5, -1)}
+                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                        <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + row?.hash} target="_blank">
+                          {row?.hash.slice(0, 5) + '...' + row?.hash.slice(-5, -1)}
                         </Link>
                       </Typography>
                     </Stack>
@@ -639,4 +491,4 @@ export default function Dashboard() {
       </Stack>
     </Grid>
   );
-};
+}

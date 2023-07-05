@@ -1,7 +1,5 @@
 export const formatAddress = (address) => {
-  return `${address.substring(0, 6)}...${address.substring(
-    address.length - 4
-  )}`;
+  return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
 };
 
 export const scrollToSection = (id, offset = 0) => {
@@ -25,10 +23,7 @@ export const shuffle = (array) => {
     currentIndex--;
 
     // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
   }
 
   return array;
@@ -68,13 +63,9 @@ export const removeLocalStorage = (name) => {
 };
 
 export function getEtherScanDomain() {
-  return process.env.NEXT_PUBLIC_CHAIN_ID === '1'
-    ? 'etherscan.io'
-    : 'rinkeby.etherscan.io';
+  return process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? 'etherscan.io' : 'rinkeby.etherscan.io';
 }
 
 export function getOpenSeaDomain() {
-  return process.env.NEXT_PUBLIC_CHAIN_ID === '1'
-    ? 'opensea.io'
-    : 'testnets.opensea.io';
+  return process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? 'opensea.io' : 'testnets.opensea.io';
 }

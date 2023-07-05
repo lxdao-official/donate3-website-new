@@ -1,11 +1,11 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import Image from 'next/image';
+import { Inter } from 'next/font/google';
 import { Container, Button, Box, Typography, CssBaseline, Link, Divider, List } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Layout } from '@/components/Layout';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 enum supportList {
   ethereum = 'ethereum',
   polygon = 'polygon',
@@ -52,10 +52,9 @@ export default function Home() {
               mb: { xs: '30px', lg: '100px' },
             }}
           >
-            Create a piece of code, or a link, posted anywhere, anyone can
-            initiate a donation to you through any EVM compatibility chain
+            Create a piece of code, or a link, posted anywhere, anyone can initiate a donation to you through any EVM compatibility chain
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: { xs: "column", lg: "row" }, gap: { xs: 1, md: 3 } }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: { xs: 1, md: 3 } }}>
             <Button
               onClick={() => {
                 router.push('/create');
@@ -77,7 +76,9 @@ export default function Home() {
               Create One
             </Button>
             <Button
-              onClick={() => { window.location.href = '/demo' }}
+              onClick={() => {
+                window.location.href = '/demo';
+              }}
               sx={{
                 width: '208px',
                 height: '48px',
@@ -108,15 +109,7 @@ export default function Home() {
             </Typography>
             <List sx={{ display: 'flex', flexDirection: 'row' }}>
               {Object.keys(supportList).map((item) => {
-                return (
-                  <Box
-                    key={item}
-                    component="img"
-                    title={item}
-                    src={`icons/support/${item}.svg`}
-                    sx={{ mr: 1 }}
-                  />
-                );
+                return <Box key={item} component="img" title={item} src={`icons/support/${item}.svg`} sx={{ mr: 1 }} />;
               })}
             </List>
           </Box>
@@ -130,8 +123,7 @@ export default function Home() {
             height: { xs: '212px', sm: '310px', md: '580px' },
           }}
         />
-
       </Box>
     </Layout>
-  )
+  );
 }
