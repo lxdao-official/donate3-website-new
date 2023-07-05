@@ -277,7 +277,10 @@ export default function Dashboard() {
         '5': 0.0,
       };
       const totalc = rows.reduce((pre, cur) => {
-        pre[cur.chainType] = pre[cur.chainType] + cur.value;
+        if (!Object.keys(initialTotalList).includes(cur.chainType)) {
+          return pre;
+        }
+        pre[cur.chainType] = pre[cur.chainType] || 0 + cur.value;
         return pre;
       }, initialTotalList);
       setTotal(totalc);
@@ -393,16 +396,16 @@ export default function Dashboard() {
             <TableBody>
               {(perPage > 0
                 ? rows
-                    .filter((row) => {
-                      const chainIds = Object.keys(coinType);
-                      if (chainIds.includes(row?.chainType)) {
-                        return row;
-                      }
-                    })
-                    .sort((a, b) => {
-                      return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
-                    })
-                    .slice(page * perPage, page * perPage + perPage)
+                  .filter((row) => {
+                    const chainIds = Object.keys(coinType);
+                    if (chainIds.includes(row?.chainType)) {
+                      return row;
+                    }
+                  })
+                  .sort((a, b) => {
+                    return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
+                  })
+                  .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateDetail, index) => (
                 <TableRow
