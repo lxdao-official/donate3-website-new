@@ -3,7 +3,7 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 
-import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled } from '@mui/material';
+import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled, Divider } from '@mui/material';
 
 import Donate3Btn from './Donate3Btn';
 

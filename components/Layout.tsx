@@ -3,6 +3,7 @@ import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@
 import { ConnectBtn } from '@/components/ConnectBtn';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+import LXDAOFooter from './LXDAOFooter';
 
 function MyContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -26,7 +27,13 @@ function Header() {
         >
           <Box component="img" src="/logo.svg" />
           {/* <Image src="/logo.svg" alt='' width={50} height={50} /> */}
-          <Typography variant="h5" paddingLeft="14px" sx={{ lineHeight: '50px' }}>
+          <Typography variant="h5" paddingLeft="14px" sx={{
+            lineHeight: '50px',
+            fontWeight: 500,
+            ":hover": {
+              textShadow: '2px 2px  #bdd75d',
+            }
+          }}>
             Donate3
           </Typography>
         </Box>
@@ -136,7 +143,8 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         <CssBaseline />
         <MyContainer>{children}</MyContainer>
         <Divider />
-        <Footer />
+        <LXDAOFooter />
+        {/* <Footer /> */}
       </Box>
     </>
   );
