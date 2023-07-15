@@ -73,7 +73,7 @@ const LXDAOFooter = () => {
                                 { name: 'Telegram', link: 'https://t.me/+lEe31QZahGhkYmM1' },
                                 {
                                     name: 'Twitter',
-                                    link: 'https://twitter.com/LXDAO_Official',
+                                    link: 'https://twitter.com/donate3official',
                                 },
                                 { name: 'Forum', link: 'https://forum.lxdao.io/c/projects/006-donate3/24' },
                             ]}
