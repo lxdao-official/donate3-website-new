@@ -54,7 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <RainbowKitProvider chains={chains}>
           {/* <CssBaseline /> */}
           <Component {...pageProps} />
-          <Script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.4/dist/webpack/bundle.js" />
+          <Script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js" />
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>
