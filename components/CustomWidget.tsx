@@ -163,11 +163,11 @@ export default function CustomWidget() {
   }, 300);
 
   const [url, setUrl] = useState(
-    `<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.30/dist/webpack/bundle.js "></script>`
+    `<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.4/dist/webpack/bundle.js "></script>`
   );
 
   useEffect(() => {
-    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script>`);
+    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.4/dist/webpack/bundle.js"></script>`);
   }, [config]);
 
   useEffect(() => {
@@ -355,7 +355,7 @@ export default function CustomWidget() {
                 fontWeight: '500',
               }}
             >
-              {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script>`}
+              {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.4/dist/webpack/bundle.js"></script>`}
             </Box>
           </FormInput>
           <Box display="flex" gap={2}>
@@ -441,7 +441,7 @@ export default function CustomWidget() {
           }}
           srcDoc={`<html><head></head><body style="padding-top: 30px;"><div 
           data-donate3-demo="true"
-          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@0.3.48/dist/webpack/bundle.js"></script></body></html>`}
+          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.4/dist/webpack/bundle.js"></script></body></html>`}
         ></Box>
       </Box>
     </Box>
