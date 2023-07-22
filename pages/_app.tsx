@@ -10,7 +10,9 @@ import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora } fro
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
+import { Inter } from 'next/font/google';
 
+const inter = Inter({ subsets: ['latin'] });
 const { chains, publicClient } = configureChains(
   [goerli, polygon, polygonMumbai],
   // [mainnet, polygon, optimism, arbitrum, zora],
@@ -33,6 +35,9 @@ const wagmiConfig = createConfig({
 });
 
 const theme = createTheme({
+  typography: {
+    fontFamily: inter,
+  },
   components: {
     MuiContainer: {
       styleOverrides: {
@@ -40,7 +45,7 @@ const theme = createTheme({
         //   maxWidth: 320,
         // },
         maxWidthLg: {
-          maxWidth: 1300,
+          maxWidth: '1300px',
         },
       },
     },

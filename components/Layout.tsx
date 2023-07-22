@@ -7,7 +7,7 @@ import LXDAOFooter from './LXDAOFooter';
 
 function MyContainer({ children }: { children: React.ReactNode }) {
   return (
-    <Container maxWidth={false} sx={{ maxWidth: '1320px' }}>
+    <Container maxWidth={false} sx={{ maxWidth: '1512px' }}>
       {children}
     </Container>
   );
