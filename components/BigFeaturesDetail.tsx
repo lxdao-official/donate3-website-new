@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import React, {useState} from 'react';
+import {Box, Typography} from '@mui/material';
 
-export function BigFeaturesDetail({ data }) {
-    const { iconSrc, title, description } = data;
+export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: string, description: string } }) {
+    const {iconSrc, title, description} = data;
     const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseEnter = () => {
@@ -45,17 +45,17 @@ export function BigFeaturesDetail({ data }) {
                 />
             )}
 
-            <img src={iconSrc} alt="Icon" style={{ width: '48px', height: '48px' }} />
+            <img src={iconSrc} alt="Icon" style={{width: '48px', height: '48px'}}/>
 
             <Typography
                 variant="h3"
                 sx={{
                     fontWeight: 600,
-                    fontSize: { xs: '28px', sm: '28px', md: '28px' },
-                    lineHeight: { xs: '36px', md: '36px' },
+                    fontSize: {xs: '28px', sm: '28px', md: '28px'},
+                    lineHeight: {xs: '36px', md: '36px'},
                     color: '#FFFFFF',
-                    textAlign: { xs: 'left', lg: 'left' },
-                    mt: { xs: '30px', lg: '38px' },
+                    textAlign: {xs: 'left', lg: 'left'},
+                    mt: {xs: '30px', lg: '38px'},
                 }}
             >
                 {title}
@@ -65,12 +65,12 @@ export function BigFeaturesDetail({ data }) {
                 variant="body1"
                 sx={{
                     fontWeight: 400,
-                    fontSize: { xs: '20px', sm: '20px', md: '20px' },
-                    lineHeight: { xs: '36px', md: '36px' },
+                    fontSize: {xs: '20px', sm: '20px', md: '20px'},
+                    lineHeight: {xs: '36px', md: '36px'},
                     color: '#FFFFFF',
-                    textAlign: { xs: 'left', lg: 'left' },
-                    width: { xs: '537px', sm: '537px' },
-                    mt: { xs: '30px', lg: '20px' },
+                    textAlign: {xs: 'left', lg: 'left'},
+                    width: {xs: '537px', sm: '537px'},
+                    mt: {xs: '30px', lg: '20px'},
                 }}
             >
                 {description}
@@ -86,35 +86,35 @@ export function BigFeaturesDetail({ data }) {
                 position: relative;
               }
 
-       @keyframes borderGrow {
-  0% {
-    border-top: 2px solid #ccff00;
-    border-right: none;
-    border-bottom: none;
-    border-left: none;
-  }
-  25% {
-    border-top: 2px solid #ccff00;
-    border-right: 2px solid #ccff00;
-    border-bottom: none;
-    border-left: none;
-  }
-  50% {
-    border-top: 2px solid #ccff00;
-    border-right: 2px solid #ccff00;
-    border-bottom: 2px solid #ccff00;
-    border-left: none;
-  }
-  75% {
-    border-top: 2px solid #ccff00;
-    border-right: 2px solid #ccff00;
-    border-bottom: 2px solid #ccff00;
-    border-left: 2px solid #ccff00;
-  }
-  100% {
-    border: 2px solid #ccff00;
-  }
-}
+              @keyframes borderGrow {
+                0% {
+                  border-top: 2px solid #ccff00;
+                  border-right: none;
+                  border-bottom: none;
+                  border-left: none;
+                }
+                25% {
+                  border-top: 2px solid #ccff00;
+                  border-right: 2px solid #ccff00;
+                  border-bottom: none;
+                  border-left: none;
+                }
+                50% {
+                  border-top: 2px solid #ccff00;
+                  border-right: 2px solid #ccff00;
+                  border-bottom: 2px solid #ccff00;
+                  border-left: none;
+                }
+                75% {
+                  border-top: 2px solid #ccff00;
+                  border-right: 2px solid #ccff00;
+                  border-bottom: 2px solid #ccff00;
+                  border-left: 2px solid #ccff00;
+                }
+                100% {
+                  border: 2px solid #ccff00;
+                }
+              }
 
             `}</style>
         </Box>

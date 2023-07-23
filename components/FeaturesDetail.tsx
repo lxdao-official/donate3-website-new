@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Box, Typography } from '@mui/material';
 
-export function FeaturesDetail({ data }) {
+export function FeaturesDetail({data}: { data: { iconSrc: string, title: string, description: string } })  {
     const { iconSrc, title, description } = data;
     const [isHovered, setIsHovered] = useState(false);
 
