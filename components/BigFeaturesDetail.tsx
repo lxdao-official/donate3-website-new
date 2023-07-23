@@ -16,8 +16,8 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
     return (
         <Box
             sx={{
-                width: '600px',
-                height: '340px',
+                width: {xs:'302px' , sm:'302px' , md:'600px'},
+                height: {xs:'360px' , sm:'360px' , md:'340px'},
                 background: '#272e3f',
                 display: 'flex',
                 flexDirection: 'column',
@@ -26,6 +26,7 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                 borderRadius: '3%',
                 paddingLeft: '32px',
                 position: 'relative', // Added for absolute positioning of pseudo-element
+                margin:{xs:'20px',lg:'0px'}
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -51,7 +52,7 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                 variant="h3"
                 sx={{
                     fontWeight: 600,
-                    fontSize: {xs: '28px', sm: '28px', md: '28px'},
+                    fontSize: {xs: '20px', sm: '20px', md: '28px'},
                     lineHeight: {xs: '36px', md: '36px'},
                     color: '#FFFFFF',
                     textAlign: {xs: 'left', lg: 'left'},
@@ -66,10 +67,10 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                 sx={{
                     fontWeight: 400,
                     fontSize: {xs: '20px', sm: '20px', md: '20px'},
-                    lineHeight: {xs: '36px', md: '36px'},
+                    lineHeight: {xs: '30px', md: '36px'},
                     color: '#FFFFFF',
                     textAlign: {xs: 'left', lg: 'left'},
-                    width: {xs: '537px', sm: '537px'},
+                    width: {xs: '270px', sm: '537px'},
                     mt: {xs: '30px', lg: '20px'},
                 }}
             >

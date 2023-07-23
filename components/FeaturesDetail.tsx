@@ -15,8 +15,9 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
     return (
         <Box
             sx={{
-                width: '392px',
-                height: '360px',
+                width: {xs:'302px' , sm:'302px' , md:'392px'},
+                height: {xs:'360px' , sm:'360px' , md:'360px'},
+
                 background: '#272e3f',
                 display: 'flex',
                 flexDirection: 'column',
@@ -25,6 +26,7 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
                 borderRadius: '3%',
                 padding: '20px',
                 position: 'relative', // Added for absolute positioning of pseudo-element
+                margin:{xs:'20px',lg:'0px'}
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}

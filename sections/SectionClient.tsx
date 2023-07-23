@@ -2,12 +2,29 @@ import Image from 'next/image';
 import {Inter} from 'next/font/google';
 import {Container, Button, Box, Typography, CssBaseline, Link, Divider, List} from '@mui/material';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {DonateOverview} from "../components/DonateOverview1";
 
 
 export function SectionClient() {
-    const donateData = [
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const checkScreenWidth = () => {
+            setIsSmallScreen(window.innerWidth <= 768);
+        };
+
+        checkScreenWidth();
+        window.addEventListener('resize', checkScreenWidth);
+
+        return () => {
+            window.removeEventListener('resize', checkScreenWidth);
+        };
+    }, []);
+
+
+
+        const donateData = [
         {
             avatarSrc: "/test/themonkey.png",
             name: "Bogdan Krivenchenko",
@@ -62,12 +79,21 @@ export function SectionClient() {
                 Our client
 
             </Typography>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Box>
+            <Box sx={{display: 'flex', alignItems: 'center',maxWidth:'100%',maxHeight:'100%',flexDirection: {xs: 'column', lg: 'row'},}}>
+              {/*  <Box>
                     <img src="/client.png" alt="Left Image"/>
-                </Box>
+                </Box>*/}
+                <Box
+                    component="img"
+                    src="/client.png"
+                    sx={{
+                        width: { xs: '300px', sm: '420px', md: '510px' },
+                        height: { xs: '300px', sm: '420px', md: '510px' },
+                    }}
+                />
+
                 <Box sx={{width: "65px"}}/>
-                <Box>
+                <Box sx={{display:'flex',maxWidth:'100%',maxHeight:'100%'}}>
                     <Box ml={2}>
                         <Typography variant="h3" sx={{
                             fontWeight: 700,
@@ -75,8 +101,7 @@ export function SectionClient() {
                             lineHeight: {xs: '37px', md: 'px'},
                             padding: {xs: '10px', sm: '30px', md: 0},
                             color: '#0F172A',
-                            textAlign: {xs: 'left  ', lg: 'left'},
-                            maxWidth: {xs: '800px', sm: '1300px'},
+                            textAlign: {xs: 'center  ', lg: 'left'},
                             mt: {xs: '30px', lg: '0'},
                             mb: {xs: '30px', lg: '23px'},
                         }}>Public good</Typography>
@@ -87,7 +112,7 @@ export function SectionClient() {
                                         lineHeight: {xs: '36px', md: '36 px'},
                                         color: '#334155',
                                         textAlign: {xs: 'left ', lg: 'left'},
-                                        maxWidth: {xs: '150px', sm: '680px'},
+                                        maxWidth: {xs: '100%', sm: '680px'},
                                         mt: {xs: '30px', lg: '23'},
                                     }}>
                             In the real world, public goods like trees, museums, and parks are supported by governments
@@ -119,11 +144,13 @@ export function SectionClient() {
                 mt: {xs: '30px', lg: '105px'},
                 mb: {xs: '30px', lg: '139px'},
                 alignItems: 'center',
-
+                flexDirection: {xs: 'column', lg: 'row'},
             }}>
+
                 {donateData.map((data, index) => (
                     <DonateOverview key={index} data={data}/>
                 ))}
+
             </Box>
 
 

@@ -13,7 +13,9 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                 flexDirection: 'column',
                 padding: '20px',
                 boxShadow: 'none',
+                borderRadius:'3%',
                 transition: 'box-shadow 0.3s', // 添加过渡效果
+                mt:{xs:'20px' , lg:'0px'},
                 '&:hover': {
                     boxShadow: '0px 20px 50px 0px #1D50751F',
                 },

@@ -44,23 +44,21 @@ export function SectionFeacture() {
 
             </Typography>
             <Box
-
                 sx={
                     {
                   /*  display:'flex',*/
                         mt: {xs: '72px', lg: '72px'},
                         maxWidth: '1258px',
-
                     }}>
 
-                <Box display='flex'>
+                <Box display='flex' sx={{flexDirection: {xs: 'column', lg: 'row'},}}>
 
                     <BigFeaturesDetail data={{
                         iconSrc: "/feacturesIcons/icon-2.png",
                         title: "Multi-chain and multi-coin",
                         description: "Donate3 utilizes Infura's RPC endpoints to access mainstream EVM chains, supporting multiple token donations to enrich your funding sources."
                     }}/>
-                    <Box sx={{width: '48px'}}/>
+                    <Box sx={{width: {xs:'0px',lg:'48px'}}}/>
                     <BigFeaturesDetail data={{
                         iconSrc: "/feacturesIcons/icon-1.png",
                         title: "Donation certificate ",
@@ -69,9 +67,9 @@ export function SectionFeacture() {
 
                 </Box>
 
-                <Box sx={{height: '52px'}}/>
+                <Box sx={{height: {xs:'0px',lg:'52px'}}}/>
 
-                <Box display='flex'>
+                <Box display='flex' sx={{flexDirection: {xs: 'column', lg: 'row'},}}>
 
                     <FeaturesDetail data={{
                         iconSrc: "/feacturesIcons/icon-3.png",

@@ -64,11 +64,11 @@ export  function  SectionHero (){
 
                 sx={{
                     fontWeight: 800,
-                    fontSize: { xs: '50px', sm: '54px', md: '72px' },
+                    fontSize: { xs: '40px', sm: '54px', md: '72px' },
                     lineHeight: { xs: '37px', md: '64px' },
                     color: '#000000',
                     textAlign: { xs: 'center', lg: 'center' },
-                    maxWidth: { xs: '800px', sm: '1240px' },
+                    maxWidth: { xs: '100%', sm: '1240px' },
                 }}
             >
                 Easy donation, More connection.
@@ -79,12 +79,12 @@ export  function  SectionHero (){
                 variant="h2"
                 sx={{
                     fontWeight: 600,
-                    fontSize: { xs: '20px', sm: '18px', md: '20px' },
+                    fontSize: { xs: '15px', sm: '15px', md: '20px' },
                     lineHeight: { xs: '30px', md: '56px' },
                     padding: { xs: '10px', sm: '30px', md: 0 },
                     color: '#64748B',
                     textAlign: { xs: 'center', lg: 'center' },
-                    maxWidth: { xs: '300px', sm: '900px' },
+                    maxWidth: { xs: '100%', sm: '900px' },
                     mt: { xs: '30px', lg: '50px' },
                 }}
             >
@@ -154,53 +154,65 @@ export  function  SectionHero (){
             </Box>
 
             <Box sx={{ height: '52px' }}/>
-            <Box sx={{ position: 'relative',
-                minHeight: { xs: '100vh', md: 'calc(100vh - 86px)' }}} >
-           {/*     <GlowingCircle/>
-                <GlowingCircleAroundleft/>*/}
+            <Box sx={{ position:'relative' }}>
                 <Box
                     style={{
                         position: 'absolute',
                         width: '300px',
                         height: '349px',
-                        left: '730px',
-                        top: '-300px',
                         borderRadius: '50% / 40%',
                         backgroundImage: 'linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc)',
                         opacity: 1,
                         filter: 'blur(180px)',
-                        zIndex: 0,
-                    }}
-                />
-                <Box
-                    style={{
-                        position: 'absolute',
-                        width: '300px',
-                        height: '349px',
-                        left: '-200px',
-                        top: '-100px',
-                        borderRadius: '50% / 40%',
-                        backgroundImage: 'linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc)',
-                        opacity: 1,
-                        filter: 'blur(180px)',
-                        zIndex: 0,
+                        zIndex: -2,
                     }}
                 />
                 <Box
                     component="img"
-                    src="/images/demo1.png"
-                    zIndex={-1}
-                />
-                <Box
-                    component="img"
-                    src="/right.png"
+                    src="/images/heroShow.png"
                     sx={{
-                        position: 'absolute',
-                        top: -100,
-                        left: 650,
-                        zIndex: 1,
+                        zIndex: 0,
+                        maxWidth: '100%',
+                        maxHeight: '100%',
                     }}
                 />
+{/*                <Box
+                    style={{
+                        position: 'absolute',
+                        width: '300px',
+                        height: '349px',
+                    //    left: '730px',
+                       // top: '-300px',
+                        borderRadius: '50% / 40%',
+                        backgroundImage: 'linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc)',
+                        opacity: 1,
+                        filter: 'blur(180px)',
+                        zIndex: -2,
+                    }}
+                />*/}
+{/*                <Box
+                    style={{
+                        position: 'absolute',
+                        width: '300px',
+                        height: '349px',
+                     //   left: '-200px',
+                     //   top: '-100px',
+                        borderRadius: '50% / 40%',
+                        backgroundImage: 'linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc)',
+                        opacity: 1,
+                        filter: 'blur(180px)',
+                        zIndex: 0,
+                    }}
+                />*/}
+{/*                <Box
+                    component="img"
+                    src="/images/heroShow.png"
+                    sx={{
+                        zIndex: 0,
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                    }}
+                />*/}
 
             </Box>
 
