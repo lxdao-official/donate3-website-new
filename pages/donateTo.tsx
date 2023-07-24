@@ -12,7 +12,7 @@ interface Config {
 
 const Test: NextPage = () => {
   const router = useRouter();
-  const { address, color, title } = router.query;
+  const { address, color, title, avatar } = router.query;
   // const [config, setConfig] = useState<{
   //   address: string,
   //   color: string,
@@ -41,7 +41,7 @@ const Test: NextPage = () => {
           height: { xs: '100vh', md: 'calc(100vh - 230px)' },
         }}
       >
-        <div data-donate3-type="embed" data-donate3-color={'#' + color} data-donate3-title={title} data-donate3-to-address={address}></div>
+        <div data-donate3-type="embed" data-donate3-color={'#' + color} data-donate3-title={title} data-donate3-to-address={address} data-donate3-avatar={avatar}></div>
       </Box>
     </Layout>
   );
