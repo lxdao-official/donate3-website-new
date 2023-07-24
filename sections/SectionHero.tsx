@@ -1,34 +1,25 @@
 import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import { Container, Button, Box, Typography, CssBaseline, Link, Divider, List } from '@mui/material';
-import { useRouter } from 'next/router';
-import styled, { keyframes } from 'styled-components';
+import {Inter} from 'next/font/google';
+import {Container, Button, Box, Typography, CssBaseline, Link, Divider, List} from '@mui/material';
+import {useRouter} from 'next/router';
+import styled, {keyframes} from 'styled-components';
 import React from 'react';
-const inter = Inter({ subsets: ['latin'] });
-const GlowingCircle = styled(Box)`
-  position: absolute;
-  width: 300px;
-  height: 349px;
-  left: 730px;
-  top: -300px;
-  border-radius: 50% / 40%;
-  background-image: linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc);
-  opacity: 1;
-  filter: blur(180px);
-  z-index: 0;
-`;
 
-const GlowingCircleAroundleft = styled(Box)`
+const inter = Inter({subsets: ['latin']});
+const CircleBg = styled(Box)`
   position: absolute;
-  width: 300px;
-  height: 349px;
-  left: -200px;
-  top: -100px;
-  border-radius: 50% / 40%;
-  background-image: linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc);
-  opacity: 1;
-  filter: blur(180px);
-  z-index: 0;
+  width: 100%;
+  height: 35%;
+  left: 0;
+  bottom: 0;
+  border-radius: 50%;
+  top:75%;
+  background: linear-gradient(142.97deg, #D3FF2552, #94dffc);
+  opacity: 0.7;
+  filter: blur(5vw);
+  pointer-events: none;
+  z-index: 0; /* 可以根据需要调整 z-index 值 */
+  
 `;
 
 
@@ -42,33 +33,37 @@ enum supportList {
     // arbitrum = 'arbitrum',
     // bsc = 'bsc',
 }
-export  function  SectionHero (){
+
+
+export function SectionHero() {
     const router = useRouter();
     return (
 
         <Box
+
             sx={{
-                fontFamily: inter,
+
                 display: 'flex',
-                flexDirection: { xs: 'column', lg: 'column' },
-                justifyContent: { xs: 'center', lg: 'center' },
+                flexDirection: {xs: 'column', lg: 'column'},
+                justifyContent: {xs: 'center', lg: 'center'},
                 alignItems: 'center',
-                minHeight: { xs: '100vh', md: 'calc(100vh )'},
-                mt: { xs: '30px', lg: '188px' },
+                minHeight: {xs: '100vh', md: 'calc(100vh )'},
+                mt: {xs: '30px', lg: '188px'},
+
             }}
         >
 
-
+            <CircleBg/>
             <Typography
                 variant="h1"
 
                 sx={{
                     fontWeight: 800,
-                    fontSize: { xs: '40px', sm: '54px', md: '72px' },
-                    lineHeight: { xs: '37px', md: '64px' },
+                    fontSize: {xs: '40px', sm: '54px', md: '72px'},
+                    lineHeight: {xs: '37px', md: '64px'},
                     color: '#000000',
-                    textAlign: { xs: 'center', lg: 'center' },
-                    maxWidth: { xs: '100%', sm: '1240px' },
+                    textAlign: {xs: 'center', lg: 'center'},
+                    maxWidth: {xs: '100%', sm: '1240px'},
                 }}
             >
                 Easy donation, More connection.
@@ -79,19 +74,25 @@ export  function  SectionHero (){
                 variant="h2"
                 sx={{
                     fontWeight: 600,
-                    fontSize: { xs: '15px', sm: '15px', md: '20px' },
-                    lineHeight: { xs: '30px', md: '56px' },
-                    padding: { xs: '10px', sm: '30px', md: 0 },
+                    fontSize: {xs: '15px', sm: '15px', md: '20px'},
+                    lineHeight: {xs: '30px', md: '56px'},
+                    padding: {xs: '10px', sm: '30px', md: 0},
                     color: '#64748B',
-                    textAlign: { xs: 'center', lg: 'center' },
-                    maxWidth: { xs: '100%', sm: '900px' },
-                    mt: { xs: '30px', lg: '50px' },
+                    textAlign: {xs: 'center', lg: 'center'},
+                    maxWidth: {xs: '100%', sm: '900px'},
+                    mt: {xs: '30px', lg: '50px'},
                 }}
             >
-                Donate3 is a web3 donation infrastructure for public good and creator.Let's accept donations from supporters with 5 minutes.
+                Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5
+                minutes.
             </Typography>
 
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: { xs: 1, md: 3 },mt: { xs: '30px', lg: '30px' }, }}>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: {xs: 'column', lg: 'row'},
+                gap: {xs: 1, md: 3},
+                mt: {xs: '30px', lg: '30px'},
+            }}>
                 <Button
                     onClick={() => {
                         router.push('/create');
@@ -107,10 +108,11 @@ export  function  SectionHero (){
                         fontWeight: '600',
                         fontSize: '20px',
                         lineHeight: '24px',
+                        textTransform:'none',
                         textAlign: 'center',
                     }}
                 >
-                    Create One
+                    Set up now
                 </Button>
 
                 <Button
@@ -128,33 +130,36 @@ export  function  SectionHero (){
                         fontWeight: '600',
                         fontSize: '20px',
                         lineHeight: '24px',
+                        textTransform: 'none',
                         textAlign: 'center',
                     }}
                 >
                     Demo
                 </Button>
+
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center',  mt: '27px' }}>
+            <Box sx={{display: 'flex', alignItems: 'center', mt: '27px'}}>
                 <Typography
                     sx={{
                         fontSize: '11px',
                         color: '#6F9492',
                         fontWeight: '500',
-                        padding:'5px'
+                        padding: '5px'
                     }}
                 >
-                    Support:
+                    Supports:
                 </Typography>
-                <List sx={{ display: 'flex', flexDirection: 'row' }}>
+                <List sx={{display: 'flex', flexDirection: 'row'}}>
                     {Object.keys(supportList).map((item) => {
-                        return <Box key={item} component="img" title={item} src={`icons/support/${item}.svg`} sx={{ mr: 1 }} />;
+                        return <Box key={item} component="img" title={item} src={`icons/support/${item}.svg`}
+                                    sx={{mr: 1}}/>;
                     })}
                 </List>
             </Box>
 
-            <Box sx={{ height: '52px' }}/>
-            <Box sx={{ position:'relative' }}>
+            <Box sx={{height: '52px'}}/>
+            <Box sx={{position: 'relative'}}>
                 <Box
                     style={{
                         position: 'absolute',
@@ -176,44 +181,6 @@ export  function  SectionHero (){
                         maxHeight: '100%',
                     }}
                 />
-{/*                <Box
-                    style={{
-                        position: 'absolute',
-                        width: '300px',
-                        height: '349px',
-                    //    left: '730px',
-                       // top: '-300px',
-                        borderRadius: '50% / 40%',
-                        backgroundImage: 'linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc)',
-                        opacity: 1,
-                        filter: 'blur(180px)',
-                        zIndex: -2,
-                    }}
-                />*/}
-{/*                <Box
-                    style={{
-                        position: 'absolute',
-                        width: '300px',
-                        height: '349px',
-                     //   left: '-200px',
-                     //   top: '-100px',
-                        borderRadius: '50% / 40%',
-                        backgroundImage: 'linear-gradient(to bottom right, rgb(195, 255, 54), #94dffc)',
-                        opacity: 1,
-                        filter: 'blur(180px)',
-                        zIndex: 0,
-                    }}
-                />*/}
-{/*                <Box
-                    component="img"
-                    src="/images/heroShow.png"
-                    sx={{
-                        zIndex: 0,
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                    }}
-                />*/}
-
             </Box>
 
 

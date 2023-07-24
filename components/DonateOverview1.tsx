@@ -7,13 +7,17 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
     return (
         <Box
             sx={{
-                width: '392px',
+                width: {xs:'392px',md:'392px',sm:'392px'},
                 height: '380px',
+                /*marginLeft:{xs:'3px',md:'3px',sm:'41px'},*/
                 display: 'flex',
                 flexDirection: 'column',
-                padding: '20px',
+                padding: '35px',
                 boxShadow: 'none',
                 borderRadius:'3%',
+                border:'2px solid',
+                borderColor:'#E2E8F0',
+                marginLeft:{md:'41px'},
                 transition: 'box-shadow 0.3s', // 添加过渡效果
                 mt:{xs:'20px' , lg:'0px'},
                 '&:hover': {
@@ -25,7 +29,7 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                 <Box>
                     <img src={avatarSrc} alt="Avatar" style={{borderRadius: '50%', width: '80px', height: '80px'}}/>
                 </Box>
-                <Box ml={2}>
+                <Box ml={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
                     <Typography variant="h3" sx={{
                         fontWeight: 700,
                         fontSize: {xs: '20px', sm: '20px', md: '20px'},
@@ -42,26 +46,26 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                         target="_blank"
                         rel="noopener noreferrer"
 
-                        sx={{color: '#64748B', textDecoration: 'none'}} // 设置 color 属性的值为 '#64748B'
+                        sx={{fontWeight:400,fontSize:'16px',lineHeight:'28px',color: '#64748B', textDecoration: 'none'}} // 设置 color 属性的值为 '#64748B'
                     >
                         {website}
                     </Typography>
 
                 </Box>
             </Box>
-            <Box sx={{height: '37px'}}/>
             <Typography variant="h3" sx={{
                 fontWeight: 400,
                 fontSize: {xs: '20px', sm: '20px', md: '20px'},
                 lineHeight: {xs: '36px', md: '36px'},
-                padding: {xs: '10px', sm: '30px', md: 0},
                 color: '#64748B',
                 textAlign: {xs: 'left', lg: 'left'},
-                maxWidth: {xs: '400px', sm: '400px'},
+                maxWidth: {xs: '321px', sm: '321px'},
+                mt:{xs:'5px',md:'32px',sm:'37px'}
             }}>
                 {description}
             </Typography>
-            <Box sx={{marginTop: 'auto', display: 'flex', alignItems: 'center'}}>
+
+            <Box sx={{mt:{xs:'25px',sm:'25px',md:'25px'}, display: 'flex', alignItems: 'center' ,mb:{xs:'32px',sm:'32px',md:'32px'}}}>
                 <img src="/test/mypng.png" alt="Avatar 1" style={{borderRadius: '50%', width: '30px', height: '30px'}}/>
                 <img src="/test/mypng.png" alt="Avatar 2"
                      style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: '-10px'}}/>

@@ -29,7 +29,8 @@ function Header() {
           {/* <Image src="/logo.svg" alt='' width={50} height={50} /> */}
           <Typography variant="h5" paddingLeft="14px" sx={{
             lineHeight: '50px',
-            fontWeight: 500,
+              fontSize:'26px',
+            fontWeight: 600,
             ":hover": {
               textShadow: '2px 2px  #bdd75d',
             }

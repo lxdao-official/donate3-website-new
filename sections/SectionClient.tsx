@@ -76,7 +76,7 @@ export function SectionClient() {
                     mb: {xs: '30px', lg: '61px'},
                 }}
             >
-                Our client
+                Use cases
 
             </Typography>
             <Box sx={{display: 'flex', alignItems: 'center',maxWidth:'100%',maxHeight:'100%',flexDirection: {xs: 'column', lg: 'row'},}}>
@@ -85,7 +85,7 @@ export function SectionClient() {
                 </Box>*/}
                 <Box
                     component="img"
-                    src="/client.png"
+                    src="/images/client.png"
                     sx={{
                         width: { xs: '300px', sm: '420px', md: '510px' },
                         height: { xs: '300px', sm: '420px', md: '510px' },
@@ -104,7 +104,7 @@ export function SectionClient() {
                             textAlign: {xs: 'center  ', lg: 'left'},
                             mt: {xs: '30px', lg: '0'},
                             mb: {xs: '30px', lg: '23px'},
-                        }}>Public good</Typography>
+                        }}>Get funded as public goods</Typography>
                         <Typography variant="subtitle1"
                                     sx={{
                                         fontWeight: 400,
@@ -127,16 +127,16 @@ export function SectionClient() {
                 variant="h1"
                 sx={{
                     fontWeight: 700,
-                    fontSize: {xs: '28px', sm: '28px', md: '28px'},
+                    fontSize: {xs: '25px', sm: '28px', md: '28px'},
                     lineHeight: {xs: '30px', md: '56px'},
                     padding: {xs: '10px', sm: '30px', md: 0},
                     color: '#000000',
                     textAlign: {xs: 'center', lg: 'center'},
-                    maxWidth: {xs: '273px', sm: '273px'},
+                    //maxWidth: {xs: '100%', sm: '400px',lg:'600px'},
                     mt: {xs: '30px', lg: '119px'},
                 }}
             >
-                Creator
+                Get supported as creators
             </Typography>
 
             <Box sx={{
@@ -144,11 +144,13 @@ export function SectionClient() {
                 mt: {xs: '30px', lg: '105px'},
                 mb: {xs: '30px', lg: '139px'},
                 alignItems: 'center',
+
                 flexDirection: {xs: 'column', lg: 'row'},
+                //margin:'37px'
             }}>
 
                 {donateData.map((data, index) => (
-                    <DonateOverview key={index} data={data}/>
+                    <DonateOverview key={index} data={data} />
                 ))}
 
             </Box>

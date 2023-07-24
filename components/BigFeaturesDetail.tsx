@@ -45,8 +45,9 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                     }}
                 />
             )}
+            <Box component="img" src={iconSrc}  sx={{width: '48px', height: '48px'}}/>
 
-            <img src={iconSrc} alt="Icon" style={{width: '48px', height: '48px'}}/>
+            {/*<img src={iconSrc} alt="Icon" style={{width: '48px', height: '48px'}}/>*/}
 
             <Typography
                 variant="h3"
@@ -70,7 +71,7 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                     lineHeight: {xs: '30px', md: '36px'},
                     color: '#FFFFFF',
                     textAlign: {xs: 'left', lg: 'left'},
-                    width: {xs: '270px', sm: '537px'},
+                    maxWidth: {xs: '270px',sm:'270px', md: '537px'},
                     mt: {xs: '30px', lg: '20px'},
                 }}
             >

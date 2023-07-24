@@ -12,6 +12,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { Inter } from 'next/font/google';
 
+
 const inter = Inter({ subsets: ['latin'] });
 const { chains, publicClient } = configureChains(
   [goerli, polygon, polygonMumbai],
@@ -37,7 +38,8 @@ const wagmiConfig = createConfig({
 const theme = createTheme({
 
   typography: {
-    fontFamily: 'Inter, Arial, sans-serif',
+    fontFamily: 'Inter',
+    /*Arial, sans-serif', */
   },
 
   components: {
