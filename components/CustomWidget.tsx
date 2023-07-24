@@ -448,7 +448,7 @@ export default function CustomWidget() {
             <Tooltip title={copied && 'copied!'}>
               <Donate3Btn
                 onClick={() => {
-                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}`;
+                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`;
                   navigator.clipboard.writeText(link).then(
                     function () {
                       setCopied(true);
