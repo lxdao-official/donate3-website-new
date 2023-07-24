@@ -10,6 +10,7 @@ import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora } fro
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
+import { DONATE_SDK_URL } from '@/utils/const';
 
 const { chains, publicClient } = configureChains(
   [goerli, polygon, polygonMumbai],
@@ -54,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <RainbowKitProvider chains={chains}>
           {/* <CssBaseline /> */}
           <Component {...pageProps} />
-          <Script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js" />
+          <Script src={DONATE_SDK_URL} />
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>
