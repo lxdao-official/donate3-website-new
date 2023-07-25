@@ -1,11 +1,9 @@
-import Image from 'next/image';
-import {Inter} from 'next/font/google';
-import {Container, Button, Box, Typography, CssBaseline, Link, Divider, List} from '@mui/material';
+import { Button, Box, Typography, List} from '@mui/material';
 import {useRouter} from 'next/router';
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
 import React from 'react';
 
-const inter = Inter({subsets: ['latin']});
+
 const CircleBg = styled(Box)`
   position: absolute;
   width: 100%;
@@ -20,6 +18,32 @@ const CircleBg = styled(Box)`
   pointer-events: none;
   z-index: 0; /* 可以根据需要调整 z-index 值 */
   
+`;
+const StyledButton = styled(Button)`
+  &.MuiButton-root {
+    width: 208px;
+    height: 48px;
+    background: #FEFFE8;
+    border: 1px solid #283231;
+    box-shadow: 4px 4px 0px #CCFF00;
+    border-radius: 5px;
+    color: #44443f;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: none;
+    text-align: center;
+
+    &:hover {
+      background: #CCFF00;
+      box-shadow: 4px 4px 0px rgba(186, 206, 204, 0.9);
+    }
+
+    &:focus {
+      background: #CCFF00;
+      box-shadow: 4px 4px 0px rgba(186, 206, 204, 0.9);
+    }
+  }
 `;
 
 
@@ -93,49 +117,13 @@ export function SectionHero() {
                 gap: {xs: 1, md: 3},
                 mt: {xs: '30px', lg: '30px'},
             }}>
-                <Button
-                    onClick={() => {
-                        router.push('/create');
-                    }}
-                    sx={{
-                        width: '208px',
-                        height: '48px',
-                        background: '#ccff00',
-                        border: '1px solid #283231',
-                        boxShadow: '4px 4px 0px rgba(186, 206, 204, 0.9)',
-                        borderRadius: '5px',
-                        color: '#44443f',
-                        fontWeight: '600',
-                        fontSize: '20px',
-                        lineHeight: '24px',
-                        textTransform:'none',
-                        textAlign: 'center',
-                    }}
-                >
+                <StyledButton onClick={() => router.push('/create')}>
                     Set up now
-                </Button>
+                </StyledButton>
 
-                <Button
-                    onClick={() => {
-                        window.location.href = '/demo';
-                    }}
-                    sx={{
-                        width: '208px',
-                        height: '48px',
-                        background: '#FEFFE8',
-                        border: '1px solid #283231',
-                        boxShadow: '4px 4px 0px #CCFF00',
-                        borderRadius: '5px',
-                        color: '#44443f',
-                        fontWeight: '600',
-                        fontSize: '20px',
-                        lineHeight: '24px',
-                        textTransform: 'none',
-                        textAlign: 'center',
-                    }}
-                >
+                <StyledButton onClick={() => router.push('/demo')}>
                     Demo
-                </Button>
+                </StyledButton>
 
             </Box>
 

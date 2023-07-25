@@ -13,8 +13,8 @@ export function SectionFeacture() {
         <Box
 
             sx={{
-                marginLeft:'-20px',
-                marginRight:'-20px',
+                marginLeft:'-16px',
+                marginRight:'-16px',
                 display: 'flex',
                 flexDirection: {xs: 'column', lg: 'column'},
                 justifyContent: {xs: 'center', lg: 'center'},

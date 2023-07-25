@@ -30,14 +30,30 @@ export function SectionClient() {
             name: "Bogdan Krivenchenko",
             website: "www.example.com",
             description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
-            donationCount: 198
+            donationCount: 198,
+            avatarSrcArray: [
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png'
+            ]
         },
         {
             avatarSrc: "/test/themonkey.png",
             name: "Bogdan Krivenchenko",
             website: "www.example.org",
             description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
-            donationCount: 150
+            donationCount: 150,
+            avatarSrcArray: [
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png'
+            ]
         },
         // Add one more data entry as needed
         {
@@ -45,7 +61,15 @@ export function SectionClient() {
             name: "Bogdan Krivenchenko",
             website: "www.example.net",
             description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
-            donationCount: 75
+            donationCount: 75,
+            avatarSrcArray: [
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png',
+                '/test/mypng.png'
+            ]
         }
     ];
 

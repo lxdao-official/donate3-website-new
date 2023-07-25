@@ -8,15 +8,17 @@ import {SectionHero} from '../sections/SectionHero'
 import {SectionClient} from '../sections/SectionClient'
 import {SectionFeacture} from "../sections/SectionFeatrues";
 import {SectionPartner} from "../sections/SectionPartner";
-
+import {SectionTest} from  "../sections/SectionTest";
 export default function Home() {
   const router = useRouter();
   return (
     <Layout>
+        {/*<SectionTest/>*/}
         <SectionHero/>
         <SectionClient/>
         <SectionFeacture/>
-     {/*   <SectionPartner/>*/}
+        <SectionPartner/>
+
     </Layout>
   );
 }

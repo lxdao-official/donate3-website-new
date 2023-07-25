@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Typography} from '@mui/material';
 
-export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, website: string, description: string, donationCount: number }}) {
+export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, website: string, description: string, donationCount: number,avatarSrcArray: string[] }}) {
     const {avatarSrc, name, website, description, donationCount} = data;
 
     return (
@@ -66,17 +66,14 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
             </Typography>
 
             <Box sx={{mt:{xs:'25px',sm:'25px',md:'25px'}, display: 'flex', alignItems: 'center' ,mb:{xs:'32px',sm:'32px',md:'32px'}}}>
-                <img src="/test/mypng.png" alt="Avatar 1" style={{borderRadius: '50%', width: '30px', height: '30px'}}/>
-                <img src="/test/mypng.png" alt="Avatar 2"
-                     style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: '-10px'}}/>
-                <img src="/test/mypng.png" alt="Avatar 3"
-                     style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: '-10px'}}/>
-                <img src="/test/mypng.png" alt="Avatar 4"
-                     style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: '-10px'}}/>
-                <img src="/test/mypng.png" alt="Avatar 5"
-                     style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: '-10px'}}/>
-                <img src="/test/mypng.png" alt="Avatar 6"
-                     style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: '-10px'}}/>
+                {data.avatarSrcArray.map((src, index) => (
+                    <img
+                        key={`avatar-${index}`}
+                        src={src}
+                        alt={`Avatar ${index + 1}`}
+                        style={{borderRadius: '50%', width: '30px', height: '30px', marginLeft: index > 0 ? '-10px' : '0'}}
+                    />
+                ))}
                 <Typography variant="body2" sx={{
                     fontWeight: 700,
                     fontSize: {xs: '14px', sm: '14px', md: '14px'},
