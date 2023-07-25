@@ -19,11 +19,12 @@ export function SectionPartner() {
                 display: 'flex',
                 alignItems: 'center',
                 background: '#F8FAFC',
-                height: "700px",
+                minHeight: {xs: '100vh', md: 'calc(60vh)'},
                 marginLeft: '-16px',
                 marginRight: '-16px',
                 flexDirection: {xs: 'column', lg: 'column'},
                 justifyContent: {xs: 'center', lg: 'center'},
+
             }}
         >
             <Typography
