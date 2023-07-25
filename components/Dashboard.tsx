@@ -267,7 +267,7 @@ export default function Dashboard() {
       setRows(tmp);
       setPagination(tmp?.length);
     })();
-  }, [address, perPage, page]);
+  }, [address, perPage, page, readData]);
 
   useEffect(() => {
     (async () => {
