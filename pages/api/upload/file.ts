@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createConnector, type Uploader3Connector } from '@lxdao/uploader3-connector';
 
 const connector = createConnector('NFT.storage', {
-  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDZEMjgzZjY5MGY1NDJlOWU4MDJBMTM4NEQ5OWY0YmJhQjAxOTFDQTMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4OTkyODg0NTEyMiwibmFtZSI6InN0ZXBoZW4ifQ.8BtqCQbz1VuTaUAKbZYxubH-ZitC0my7NOb6tuY-siY',
+  token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '',
 });
 
 export default async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
-  const reqBody = <Uploader3Connector.PostImageFile>req.body;
+  const reqBody = req.body as Uploader3Connector.PostImageFile;
   let { data: imageData = '', type } = reqBody;
 
   if (!imageData) {
