@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
-import { Uploader3 } from '@lxdao/uploader3';
+import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
 import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled } from '@mui/material';
 
@@ -137,7 +137,7 @@ function RadioBox({ onChange, value, title, imgurl, current }: any) {
 
 export default function CustomWidget() {
   const { address } = useAccount();
-  const [file, setFile] = React.useState();
+  const [file, setFile] = React.useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
   const [avatar, setAvatar] = React.useState('');
 
   // const [, user] = useUser(address as string);
@@ -181,7 +181,7 @@ export default function CustomWidget() {
       ...pre,
       address: address ? address : '0xe395B9bA2F93236489ac953146485C435D1A267B',
     }));
-  }, [address]);
+  }, [address, setValue]);
 
   return (
     <Box
@@ -448,7 +448,7 @@ export default function CustomWidget() {
             <Tooltip title={copied && 'copied!'}>
               <Donate3Btn
                 onClick={() => {
-                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}`;
+                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`;
                   navigator.clipboard.writeText(link).then(
                     function () {
                       setCopied(true);

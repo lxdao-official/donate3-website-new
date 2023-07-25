@@ -16,7 +16,6 @@ const PreviewFile = ({ file, style, setAvatar }: IPreviewFileProps) => {
   if (file.status === 'uploading') {
     src = file.thumbData || file.imageData;
   } else if (file.status === 'done') {
-    debugger;
     src = file.url;
     setAvatar!(src!)
   } else if (file.status === 'cropped') {
