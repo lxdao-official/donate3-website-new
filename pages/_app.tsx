@@ -34,18 +34,29 @@ const wagmiConfig = createConfig({
 });
 
 const theme = createTheme({
+
+  typography: {
+    fontFamily: ['inter', 'sans-serif'].join(','),
+    /*Arial, sans-serif', */
+  },
+
   components: {
+
     MuiContainer: {
+
       styleOverrides: {
+
         // maxWidthMd: {
         //   maxWidth: 320,
         // },
         maxWidthLg: {
-          maxWidth: 1300,
+
+          maxWidth: '1300px',
         },
       },
     },
   },
+
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -53,7 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
-          {/* <CssBaseline /> */}
+          {/*<CssBaseline />*/}
           <Component {...pageProps} />
           <Script src={DONATE_SDK_URL} />
         </RainbowKitProvider>

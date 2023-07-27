@@ -23,7 +23,7 @@ export const ConnectBtn = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <Donate3Btn sx={{ height: '43px' }} onClick={openConnectModal}>
+                  <Donate3Btn sx={{ weight:'600',height: '43px' ,fontsize:'14px'}} onClick={openConnectModal}>
                     Connect Wallet
                   </Donate3Btn>
                 );
