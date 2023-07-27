@@ -1,9 +1,8 @@
 import Image from 'next/image';
-import {Inter} from 'next/font/google';
-import {Container, Button, Box, Typography, CssBaseline, Link, Divider, List} from '@mui/material';
+import { Container, Button, Box, Typography, CssBaseline, Link, Divider, List } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
-import {DonateOverview} from "../components/DonateOverview1";
+import { DonateOverview } from "../components/DonateOverview1";
 
 
 export function SectionClient() {
@@ -24,7 +23,7 @@ export function SectionClient() {
 
 
 
-        const donateData = [
+    const donateData = [
         {
             avatarSrc: "/test/themonkey.png",
             name: "Bogdan Krivenchenko",
@@ -79,10 +78,10 @@ export function SectionClient() {
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: {xs: 'column', lg: 'column'},
-                justifyContent: {xs: 'center', lg: 'center'},
+                flexDirection: { xs: 'column', lg: 'column' },
+                justifyContent: { xs: 'center', lg: 'center' },
                 alignItems: 'center',
-                minHeight: {xs: '100vh', md: 'calc(100vh )'},
+                minHeight: { xs: '100vh', md: 'calc(100vh )' },
             }}
         >
 
@@ -92,19 +91,19 @@ export function SectionClient() {
 
                 sx={{
                     fontWeight: 800,
-                    fontSize: {xs: '50px', sm: '54px', md: '56px'},
-                    lineHeight: {xs: '37px', md: '64px'},
+                    fontSize: { xs: '50px', sm: '54px', md: '56px' },
+                    lineHeight: { xs: '37px', md: '64px' },
                     color: '#0F172A',
-                    textAlign: {xs: 'center', lg: 'center'},
-                    mt: {xs: '30px', lg: '86'},
-                    mb: {xs: '30px', lg: '61px'},
+                    textAlign: { xs: 'center', lg: 'center' },
+                    mt: { xs: '30px', lg: '86' },
+                    mb: { xs: '30px', lg: '61px' },
                 }}
             >
                 Use cases
 
             </Typography>
-            <Box sx={{display: 'flex', alignItems: 'center',maxWidth:'100%',maxHeight:'100%',flexDirection: {xs: 'column', lg: 'row'},}}>
-              {/*  <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', maxWidth: '100%', maxHeight: '100%', flexDirection: { xs: 'column', lg: 'row' }, }}>
+                {/*  <Box>
                     <img src="/client.png" alt="Left Image"/>
                 </Box>*/}
                 <Box
@@ -116,29 +115,29 @@ export function SectionClient() {
                     }}
                 />
 
-                <Box sx={{width: "65px"}}/>
-                <Box sx={{display:'flex',maxWidth:'100%',maxHeight:'100%'}}>
+                <Box sx={{ width: "65px" }} />
+                <Box sx={{ display: 'flex', maxWidth: '100%', maxHeight: '100%' }}>
                     <Box ml={2}>
                         <Typography variant="h3" sx={{
                             fontWeight: 700,
-                            fontSize: {xs: '28px', sm: '54px', md: '28px'},
-                            lineHeight: {xs: '37px', md: 'px'},
-                            padding: {xs: '10px', sm: '30px', md: 0},
+                            fontSize: { xs: '28px', sm: '54px', md: '28px' },
+                            lineHeight: { xs: '37px', md: 'px' },
+                            padding: { xs: '10px', sm: '30px', md: 0 },
                             color: '#0F172A',
-                            textAlign: {xs: 'center  ', lg: 'left'},
-                            mt: {xs: '30px', lg: '0'},
-                            mb: {xs: '30px', lg: '23px'},
+                            textAlign: { xs: 'center  ', lg: 'left' },
+                            mt: { xs: '30px', lg: '0' },
+                            mb: { xs: '30px', lg: '23px' },
                         }}>Get funded as public goods</Typography>
                         <Typography variant="subtitle1"
-                                    sx={{
-                                        fontWeight: 400,
-                                        fontSize: {xs: '20px', sm: '20px', md: '20px'},
-                                        lineHeight: {xs: '36px', md: '36 px'},
-                                        color: '#334155',
-                                        textAlign: {xs: 'left ', lg: 'left'},
-                                        maxWidth: {xs: '100%', sm: '680px'},
-                                        mt: {xs: '30px', lg: '23'},
-                                    }}>
+                            sx={{
+                                fontWeight: 400,
+                                fontSize: { xs: '20px', sm: '20px', md: '20px' },
+                                lineHeight: { xs: '36px', md: '36 px' },
+                                color: '#334155',
+                                textAlign: { xs: 'left ', lg: 'left' },
+                                maxWidth: { xs: '100%', sm: '680px' },
+                                mt: { xs: '30px', lg: '23' },
+                            }}>
                             In the real world, public goods like trees, museums, and parks are supported by governments
                             or public agencies, enhancing the beauty and charm of a city. However, in the web3 world, we
                             encounter numerous public goods that bring us joy but lack an equivalent role of government
@@ -151,13 +150,13 @@ export function SectionClient() {
                 variant="h1"
                 sx={{
                     fontWeight: 700,
-                    fontSize: {xs: '25px', sm: '28px', md: '28px'},
-                    lineHeight: {xs: '30px', md: '56px'},
-                    padding: {xs: '10px', sm: '30px', md: 0},
+                    fontSize: { xs: '25px', sm: '28px', md: '28px' },
+                    lineHeight: { xs: '30px', md: '56px' },
+                    padding: { xs: '10px', sm: '30px', md: 0 },
                     color: '#000000',
-                    textAlign: {xs: 'center', lg: 'center'},
+                    textAlign: { xs: 'center', lg: 'center' },
                     //maxWidth: {xs: '100%', sm: '400px',lg:'600px'},
-                    mt: {xs: '30px', lg: '119px'},
+                    mt: { xs: '30px', lg: '119px' },
                 }}
             >
                 Get supported as creators
@@ -165,11 +164,11 @@ export function SectionClient() {
 
             <Box sx={{
                 display: 'flex',
-                mt: {xs: '30px', lg: '105px'},
-                mb: {xs: '30px', lg: '139px'},
+                mt: { xs: '30px', lg: '105px' },
+                mb: { xs: '30px', lg: '139px' },
                 alignItems: 'center',
 
-                flexDirection: {xs: 'column', lg: 'row'},
+                flexDirection: { xs: 'column', lg: 'row' },
                 //margin:'37px'
             }}>
 

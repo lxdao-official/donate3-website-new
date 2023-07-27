@@ -10,10 +10,7 @@ import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora } fro
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
-import { Inter } from 'next/font/google';
 
-
-const inter = Inter({ subsets: ['latin'] });
 const { chains, publicClient } = configureChains(
   [goerli, polygon, polygonMumbai],
   // [mainnet, polygon, optimism, arbitrum, zora],
@@ -38,7 +35,7 @@ const wagmiConfig = createConfig({
 const theme = createTheme({
 
   typography: {
-    fontFamily: 'Inter',
+    fontFamily: ['inter', 'sans-serif'].join(','),
     /*Arial, sans-serif', */
   },
 
@@ -66,7 +63,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
-           {/*<CssBaseline />*/}
+          {/*<CssBaseline />*/}
           <Component {...pageProps} />
           <Script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js" />
         </RainbowKitProvider>
