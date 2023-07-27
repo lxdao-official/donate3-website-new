@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
-
-import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled, Divider } from '@mui/material';
+import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
+import { Icon } from '@iconify/react';
+import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled } from '@mui/material';
 
 import Donate3Btn from './Donate3Btn';
+import PreviewFile from './PreviewFile';
+import PreviewWrapper from './PreviewWrapper';
+import { DONATE_SDK_URL } from '@/utils/const';
 
 function throttle<F extends (...args: any[]) => void>(func: F, wait: number): (this: ThisParameterType<F>, ...args: Parameters<F>) => void {
   let timer: NodeJS.Timeout | null = null;
@@ -133,6 +137,8 @@ function RadioBox({ onChange, value, title, imgurl, current }: any) {
 
 export default function CustomWidget() {
   const { address } = useAccount();
+  const [file, setFile] = React.useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
+  const [avatar, setAvatar] = React.useState('');
 
   // const [, user] = useUser(address as string);
 
@@ -148,6 +154,7 @@ export default function CustomWidget() {
       color: '#b7d844',
       name: 'Donate3',
       address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
+      avatar: '',
     },
   });
   const [copied, setCopied] = useState(false);
@@ -162,13 +169,11 @@ export default function CustomWidget() {
     setConfig((pre) => ({ ...pre, color: color }));
   }, 300);
 
-  const [url, setUrl] = useState(
-    `<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js "></script>`
-  );
+  const [url, setUrl] = useState(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
 
   useEffect(() => {
-    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js"></script>`);
-  }, [config]);
+    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
+  }, [avatar, config]);
 
   useEffect(() => {
     setValue('address', address as string);
@@ -176,7 +181,7 @@ export default function CustomWidget() {
       ...pre,
       address: address ? address : '0xe395B9bA2F93236489ac953146485C435D1A267B',
     }));
-  }, [address]);
+  }, [address, setValue]);
 
   return (
     <Box
@@ -234,6 +239,45 @@ export default function CustomWidget() {
                     imgurl="../images/widget_hyperlink.png"
                   />
                 </Box>
+              </FormInput>
+            );
+          }}
+        />
+
+        <Controller
+          name={'avatar'}
+          control={control}
+          rules={{ required: true }}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <FormInput title="Avatar" error={errors.color?.type}>
+                <div style={{ padding: 10 }}>
+                  <Uploader3
+                    api={'/api/upload/file?name=your-name'}
+                    headers={{
+                      'x-token': 'abcd',
+                    }}
+                    multiple={false}
+                    crop={true} // use default crop options
+                    onChange={(files) => {
+                      setFile(files[0]);
+                    }}
+                    onUpload={(file) => {
+                      setFile(file);
+                    }}
+                    onComplete={(file) => {
+                      setFile(file);
+                    }}
+                    onCropCancel={(file) => {
+                      setFile(null);
+                    }}
+                    onCropEnd={(file) => {
+                      setFile(file);
+                    }}
+                  >
+                    <PreviewWrapper style={{ height: '200px', width: '200px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatar} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                  </Uploader3>
+                </div>
               </FormInput>
             );
           }}
@@ -355,7 +399,7 @@ export default function CustomWidget() {
                 fontWeight: '500',
               }}
             >
-              {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js"></script>`}
+              {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`}
             </Box>
           </FormInput>
           <Box display="flex" gap={2}>
@@ -397,14 +441,14 @@ export default function CustomWidget() {
                 fontWeight: '500',
               }}
             >
-              {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}`}
+              {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`}
             </Box>
           </FormInput>
           <Box display="flex" gap={2}>
             <Tooltip title={copied && 'copied!'}>
               <Donate3Btn
                 onClick={() => {
-                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}`;
+                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`;
                   navigator.clipboard.writeText(link).then(
                     function () {
                       setCopied(true);
@@ -441,7 +485,7 @@ export default function CustomWidget() {
           }}
           srcDoc={`<html><head></head><body style="padding-top: 30px;"><div 
           data-donate3-demo="true"
-          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}"></div><script src="https://cdn.jsdelivr.net/npm/donate3-sdk@1.0.5/dist/webpack/bundle.js"></script></body></html>`}
+          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script></body></html>`}
         ></Box>
       </Box>
     </Box>
