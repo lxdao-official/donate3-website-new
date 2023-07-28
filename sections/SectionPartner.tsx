@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Container, Button, Box, Typography, CssBaseline, Link, Divider, List } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { DonateOverview } from "../components/DonateOverview1";
+import { DonateOverview } from "../components/DonateOverview";
 import styled from "styled-components";
 
 
@@ -64,7 +64,7 @@ export function SectionPartner() {
                         border: '1px solid',
                         borderColor: '#E2E8F0',
                         borderRadius: '3%',
-                        marginLeft: '24px',
+                        //marginLeft: '24px',
                         mt: '5px'
                     }}
                 >
@@ -95,173 +95,8 @@ export function SectionPartner() {
                         LXDAO
 
                     </Typography>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: '180px',
-                        height: '70px',
-                        border: '1px solid',
-                        borderColor: '#E2E8F0',
-                        borderRadius: '3%',
-                        marginLeft: '24px',
-                        mt: '5px'
-                    }}
-                >
-                    <Box
-                        component="img"
-                        src="/icons/pLxdao.svg"
-                        sx={{
-                            marginLeft: '20px',
-                            maxWidth: '32px',
-
-                        }}
-                    >
 
 
-                    </Box>
-                    <Typography
-                        variant="h3"
-
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: { xs: '23px', sm: '23px', md: '23px' },
-                            lineHeight: { xs: '36px', md: '36px' },
-                            color: '#000000',
-                            textAlign: { xs: 'center', lg: 'center' },
-                            marginLeft: { lg: '8px' }
-                        }}
-                    >
-                        LXDAO
-
-                    </Typography>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: '180px',
-                        height: '70px',
-                        border: '1px solid',
-                        borderColor: '#E2E8F0',
-                        borderRadius: '3%',
-                        marginLeft: '24px',
-                        mt: '5px'
-                    }}
-                >
-                    <Box
-                        component="img"
-                        src="/icons/pLxdao.svg"
-                        sx={{
-                            marginLeft: '20px',
-                            maxWidth: '32px',
-
-                        }}
-                    >
-
-
-                    </Box>
-                    <Typography
-                        variant="h3"
-
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: { xs: '23px', sm: '23px', md: '23px' },
-                            lineHeight: { xs: '36px', md: '36px' },
-                            color: '#000000',
-                            textAlign: { xs: 'center', lg: 'center' },
-                            marginLeft: { lg: '8px' }
-                        }}
-                    >
-                        LXDAO
-
-                    </Typography>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: '180px',
-                        height: '70px',
-                        border: '1px solid',
-                        borderColor: '#E2E8F0',
-                        borderRadius: '3%',
-                        marginLeft: '24px',
-                        mt: '5px'
-                    }}
-                >
-                    <Box
-                        component="img"
-                        src="/icons/pLxdao.svg"
-                        sx={{
-                            marginLeft: '20px',
-                            maxWidth: '32px',
-
-                        }}
-                    >
-
-
-                    </Box>
-                    <Typography
-                        variant="h3"
-
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: { xs: '23px', sm: '23px', md: '23px' },
-                            lineHeight: { xs: '36px', md: '36px' },
-                            color: '#000000',
-                            textAlign: { xs: 'center', lg: 'center' },
-                            marginLeft: { lg: '8px' }
-                        }}
-                    >
-                        LXDAO
-
-                    </Typography>
-                </Box>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: '180px',
-                        height: '70px',
-                        border: '1px solid',
-                        borderColor: '#E2E8F0',
-                        borderRadius: '3%',
-                        marginLeft: '24px',
-                        mt: '5px'
-                    }}
-                >
-                    <Box
-                        component="img"
-                        src="/icons/pLxdao.svg"
-                        sx={{
-                            marginLeft: '20px',
-                            maxWidth: '32px',
-
-                        }}
-                    >
-
-
-                    </Box>
-                    <Typography
-                        variant="h3"
-
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: { xs: '23px', sm: '23px', md: '23px' },
-                            lineHeight: { xs: '36px', md: '36px' },
-                            color: '#000000',
-                            textAlign: { xs: 'center', lg: 'center' },
-                            marginLeft: { lg: '8px' }
-                        }}
-                    >
-                        LXDAO
-
-                    </Typography>
                 </Box>
 
 

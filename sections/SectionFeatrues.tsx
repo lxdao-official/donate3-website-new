@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import {Container, Button, Box, Typography, CssBaseline, Link, Divider, List} from '@mui/material';
 import React from 'react';
-import {DonateOverview} from "../components/DonateOverview1";
+import {DonateOverview} from "../components/DonateOverview";
 import {BigFeaturesDetail} from "../components/BigFeaturesDetail";
 import {FeaturesDetail} from "../components/FeaturesDetail";
 

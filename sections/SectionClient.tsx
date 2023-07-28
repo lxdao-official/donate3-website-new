@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Container, Button, Box, Typography, CssBaseline, Link, Divider, List } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
-import { DonateOverview } from "../components/DonateOverview1";
+import { DonateOverview } from "../components/DonateOverview";
 
 
 export function SectionClient() {
@@ -25,49 +25,49 @@ export function SectionClient() {
 
     const donateData = [
         {
-            avatarSrc: "/test/themonkey.png",
-            name: "Bogdan Krivenchenko",
-            website: "www.example.com",
-            description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
-            donationCount: 198,
+            avatarSrc: "/test/lxdao-logo.svg",
+            name: "LXDAO",
+            website: "https://lxdao.io",
+            description: "LXDAO is an R&D-focused DAO in Web3",
+            donationCount: 68,
             avatarSrcArray: [
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png'
+                '/test/bruce.png',
+                '/test/daodao.png',
+                '/test/muxin.png',
+                '/test/ache.png',
+                '/test/1998.png',
+                '/test/themonkey.png'
             ]
         },
         {
-            avatarSrc: "/test/themonkey.png",
-            name: "Bogdan Krivenchenko",
-            website: "www.example.org",
-            description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
+            avatarSrc: "/test/marry3-logo-rect.png",
+            name: "marry3",
+            website: "https://marry3.love",
+            description: "Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain",
             donationCount: 150,
             avatarSrcArray: [
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png'
+                '/test/daodao.png',
+                '/test/yoo.png',
+                '/test/nextdao.png',
+                '/test/kenlabs.png',
+                '/test/dotbit.png',
+                '/test/mail3.png'
             ]
         },
         // Add one more data entry as needed
         {
-            avatarSrc: "/test/themonkey.png",
-            name: "Bogdan Krivenchenko",
-            website: "www.example.net",
-            description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
+            avatarSrc: "/test/mail3.png",
+            name: "mail3",
+            website: "https://mail3.me",
+            description: "Web3 natives deserve a better mail",
             donationCount: 75,
             avatarSrcArray: [
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png'
+                '/test/mixin.png',
+                '/test/dotbit.png',
+                '/test/bruce.png',
+                '/test/GangsDAO.png',
+                '/test/MetaverseSpace.png',
+                '/test/MetaBank.png'
             ]
         }
     ];
