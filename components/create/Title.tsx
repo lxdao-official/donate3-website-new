@@ -3,8 +3,8 @@ import React from 'react';
 
 const Title = () => {
   return (
-    <Box>
-      <Typography variant="h4" color="rgba(15, 23, 42, 1)" fontWeight="600" fontSize="36px" lineHeight="44px" marginBottom="10px">
+    <Box marginBottom="36px">
+      <Typography variant="h4" color="rgba(15, 23, 42, 1)" fontWeight="600" fontSize="36px" lineHeight="44px">
         Get Widget
       </Typography>
       <Typography variant="body1" color="rgba(100, 116, 139, 1)" fontWeight="400" fontSize="14px" lineHeight="26px">

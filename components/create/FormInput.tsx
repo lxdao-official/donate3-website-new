@@ -2,20 +2,30 @@ import { Box, FormControl, Typography } from '@mui/material';
 
 const FormInput = ({ title, desc, error, children }: any) => {
   return (
-    <FormControl variant="standard" fullWidth>
-      <Box mb="12px">
-        <Typography
-          sx={{
-            position: 'inherit',
-            fontWeight: '600',
-            fontSize: '14px',
-            lineHeight: '17px',
-            px: '5px',
-            color: '#3e4343',
-          }}
-        >
-          {title}
-        </Typography>
+    <FormControl
+      variant="standard"
+      fullWidth
+      style={{
+        marginBottom: '30px',
+      }}
+    >
+      <Box>
+        {title ? (
+          <Typography
+            sx={{
+              position: 'inherit',
+              fontSize: '14px',
+              fontWeight: 600,
+              lineHeight: '26px',
+              marginBottom: '10px',
+            }}
+          >
+            {title}
+          </Typography>
+        ) : (
+          <></>
+        )}
+
         <Typography
           sx={{
             fontWeight: '500',
