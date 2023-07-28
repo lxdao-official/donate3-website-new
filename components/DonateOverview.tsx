@@ -42,7 +42,7 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                     <Typography
                         variant="body1"
                         component="a"
-                        href={website}
+                        href={`https://${website}`} // 在href属性中添加'https://'前缀
                         target="_blank"
                         rel="noopener noreferrer"
 

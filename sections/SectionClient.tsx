@@ -27,7 +27,7 @@ export function SectionClient() {
         {
             avatarSrc: "/test/lxdao-logo.svg",
             name: "LXDAO",
-            website: "https://lxdao.io",
+            website: "lxdao.io",
             description: "LXDAO is an R&D-focused DAO in Web3",
             donationCount: 68,
             avatarSrcArray: [
@@ -42,7 +42,7 @@ export function SectionClient() {
         {
             avatarSrc: "/test/marry3-logo-rect.png",
             name: "marry3",
-            website: "https://marry3.love",
+            website: "marry3.love",
             description: "Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain",
             donationCount: 150,
             avatarSrcArray: [
@@ -58,7 +58,7 @@ export function SectionClient() {
         {
             avatarSrc: "/test/mail3.png",
             name: "mail3",
-            website: "https://mail3.me",
+            website: "mail3.me",
             description: "Web3 natives deserve a better mail",
             donationCount: 75,
             avatarSrcArray: [
