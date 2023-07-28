@@ -10,137 +10,15 @@ import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
 import { DONATE_SDK_URL } from '@/utils/const';
-
-function throttle<F extends (...args: any[]) => void>(func: F, wait: number): (this: ThisParameterType<F>, ...args: Parameters<F>) => void {
-  let timer: NodeJS.Timeout | null = null;
-
-  return function (this: ThisParameterType<F>, ...args: Parameters<F>) {
-    const context = this;
-
-    if (timer) {
-      clearTimeout(timer);
-    }
-
-    timer = setTimeout(() => {
-      func.apply(context, args);
-      timer = null;
-    }, wait);
-  };
-}
-
-const FormInput = ({ title, desc, error, children }: any) => {
-  return (
-    <FormControl variant="standard" fullWidth>
-      <Box mb="12px">
-        <Typography
-          sx={{
-            position: 'inherit',
-            fontWeight: '600',
-            fontSize: '14px',
-            lineHeight: '17px',
-            px: '5px',
-            color: '#3e4343',
-          }}
-        >
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: '500',
-            fontSize: '12px',
-            lineHeight: '15px',
-            px: '5px',
-            mr: '3px',
-            color: '#929f9e',
-          }}
-        >
-          {desc}
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: '500',
-            fontSize: '12px',
-            lineHeight: '15px',
-            px: '5px',
-            mr: '3px',
-            color: '#DC0202',
-          }}
-        >
-          {error}
-        </Typography>
-      </Box>
-      {children}
-      {/* <InputBase sx={{ mt: 0 }} /> */}
-    </FormControl>
-  );
-};
-
-const BpIcon = styled('span')(({ theme }) => ({
-  borderRadius: '50%',
-  width: 18,
-  height: 18,
-  backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f1f3f4',
-
-  'input:hover ~ &': {
-    backgroundColor: theme.palette.mode === 'dark' ? '#30404d' : '#e4e4e5',
-  },
-  'input:disabled ~ &': {
-    boxShadow: 'none',
-    background: theme.palette.mode === 'dark' ? 'rgba(57,75,89,.5)' : 'rgba(206,217,224,.5)',
-  },
-}));
-
-const BpCheckedIcon = styled(BpIcon)({
-  backgroundColor: '#CCFF00',
-  '&:before': {
-    display: 'block',
-    width: 18,
-    height: 18,
-    // backgroundImage: 'radial-gradient(#fff,#fff 33%,transparent 33%)',
-    content: '""',
-  },
-  'input:hover ~ &': {
-    backgroundColor: '#a5ce00',
-  },
-});
-
-// Inspired by blueprintjs
-function BpRadio(props: any) {
-  return <Radio disableRipple color="default" checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} {...props} />;
-}
-
-function RadioBox({ onChange, value, title, imgurl, current }: any) {
-  return (
-    <Box
-      onClick={() => {
-        onChange(value);
-      }}
-      sx={{
-        padding: '12px',
-        bgcolor: 'background.paper',
-        width: 200,
-        height: 160,
-        marginRight: '10px',
-        marginBottom: '10px',
-        border: value == current ? '3px solid #CCFF00' : '',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        color: value == current ? '#A9D300' : '#3E4343',
-      }}
-    >
-      <BpRadio checked={value == current} size="small" />
-      <span>{title}</span>
-      <Box component={'img'} src={imgurl} sx={{ borderRadius: 2 }} />
-    </Box>
-  );
-}
+import CreateTitle from './create/Title';
+import { throttle } from '@/utils/common';
+import FormInput from './create/FormInput';
+import RadioBox from './create/RadioBox';
 
 export default function CustomWidget() {
   const { address } = useAccount();
   const [file, setFile] = React.useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
   const [avatar, setAvatar] = React.useState('');
-
-  // const [, user] = useUser(address as string);
 
   const {
     control,
@@ -194,14 +72,8 @@ export default function CustomWidget() {
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-        <Box>
-          <Typography variant="h4" color="#44443F">
-            Create Custom Widget
-          </Typography>
-          <Typography variant="body1" color="#858686">
-            Through simple settings, you can produce a piece of code and put the four seas, and anyone can send you a cross-chain cryptocurrency.
-          </Typography>
-        </Box>
+        <CreateTitle />
+
         <Controller
           name={'type'}
           control={control}

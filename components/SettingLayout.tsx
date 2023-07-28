@@ -17,7 +17,9 @@ function MyTab({ title, icon, active, onClick }: { title: string; icon: string; 
         py: 2,
         cursor: 'pointer',
         fontBold: 600,
-        bgcolor: active ? '#fcfede' : 'transparent',
+        color:"rgba(15, 23, 42, 1)",
+        fontSize: '16px',
+        bgcolor: active ? "rgba(204, 255, 0, 1)" : 'transparent',
       }}
     >
       <Box component={'img'} src={icon} />
@@ -51,8 +53,8 @@ export default function SettingLayout({ children }: { children: React.ReactNode 
           }}
         >
           {[
-            { title: 'Create', icon: '/icons/gear.svg', path: '/create' },
             { title: 'Dashboard', icon: '/icons/dashboard.svg', path: '/dashboard' },
+            { title: 'Widget', icon: '/icons/gear.svg', path: '/create' },
           ].map((val, index) => {
             return (
               <MyTab
