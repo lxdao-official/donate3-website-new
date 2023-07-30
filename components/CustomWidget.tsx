@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
@@ -6,12 +6,12 @@ import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '
 import { Icon } from '@iconify/react';
 import { Box, InputAdornment, InputBase, Tooltip } from '@mui/material';
 import Image from 'next/image';
-import { AccountCircle } from '@mui/icons-material';
+import { NFTStorage, File, Blob } from 'nft.storage';
 
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DONATE_SDK_URL } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -21,10 +21,24 @@ import Card from './create/Card';
 import CodeRegion from './create/CodeRegion';
 import DescEditor from './create/DescEditor';
 
+interface ICustomWidget {
+  type: number;
+  color: string;
+  name: string;
+  address: string;
+  avatar: string;
+  description: string;
+  twitter: string;
+  telegram: string;
+}
+
 export default function CustomWidget() {
   const { address } = useAccount();
-  const [file, setFile] = React.useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
-  const [avatar, setAvatar] = React.useState('');
+  const [file, setFile] = useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
+  const [avatar] = useState('');
+  const [donationsCode, setDonationsCode] = useState<string>('');
+  const [donationsLink, setDonationsLink] = useState<string>('');
+  const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
 
   const {
     control,
@@ -33,42 +47,83 @@ export default function CustomWidget() {
     setError,
   } = useForm({
     mode: 'onBlur',
-    defaultValues: {
-      type: 0,
-      color: '#396AFF',
-      name: 'Donate3',
-      address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-      avatar: '',
-      description: '',
-      twitter: '',
-      telegram: '',
-    },
+    defaultValues: DEFAULT_CREATE_CONFIG,
   });
   const [copied, setCopied] = useState(false);
-  const [config, setConfig] = useState({
-    type: 0,
-    color: '#396AFF',
-    name: 'Donate3',
-    address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-  });
+  const [config, setConfig] = useState<Partial<ICustomWidget>>(DEFAULT_CREATE_CONFIG);
 
   const setColorThrottle = throttle((color) => {
     setConfig((pre) => ({ ...pre, color: color }));
   }, 300);
 
-  const [url, setUrl] = useState(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
+  // const [url, setUrl] = useState(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
 
-  useEffect(() => {
-    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
-  }, [avatar, config]);
+  // useEffect(() => {
+  //   setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
+  // }, [avatar, config]);
 
   useEffect(() => {
     setValue('address', address as string);
     setConfig((pre) => ({
       ...pre,
-      address: address ? address : '0xe395B9bA2F93236489ac953146485C435D1A267B',
+      address: address || DEFAULT_CREATE_ADDRESS,
     }));
   }, [address, setValue]);
+
+  const confirmBtnDisabled = useMemo(() => {
+    return !config.color || !config.name || !config.address;
+  }, [config]);
+
+  const genDonationsCode = (code: string) => {
+    setDonationsCode(code);
+  };
+
+  const genDonationsLink = (cid: string) => {
+    setDonationsLink(`https://donate3.xyz/donateTo?cid=${cid}`);
+  };
+
+  const genPreviewSrcDoc = (l: string) => {
+    let doc = `<html><head></head><body style="padding-top: 30px;">${l}</body></html>`;
+    setPreviewSrcDoc(doc);
+  };
+
+  const genUrl = (cid: string, isSrcDoc?: boolean) => {
+    const url = `<div data-donate3-cid="${cid}" ${isSrcDoc ? 'data-donate3-demo="true"' : ''}></div><script src="${DONATE_SDK_URL}"></script>`;
+    return url;
+  };
+
+  const genInfoByCid = (cid: string) => {
+    genDonationsCode(genUrl(cid));
+    genDonationsLink(cid);
+    genPreviewSrcDoc(genUrl(cid, true));
+  };
+
+  const storeInfoToNFTStorage = async (data: Partial<ICustomWidget>) => {
+    const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '' });
+    const blobData = new Blob([JSON.stringify(data)], {
+      type: 'application/json',
+    });
+    const cid = await client.storeBlob(blobData);
+    genInfoByCid(cid);
+  };
+
+  const handleClickConfirmBtn = () => {
+    storeInfoToNFTStorage(config);
+  };
+
+  const setAvatarToConfig = (avatar: string) => {
+    setConfig((pre) => ({
+      ...pre,
+      avatar,
+    }));
+  };
+
+  const handleDescEditorChange = (content: string) => {
+    setConfig((pre) => ({
+      ...pre,
+      description: content,
+    }));
+  };
 
   return (
     <>
@@ -150,6 +205,10 @@ export default function CustomWidget() {
                       }}
                       value={value}
                       onChange={(e: any) => {
+                        setError('color', {});
+                        if (!e.target.value) {
+                          setError('color', { type: 'invalid color' });
+                        }
                         setConfig((pre) => ({
                           ...pre,
                           color: e.target.value,
@@ -201,7 +260,7 @@ export default function CustomWidget() {
                         setFile(file);
                       }}
                     >
-                      <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatar} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                      <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
                     </Uploader3>
                   </FormInput>
                 );
@@ -226,6 +285,11 @@ export default function CustomWidget() {
                       }}
                       value={value}
                       onChange={(e: any) => {
+                        let name = e.target.value;
+                        setError('name', {});
+                        if (!name) {
+                          setError('name', { type: 'invalid name' });
+                        }
                         setConfig((pre) => ({
                           ...pre,
                           name: e.target.value,
@@ -245,7 +309,7 @@ export default function CustomWidget() {
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => {
                 return (
-                  <FormInput title="About me" error={errors.name?.type}>
+                  <FormInput title="About me" error={errors.description?.type}>
                     {/* <InputBase
                       sx={{
                         mt: 0,
@@ -258,12 +322,12 @@ export default function CustomWidget() {
                       onChange={(e: any) => {
                         setConfig((pre) => ({
                           ...pre,
-                          name: e.target.value,
+                          description: e.target.value,
                         }));
                         onChange(e);
                       }}
                     /> */}
-                    <DescEditor />
+                    <DescEditor onChange={handleDescEditorChange} />
                   </FormInput>
                 );
               }}
@@ -278,7 +342,7 @@ export default function CustomWidget() {
                 return (
                   <FormInput
                     title="Social media"
-                    error={errors.name?.type}
+                    error={errors.twitter?.type}
                     style={{
                       marginBottom: '16px',
                     }}
@@ -300,7 +364,7 @@ export default function CustomWidget() {
                       onChange={(e: any) => {
                         setConfig((pre) => ({
                           ...pre,
-                          name: e.target.value,
+                          twitter: e.target.value,
                         }));
                         onChange(e);
                       }}
@@ -317,7 +381,7 @@ export default function CustomWidget() {
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => {
                 return (
-                  <FormInput title="" error={errors.name?.type}>
+                  <FormInput title="" error={errors.telegram?.type}>
                     <InputBase
                       sx={{
                         mt: 0,
@@ -335,7 +399,7 @@ export default function CustomWidget() {
                       onChange={(e: any) => {
                         setConfig((pre) => ({
                           ...pre,
-                          name: e.target.value,
+                          telegram: e.target.value,
                         }));
                         onChange(e);
                       }}
@@ -393,7 +457,7 @@ export default function CustomWidget() {
               marginBottom: '18px',
             }}
           >
-            <Donate3Btn onClick={() => {}} variant="contained">
+            <Donate3Btn onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
               Confirm
             </Donate3Btn>
             <div
@@ -431,7 +495,7 @@ export default function CustomWidget() {
       </Box>
 
       {/* code */}
-      <CodeRegion />
+      <CodeRegion code={donationsCode} link={donationsLink}/>
     </>
   );
 }

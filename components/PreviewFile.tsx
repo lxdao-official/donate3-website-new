@@ -1,6 +1,6 @@
 import type { CroppedFile, SelectedFile, UploadFile, UploadResult } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import React from 'react';
+import React, { use, useEffect } from 'react';
 import { Img3 } from '@lxdao/img3';
 
 import { Status } from './Status';
@@ -12,17 +12,21 @@ interface IPreviewFileProps {
 }
 
 const PreviewFile = ({ file, style, setAvatar }: IPreviewFileProps) => {
-  let src: string;
-  if (file.status === 'uploading') {
-    src = file.thumbData || file.imageData;
-  } else if (file.status === 'done') {
-    src = file.url;
-    setAvatar!(src!)
-  } else if (file.status === 'cropped') {
-    src = file.thumbData;
-  } else {
-    src = file.previewUrl;
-  }
+  const [src, setSrc] = React.useState<string>();
+  useEffect(() => {
+    let src: string;
+    if (file.status === 'uploading') {
+      src = file.thumbData || file.imageData;
+    } else if (file.status === 'done') {
+      src = file.url;
+      setAvatar!(src!);
+    } else if (file.status === 'cropped') {
+      src = file.thumbData;
+    } else {
+      src = file.previewUrl;
+    }
+    setSrc(src);
+  }, [file, setAvatar, setSrc]);
 
   return (
     <>
@@ -41,4 +45,4 @@ const PreviewFile = ({ file, style, setAvatar }: IPreviewFileProps) => {
   );
 };
 
-export default React.memo(PreviewFile);
+export default PreviewFile;

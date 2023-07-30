@@ -4,7 +4,12 @@ import React from 'react';
 import FormInput from './FormInput';
 import Donate3Btn from '../Donate3Btn';
 
-const CodeRegion = () => {
+interface ICodeRegionProps {
+  code: string;
+  link: string;
+}
+
+const CodeRegion = ({ code, link }: ICodeRegionProps) => {
   return (
     <div
       style={{
@@ -39,7 +44,7 @@ const CodeRegion = () => {
               boxSizing: 'border-box',
             }}
           >
-            {/* {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`} */}
+            {code}
 
             <Tooltip
               title={'copied!'}
@@ -92,7 +97,7 @@ const CodeRegion = () => {
               boxSizing: 'border-box',
             }}
           >
-            {/* {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`} */}
+            {link}
 
             <Tooltip
               // title={copied && 'copied!'}

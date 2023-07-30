@@ -1,8 +1,9 @@
 import { Button, styled } from '@mui/material';
-export default function Donate3Btn({ children, variant, sx, onClick, ...rest }: any) {
+export default function Donate3Btn({ children, variant, sx, onClick,disabled, ...rest }: any) {
   return (
     <Button
       onClick={onClick}
+      disabled={disabled || false}
       sx={{
         background: variant == 'contained' ? '#CCFF00' : 'transparent',
         border: '1px solid #283231',
