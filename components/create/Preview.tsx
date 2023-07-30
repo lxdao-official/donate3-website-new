@@ -15,7 +15,7 @@ const Preview = () => {
         fontWeight: 700,
         position: 'absolute',
         top: 10,
-        left: 10,
+        left: 89,
       }}
     >
       Preview

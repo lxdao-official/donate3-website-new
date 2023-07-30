@@ -1,12 +1,13 @@
 import { Box, FormControl, Typography } from '@mui/material';
 
-const FormInput = ({ title, desc, error, children }: any) => {
+const FormInput = ({ title, desc, error, children,style }: any) => {
   return (
     <FormControl
       variant="standard"
       fullWidth
       style={{
         marginBottom: '30px',
+        ...style
       }}
     >
       <Box>

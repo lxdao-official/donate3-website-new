@@ -6,98 +6,123 @@ import Donate3Btn from '../Donate3Btn';
 
 const CodeRegion = () => {
   return (
-    <>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <FormInput title="Integrate into your code?">
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: '41px 32px 32px 32px',
+        borderRadius: '4px',
+        background: '#FFF',
+      }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+        <FormInput
+          title="Integrate into your code?"
+          style={{
+            marginBottom: '0px',
+          }}
+        >
           <Box
             sx={{
-              height: 'auto',
-              border: '2px dashed #EBEBEC',
+              width: '100%',
+              height: '263px',
+              border: '1px dashed var(--gray-400, #CBD5E1)',
               borderRadius: '4px',
               wordBreak: 'break-all',
               color: '#929F9E',
-              backgroundColor: '#f0f0f0',
+              background: 'var(--gray-200, #F1F5F9)',
               padding: '12px 10px',
               fontSize: '16px',
               fontWeight: '500',
+              position: 'relative',
+              boxSizing: 'border-box',
             }}
           >
             {/* {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`} */}
+
+            <Tooltip
+              title={'copied!'}
+              // title={copied && 'copied!'}
+            >
+              <Donate3Btn
+                style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', left: '10px' }}
+                onClick={() => {
+                  // navigator.clipboard.writeText(url).then(
+                  //   function () {
+                  //     setCopied(true);
+                  //     setTimeout(() => {
+                  //       setCopied(false);
+                  //     }, 1000);
+                  //   },
+                  //   function (e) {
+                  //     console.error(e);
+                  //   }
+                  // );
+                }}
+              >
+                <Box component={'img'} src="/images/copyGroup.png" mr="15px"></Box>
+                Copy code
+              </Donate3Btn>
+            </Tooltip>
           </Box>
         </FormInput>
-        <Box display="flex" gap={2}>
-          <Tooltip
-            title={'copied!'}
-            // title={copied && 'copied!'}
-          >
-            <Donate3Btn
-              onClick={() => {
-                // navigator.clipboard.writeText(url).then(
-                //   function () {
-                //     setCopied(true);
-                //     setTimeout(() => {
-                //       setCopied(false);
-                //     }, 1000);
-                //   },
-                //   function (e) {
-                //     console.error(e);
-                //   }
-                // );
-              }}
-            >
-              <Box component={'img'} src="/icons/copy2.svg" mr="15px"></Box>
-              Copy code
-            </Donate3Btn>
-          </Tooltip>
-        </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <FormInput title="Need a link to accept donations?">
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+        <FormInput
+          style={{
+            marginBottom: '0px',
+          }}
+          title="Need a link to accept donations?"
+        >
           <Box
             sx={{
-              height: 'auto',
-              border: '2px dashed #EBEBEC',
+              width: '100%',
+              height: '263px',
+              border: '1px dashed var(--gray-400, #CBD5E1)',
               borderRadius: '4px',
               wordBreak: 'break-all',
               color: '#929F9E',
-              backgroundColor: '#f0f0f0',
+              background: 'var(--gray-200, #F1F5F9)',
               padding: '12px 10px',
               fontSize: '16px',
               fontWeight: '500',
+              position: 'relative',
+              boxSizing: 'border-box',
             }}
           >
             {/* {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`} */}
+
+            <Tooltip
+              // title={copied && 'copied!'}
+              title={'copied!'}
+            >
+              <Donate3Btn
+                style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', left: '10px' }}
+                onClick={() => {
+                  // const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`;
+                  // navigator.clipboard.writeText(link).then(
+                  //   function () {
+                  //     setCopied(true);
+                  //     setTimeout(() => {
+                  //       setCopied(false);
+                  //     }, 1000);
+                  //   },
+                  //   function (e) {
+                  //     console.error(e);
+                  //   }
+                  // );
+                }}
+              >
+                <Box component={'img'} src="/images/copyLink.png" mr="15px"></Box>
+                Copy Link
+              </Donate3Btn>
+            </Tooltip>
           </Box>
         </FormInput>
-        <Box display="flex" gap={2}>
-          <Tooltip
-            // title={copied && 'copied!'}
-            title={'copied!'}
-          >
-            <Donate3Btn
-              onClick={() => {
-                // const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`;
-                // navigator.clipboard.writeText(link).then(
-                //   function () {
-                //     setCopied(true);
-                //     setTimeout(() => {
-                //       setCopied(false);
-                //     }, 1000);
-                //   },
-                //   function (e) {
-                //     console.error(e);
-                //   }
-                // );
-              }}
-            >
-              <Box component={'img'} src="/icons/copy2.svg" mr="15px"></Box>
-              Copy Link
-            </Donate3Btn>
-          </Tooltip>
-        </Box>
       </Box>
-    </>
+    </div>
   );
 };
 export default CodeRegion;

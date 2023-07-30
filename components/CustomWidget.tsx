@@ -4,7 +4,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, InputBase, Tooltip } from '@mui/material';
+import { Box, InputAdornment, InputBase, Tooltip } from '@mui/material';
+import Image from 'next/image';
+import { AccountCircle } from '@mui/icons-material';
 
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
@@ -36,6 +38,9 @@ export default function CustomWidget() {
       name: 'Donate3',
       address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
       avatar: '',
+      description: '',
+      twitter: '',
+      telegram: '',
     },
   });
   const [copied, setCopied] = useState(false);
@@ -202,6 +207,7 @@ export default function CustomWidget() {
               }}
             />
 
+            {/* Name */}
             <Controller
               name={'name'}
               control={control}
@@ -225,6 +231,113 @@ export default function CustomWidget() {
                         }));
                         onChange(e);
                       }}
+                    />
+                  </FormInput>
+                );
+              }}
+            />
+
+            {/* About me */}
+            <Controller
+              name={'description'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="About me" error={errors.name?.type}>
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      onChange={(e: any) => {
+                        setConfig((pre) => ({
+                          ...pre,
+                          name: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
+                    />
+                  </FormInput>
+                );
+              }}
+            />
+
+            {/* Social media */}
+            <Controller
+              name={'twitter'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput
+                    title="Social media"
+                    error={errors.name?.type}
+                    style={{
+                      marginBottom: '16px',
+                    }}
+                  >
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Image src="/images/twitterNew.png" alt="twitter" width="24" height="24" />
+                        </InputAdornment>
+                      }
+                      onChange={(e: any) => {
+                        setConfig((pre) => ({
+                          ...pre,
+                          name: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
+                      placeholder="set your twitter account"
+                    />
+                  </FormInput>
+                );
+              }}
+            />
+
+            <Controller
+              name={'telegram'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="" error={errors.name?.type}>
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Image src="/images/telegram.png" alt="telegram" width="24" height="24" />
+                        </InputAdornment>
+                      }
+                      value={value}
+                      onChange={(e: any) => {
+                        setConfig((pre) => ({
+                          ...pre,
+                          name: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
+                      placeholder="set your telegram account"
                     />
                   </FormInput>
                 );
@@ -273,7 +386,11 @@ export default function CustomWidget() {
             />
           </Card>
 
-          <div>
+          <div
+            style={{
+              marginBottom: '18px',
+            }}
+          >
             <Donate3Btn onClick={() => {}} variant="contained">
               Confirm
             </Donate3Btn>
@@ -294,7 +411,7 @@ export default function CustomWidget() {
             component="iframe"
             sx={{
               top: { xs: '-105px', sm: 0 },
-              left: { xs: '-60px', sm: 0 },
+              left: { xs: '-60px', sm: '79px' },
               border: '2px solid var(--gray-300, #E2E8F0);',
               mx: 'auto',
               minWidth: '400px',
