@@ -35,6 +35,8 @@
     "react-hook-form": "^7.45.1",
     "react-slick": "^0.29.0",
     "styled-components": "^6.0.5",
+    "suneditor": "^2.45.1",
+    "suneditor-react": "^3.6.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.6",
     "viem": "^1.2.9",

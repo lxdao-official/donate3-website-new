@@ -19,6 +19,7 @@ import RadioBox from './create/RadioBox';
 import Preview from './create/Preview';
 import Card from './create/Card';
 import CodeRegion from './create/CodeRegion';
+import DescEditor from './create/DescEditor';
 
 export default function CustomWidget() {
   const { address } = useAccount();
@@ -245,7 +246,7 @@ export default function CustomWidget() {
               render={({ field: { onChange, value } }) => {
                 return (
                   <FormInput title="About me" error={errors.name?.type}>
-                    <InputBase
+                    {/* <InputBase
                       sx={{
                         mt: 0,
                         backgroundColor: 'var(--gray-300, #E2E8F0)',
@@ -261,7 +262,8 @@ export default function CustomWidget() {
                         }));
                         onChange(e);
                       }}
-                    />
+                    /> */}
+                    <DescEditor />
                   </FormInput>
                 );
               }}
@@ -302,7 +304,7 @@ export default function CustomWidget() {
                         }));
                         onChange(e);
                       }}
-                      placeholder="set your twitter account"
+                      placeholder="Enter your twitter account"
                     />
                   </FormInput>
                 );
@@ -337,7 +339,7 @@ export default function CustomWidget() {
                         }));
                         onChange(e);
                       }}
-                      placeholder="set your telegram account"
+                      placeholder="Enter your telegram account"
                     />
                   </FormInput>
                 );
