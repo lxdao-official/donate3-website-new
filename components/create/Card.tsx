@@ -10,7 +10,7 @@ interface ICardProps {
 const Card = ({ title, children, style, hasBorder = true }: ICardProps) => {
   const borderStyle = hasBorder
     ? {
-        borderBottom: '1px solid var(--gray-400, #CBD5E1);',
+        borderBottom: '1px solid var(--gray-400, #CBD5E1)',
       }
     : {};
 
