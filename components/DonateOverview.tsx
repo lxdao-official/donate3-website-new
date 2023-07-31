@@ -7,7 +7,7 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
     return (
         <Box
             sx={{
-                width: {xs:'392px',md:'392px',sm:'392px'},
+                width: {xs:'360px',md:'360px',sm:'392px'},
                 height: '380px',
                 /*marginLeft:{xs:'3px',md:'3px',sm:'41px'},*/
                 display: 'flex',
@@ -104,6 +104,7 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                                 justifyContent: 'center',
                                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                                 borderRadius: '50%',
+
                                 width: '100%',
                                 height: '100%',
                             }}
@@ -125,12 +126,11 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                 <Typography
                     variant="body2"
                     sx={{
-                        fontWeight: 700,
+                        fontWeight: 400,
                         fontSize: { xs: '14px', sm: '14px', md: '14px' },
                         lineHeight: { xs: '26px', md: '26px' },
-                        padding: { xs: '10px', sm: '30px', md: 0 },
                         color: '#475569',
-                        marginLeft:'3px',
+                        marginLeft:'12px',
                         textAlign: { xs: 'left', lg: 'left' },
                     }}
                 >

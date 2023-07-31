@@ -150,7 +150,7 @@ export default function CustomWidget() {
   } = useForm({
     mode: 'onBlur',
     defaultValues: {
-      type: 0,
+      type: 1,
       color: '#b7d844',
       name: 'Donate3',
       address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
@@ -159,7 +159,7 @@ export default function CustomWidget() {
   });
   const [copied, setCopied] = useState(false);
   const [config, setConfig] = useState({
-    type: 0,
+    type: 1,
     color: '#b7d844',
     name: 'Donate3',
     address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
@@ -210,6 +210,19 @@ export default function CustomWidget() {
             return (
               <FormInput title="Stylein your website" error={errors.type?.type}>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <RadioBox
+                        onChange={(e: number) => {
+                            setConfig((pre) => ({
+                                ...pre,
+                                type: e,
+                            }));
+                            onChange(e);
+                        }}
+                        value={1}
+                        current={value}
+                        title="Normal button"
+                        imgurl="../images/widget_hyperlink.png"
+                    />
                   <RadioBox
                     onChange={(e: number) => {
                       setConfig((pre) => ({
@@ -225,19 +238,7 @@ export default function CustomWidget() {
                     title="Floating button"
                     imgurl="../images/widget_button.jpg"
                   />
-                  <RadioBox
-                    onChange={(e: number) => {
-                      setConfig((pre) => ({
-                        ...pre,
-                        type: e,
-                      }));
-                      onChange(e);
-                    }}
-                    value={1}
-                    current={value}
-                    title="Normal button"
-                    imgurl="../images/widget_hyperlink.png"
-                  />
+
                 </Box>
               </FormInput>
             );

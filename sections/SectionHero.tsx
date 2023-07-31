@@ -6,18 +6,50 @@ import React from 'react';
 
 const CircleBg = styled(Box)`
   position: absolute;
-  width: 100%;
-  height: 35%;
-  left: 0;
+
+  right: 0;
   bottom: 0;
   border-radius: 50%;
-  top:75%;
-  background: linear-gradient(142.97deg, #D3FF2552, #94dffc);
-  opacity: 0.7;
+  background: linear-gradient(142.97deg, #D3FF25 32%, #4BB5F7 10%);
+  opacity: 0.2;
   filter: blur(5vw);
   pointer-events: none;
-  z-index: 0; /* 可以根据需要调整 z-index 值 */
+  z-index: 0;
+  @media (max-width: 600px) {
+    top: 90%;
+    width: 40%;
+    height: 20%;
+  }
+
+  @media (min-width: 601px) {
+    top: 46%;
+    width: 60%;
+    height: 50%;
+  }
   
+`;
+const CircleBgg = styled(Box)`
+  position: absolute;
+
+  left: 10%;
+  bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(10.97deg, #D3FF25 32%, #11D6C3 10%);
+  opacity: 0.25;
+  filter: blur(5vw);
+  pointer-events: none;
+  z-index: 0;
+  @media (max-width: 600px) {
+    top: 92%;
+    width: 30%;
+    height: 20%;
+  }
+
+  @media (min-width: 601px) {
+    top: 66%;
+    width: 30%;
+    height: 40%;
+  }
 `;
 const StyledButton = styled(Button)`
   &.MuiButton-root {
@@ -76,14 +108,14 @@ export function SectionHero() {
 
             }}
         >
-
             <CircleBg/>
+            <CircleBgg/>
             <Typography
                 variant="h1"
 
                 sx={{
                     fontWeight: 800,
-                    fontSize: {xs: '40px', sm: '54px', md: '72px'},
+                    fontSize: {xs: '30px', sm: '54px', md: '72px'},
                     lineHeight: {xs: '37px', md: '64px'},
                     color: '#000000',
                     textAlign: {xs: 'center', lg: 'center'},

@@ -83,7 +83,7 @@ const LXDAOFooter = () => {
                 <Box display="flex" gap="24px" flexDirection="column" marginTop={{ lg: 0, xs: 4 }} flex={1}>
                     <Box>
                         <Typography variant="h6" lineHeight="58px" color="black" fontWeight={700}>
-                            Product of
+                            Support by
                         </Typography>
                         <Box width="147px" height="58px" component={'img'} src={'/icons/lxdao-logo.svg'} />
                     </Box>

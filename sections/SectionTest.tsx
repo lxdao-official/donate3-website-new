@@ -1,114 +1,82 @@
-
-import { Button, Box, Typography, List} from '@mui/material';
-import {useRouter} from 'next/router';
-import styled from 'styled-components';
 import React from 'react';
-
-
-/*
-const CircleBg = styled(Box)`
-  position: absolute;
-  width: 100%;
-  height: 35%;
-  left: 0;
-  bottom: 0;
-  border-radius: 50%;
-  top:75%;
-  background: linear-gradient(142.97deg, #D3FF2552, #94dffc);
-  opacity: 0.7;
-  filter: blur(5vw);
-  pointer-events: none;
-  z-index: 0; /!* 可以根据需要调整 z-index 值 *!/
-
-`;
-
-*/
-
+import { Box } from '@mui/system';
 
 export function SectionTest() {
-    const router = useRouter();
     return (
-
         <Box
-
             sx={{
-
                 display: 'flex',
-                flexDirection: {xs: 'column', lg: 'column'},
-                justifyContent: {xs: 'center', lg: 'center'},
+                justifyContent: 'center',
                 alignItems: 'center',
-                minHeight: {xs: '100vh', md: 'calc(100vh )'},
-                mt: {xs: '30px', lg: '188px'},
-
+                height: '100vh',
             }}
+            component="body"
         >
+            <style>
+                {`
+        *, *::before, *::after {
+          box-sizing: border-box;
+        }
 
-           {/*<HeartBg/>*/}
-            <HeartShape/>
+        @keyframes rotate {
+          100% {
+            transform: rotate(1turn);
+          }
+        }
+
+        .rainbow {
+          position: relative;
+          z-index: 0;
+          width: 400px;
+          height: 300px;
+          border-radius: 10px;
+          overflow: hidden;
+          padding: 2rem;
+
+          &::before {
+            content: '';
+            position: absolute;
+            z-index: -2;
+            left: -50%;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            background-color: #399953;
+            background-repeat: no-repeat;
+            background-size: 50% 50%, 50% 50%;
+            background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+            background-image: linear-gradient(#399953, #399953), linear-gradient(#fbb300, #fbb300), linear-gradient(#d53e33, #d53e33), linear-gradient(#377af5, #377af5);
+            animation: rotate 4s linear infinite;
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            left: 6px;
+            top: 6px;
+            width: calc(100% - 12px);
+            height: calc(100% - 12px);
+            background: white;
+            border-radius: 5px;
+            animation: opacityChange 3s infinite alternate;
+          }
+        }
+
+        @keyframes opacityChange {np
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: .5;
+          }
+        }
+      `}
+            </style>
+
+            <Box className="rainbow" />
         </Box>
-
     );
 };
-const HeartShape = styled('div')`
-  position: absolute;
-  width: 100%;
-  height: 35%;
-  left: 0;
-  bottom: 0;
-  top: 75%;
-  opacity: 0.7;
-  pointer-events: none;
-  z-index: 0;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -25px;
-    width: 52px;
-    height: 72px;
-    background-color: #D3FF25;
-    border-radius: 50px 50px 0 0;
-  }
-
-  &::before {
-    transform: rotate(-45deg);
-    left: calc(50% - 26px);
-  }
-
-  &::after {
-    transform: rotate(45deg);
-    right: calc(50% - 40px);
-  }
-`;
 
 
-const HeartBg = styled(Box)`
-  position: absolute;
-  width: 100%;
-  height: 35%;
-  left: 0;
-  bottom: 0;
-  top: 75%;
-  opacity: 0.7;
-  pointer-events: none;
-  z-index: 0;
-
-  &::after,
-  &::before {
-    position: absolute;
-    content: '';
-    left: 50%;
-    top: 0;
-    width: 52px;
-    height: 80px;
-    background: linear-gradient(142.97deg, #D3FF2552, #94dffc);
-    border-radius: 50px 50px 0 0;
-    transform: translateX(-50%) rotate(45deg);
-    transform-origin: 0 100%;
-  }
-
-  &::before {
-    transform: translateX(-50%) rotate(-45deg);
-  }
-`;
