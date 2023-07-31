@@ -4,9 +4,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, InputAdornment, InputBase, Tooltip } from '@mui/material';
+import { Box, InputAdornment, InputBase } from '@mui/material';
 import Image from 'next/image';
-import { NFTStorage, File, Blob } from 'nft.storage';
+import { NFTStorage, Blob } from 'nft.storage';
 
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
@@ -16,10 +16,10 @@ import CreateTitle from './create/Title';
 import { throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
 import RadioBox from './create/RadioBox';
-import Preview from './create/Preview';
 import Card from './create/Card';
 import CodeRegion from './create/CodeRegion';
 import DescEditor from './create/DescEditor';
+import PreviewRegion from './create/PreviewRegion';
 
 interface ICustomWidget {
   type: number;
@@ -34,8 +34,8 @@ interface ICustomWidget {
 
 export default function CustomWidget() {
   const { address } = useAccount();
+  const [loading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
-  const [avatar] = useState('');
   const [donationsCode, setDonationsCode] = useState<string>('');
   const [donationsLink, setDonationsLink] = useState<string>('');
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
@@ -49,18 +49,11 @@ export default function CustomWidget() {
     mode: 'onBlur',
     defaultValues: DEFAULT_CREATE_CONFIG,
   });
-  const [copied, setCopied] = useState(false);
   const [config, setConfig] = useState<Partial<ICustomWidget>>(DEFAULT_CREATE_CONFIG);
 
   const setColorThrottle = throttle((color) => {
     setConfig((pre) => ({ ...pre, color: color }));
   }, 300);
-
-  // const [url, setUrl] = useState(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
-
-  // useEffect(() => {
-  //   setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
-  // }, [avatar, config]);
 
   useEffect(() => {
     setValue('address', address as string);
@@ -84,6 +77,7 @@ export default function CustomWidget() {
 
   const genPreviewSrcDoc = (l: string) => {
     let doc = `<html><head></head><body style="padding-top: 30px;">${l}</body></html>`;
+    console.info(doc, '🍑🍑doc🍑🍑');
     setPreviewSrcDoc(doc);
   };
 
@@ -93,6 +87,7 @@ export default function CustomWidget() {
   };
 
   const genInfoByCid = (cid: string) => {
+    setLoading(false);
     genDonationsCode(genUrl(cid));
     genDonationsLink(cid);
     genPreviewSrcDoc(genUrl(cid, true));
@@ -104,10 +99,12 @@ export default function CustomWidget() {
       type: 'application/json',
     });
     const cid = await client.storeBlob(blobData);
+    console.info(cid, '🐻🐻cid🐻🐻');
     genInfoByCid(cid);
   };
 
   const handleClickConfirmBtn = () => {
+    setLoading(true);
     storeInfoToNFTStorage(config);
   };
 
@@ -310,23 +307,6 @@ export default function CustomWidget() {
               render={({ field: { onChange, value } }) => {
                 return (
                   <FormInput title="About me" error={errors.description?.type}>
-                    {/* <InputBase
-                      sx={{
-                        mt: 0,
-                        backgroundColor: 'var(--gray-300, #E2E8F0)',
-                        height: '40px',
-                        paddingX: '10px',
-                        borderRadius: '4px',
-                      }}
-                      value={value}
-                      onChange={(e: any) => {
-                        setConfig((pre) => ({
-                          ...pre,
-                          description: e.target.value,
-                        }));
-                        onChange(e);
-                      }}
-                    /> */}
                     <DescEditor onChange={handleDescEditorChange} />
                   </FormInput>
                 );
@@ -457,7 +437,7 @@ export default function CustomWidget() {
               marginBottom: '18px',
             }}
           >
-            <Donate3Btn onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
+            <Donate3Btn loadingButton loading={loading} onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
               Confirm
             </Donate3Btn>
             <div
@@ -472,30 +452,11 @@ export default function CustomWidget() {
             </div>
           </div>
         </Box>
-        <Box sx={{ position: 'relative', minWidth: { xs: '280px', sm: '400px' }, height: { xs: '490px', sm: '700px' } }} flex={1}>
-          <Box
-            component="iframe"
-            sx={{
-              top: { xs: '-105px', sm: 0 },
-              left: { xs: '-60px', sm: '79px' },
-              border: '2px solid var(--gray-300, #E2E8F0);',
-              mx: 'auto',
-              minWidth: '400px',
-              height: '800px',
-              borderRadius: '22px',
-              position: 'absolute',
-              scale: { xs: '0.7', sm: '1' },
-            }}
-            srcDoc={`<html><head></head><body style="padding-top: 30px;"><div 
-          data-donate3-demo="true"
-          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script></body></html>`}
-          ></Box>
-          <Preview />
-        </Box>
+        <PreviewRegion srcDoc={previewSrcDoc} />
       </Box>
 
       {/* code */}
-      <CodeRegion code={donationsCode} link={donationsLink}/>
+      <CodeRegion code={donationsCode} link={donationsLink} />
     </>
   );
 }

@@ -15,3 +15,5 @@ export const DEFAULT_CREATE_CONFIG = {
   twitter: '',
   telegram: '',
 };
+
+// config.type ? 'embed' : 'float'

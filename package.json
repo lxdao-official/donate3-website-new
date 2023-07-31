@@ -16,6 +16,7 @@
     "@lxdao/uploader3": "^1.2.2",
     "@lxdao/uploader3-connector": "^1.0.1",
     "@mui/icons-material": "^5.13.7",
+    "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.13.7",
     "@rainbow-me/rainbowkit": "^1.0.4",
     "@types/node": "20.3.3",
