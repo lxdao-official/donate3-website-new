@@ -4,17 +4,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, FormControl, InputBase, InputAdornment, Radio, Tooltip, Typography, styled, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
+import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
 // import { ChromePicker } from 'react-color';
-
-import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
+// import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
 
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -28,7 +27,9 @@ interface ICustomWidget {
   type: number;
   color: string;
   name: string;
-  address: string;
+  accountType: AccountType;
+  address?: string;
+  safeAccounts?: SafeAccount[];
   avatar: string;
   description: string;
   twitter: string;
@@ -70,6 +71,8 @@ export default function CustomWidget() {
     return !config.color || !config.name || !config.address;
   }, [config]);
 
+  const Internets = ['Ethereum', 'Goerli', 'Optimism', 'Arbitrum', 'Polygon', 'Linea', 'PGN'];
+
   const genDonationsCode = (code: string) => {
     setDonationsCode(code);
   };
@@ -108,7 +111,14 @@ export default function CustomWidget() {
 
   const handleClickConfirmBtn = () => {
     setLoading(true);
-    storeInfoToNFTStorage(config);
+    const newConfig = { ...config };
+    if (newConfig.accountType) {
+      delete newConfig.address;
+    } else {
+      delete newConfig.safeAccounts;
+    }
+    delete newConfig.accountType;
+    storeInfoToNFTStorage(newConfig);
   };
 
   const setAvatarToConfig = (avatar: string) => {
@@ -123,6 +133,17 @@ export default function CustomWidget() {
       ...pre,
       description: content,
     }));
+  };
+
+  const addAccountItem = () => {
+    const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
+    if (!newSafeAccounts[newSafeAccounts.length - 1].address) {
+      return;
+    }
+    setConfig((pre) => {
+      newSafeAccounts.push({ internet: '', address: '' });
+      return { ...pre, safeAccounts: newSafeAccounts };
+    });
   };
 
   return (
@@ -394,45 +415,190 @@ export default function CustomWidget() {
             />
 
             <Controller
-              name={'address'}
+              name={'accountType'}
               control={control}
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => {
                 return (
-                  <FormInput
-                    title="Receive address"
-                    // desc="默认收款地址是钱包登录地址"
-                    error={errors.address?.type}
-                  >
-                    <InputBase
-                      sx={{
-                        mt: 0,
-                        backgroundColor: 'var(--gray-300, #E2E8F0)',
-                        height: '40px',
-                        paddingX: '10px',
-                        borderRadius: '4px',
-                      }}
+                  <FormInput title="Account" error={errors.accountType?.type}>
+                    <RadioGroup
+                      defaultValue="0"
                       value={value}
-                      onChange={(e: any) => {
-                        let address = e.target.value;
-                        setError('address', {});
+                      onChange={(e) => {
+                        let account = Number(e.target.value);
+                        setError('accountType', {});
                         setConfig((pre) => ({
                           ...pre,
-                          address: address,
+                          accountType: account,
                         }));
-                        if (address.slice(0, 2) != '0x') {
-                          setError('address', { type: 'not address' });
-                        }
-                        if (address.length != 42) {
-                          setError('address', { type: 'too long or too short' });
-                        }
                         onChange(e);
                       }}
-                    />
+                      name="radio-buttons-group"
+                    >
+                      <FormControlLabel
+                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px' }}
+                        value="0"
+                        control={<Radio color="default" />}
+                        label={
+                          <Box>
+                            <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                              Eoa
+                            </Typography>
+                            <Typography variant="body2" lineHeight="26px" color="#64748B">
+                              Receive donation from any chain with same address.
+                            </Typography>
+                          </Box>
+                        }
+                      />
+                      <FormControlLabel
+                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px' }}
+                        value="1"
+                        control={<Radio color="default" />}
+                        label={
+                          <Box>
+                            <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                              Safe Account
+                            </Typography>
+                            <Typography variant="body2" lineHeight="26px" color="#64748B">
+                              Receive donation from any chain with different address.
+                            </Typography>
+                          </Box>
+                        }
+                      />
+                    </RadioGroup>
                   </FormInput>
                 );
               }}
             />
+
+            {config.accountType === 0 ? (
+              <Controller
+                name={'address'}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <FormInput
+                      title="Receive address"
+                      // desc="默认收款地址是钱包登录地址"
+                      error={errors.address?.type}
+                    >
+                      <InputBase
+                        sx={{
+                          mt: 0,
+                          backgroundColor: 'var(--gray-300, #E2E8F0)',
+                          height: '40px',
+                          paddingX: '10px',
+                          borderRadius: '4px',
+                        }}
+                        value={value}
+                        onChange={(e: any) => {
+                          let address = e.target.value;
+                          setError('address', {});
+                          setConfig((pre) => ({
+                            ...pre,
+                            address: address,
+                          }));
+                          if (address.slice(0, 2) != '0x') {
+                            setError('address', { type: 'not address' });
+                          }
+                          if (address.length != 42) {
+                            setError('address', { type: 'too long or too short' });
+                          }
+                          onChange(e);
+                        }}
+                      />
+                    </FormInput>
+                  );
+                }}
+              />
+            ) : (
+              <Box>
+                <Typography
+                  sx={{
+                    position: 'inherit',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    lineHeight: '26px',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <span style={{ display: 'flex' }}>
+                    <span style={{ flex: 1 }}>Receive address</span>
+                    <span style={{ cursor: 'pointer' }} onClick={addAccountItem}>
+                      + Add
+                    </span>
+                  </span>
+                </Typography>
+
+                {!!errors.safeAccounts?.type && (
+                  <Typography
+                    sx={{
+                      fontWeight: '500',
+                      fontSize: '12px',
+                      lineHeight: '15px',
+                      px: '5px',
+                      mr: '3px',
+                      color: '#DC0202',
+                    }}
+                  >
+                    {errors.safeAccounts.type}
+                  </Typography>
+                )}
+
+                {!!config.safeAccounts?.length &&
+                  config.safeAccounts.map((item, index) => (
+                    <Box display={'flex'} key={'list' + index} mb={1}>
+                      <Box width={165} mr={1.5}>
+                        <Select
+                          fullWidth
+                          variant="standard"
+                          sx={{
+                            height: '40px',
+                            borderRadius: '4px',
+                            textIndent: '10px',
+                            backgroundColor: 'var(--gray-300, #E2E8F0)',
+                          }}
+                          value={item.internet || Internets[0]}
+                          onChange={(e) => {
+                            setConfig((pre) => {
+                              const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
+                              newSafeAccounts[index].internet = e.target.value;
+                              return { ...pre, safeAccounts: newSafeAccounts };
+                            });
+                          }}
+                        >
+                          {Internets.map((item) => (
+                            <MenuItem value={item} key={item}>
+                              {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Box>
+                      <Box flex={1}>
+                        <InputBase
+                          sx={{
+                            mt: 0,
+                            width: '100%',
+                            backgroundColor: 'var(--gray-300, #E2E8F0)',
+                            height: '40px',
+                            paddingX: '10px',
+                            borderRadius: '4px',
+                          }}
+                          value={item.address}
+                          onChange={(e: any) => {
+                            setConfig((pre) => {
+                              const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
+                              newSafeAccounts[index].address = e.target.value;
+                              return { ...pre, safeAccounts: newSafeAccounts };
+                            });
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  ))}
+              </Box>
+            )}
           </Card>
 
           <div

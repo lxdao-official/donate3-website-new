@@ -5,11 +5,22 @@ export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE
 export const DEFAULT_CREATE_NAME = 'Donate3';
 export const DEFAULT_CREATE_COLOR = '#396AFF';
 export const DEFAULT_CREATE_ADDRESS = '0xe395B9bA2F93236489ac953146485C435D1A267B';
+
+export enum AccountType {
+  'EOA',
+  'safeAccount',
+}
+export interface SafeAccount {
+  internet: string;
+  address: string;
+}
 export const DEFAULT_CREATE_CONFIG = {
   type: 0,
   color: DEFAULT_CREATE_COLOR,
   name: DEFAULT_CREATE_NAME,
+  accountType: AccountType.EOA,
   address: DEFAULT_CREATE_ADDRESS,
+  safeAccounts: [{ internet: '', address: '' }],
   avatar: '',
   description: '',
   twitter: '',
