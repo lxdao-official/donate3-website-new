@@ -1,33 +1,12 @@
 import type { NextPage } from 'next';
 import { Box } from '@mui/material';
-import { useState, useEffect } from 'react';
 
 import { Layout } from '@/components/Layout';
-import { useRouter } from 'next/router';
-interface Config {
-  address: string;
-  color: string;
-  title: string;
-}
+import { useRouter } from 'next/router'
 
 const Test: NextPage = () => {
   const router = useRouter();
-  const { address, color, title, avatar } = router.query;
-  // const [config, setConfig] = useState<{
-  //   address: string,
-  //   color: string,
-  //   title: string
-  // }>({
-  //   address: "0xe395B9bA2F93236489ac953146485C435D1A267B",
-  //   color: "b7d844",
-  //   title: "Donate3"
-  // })
-
-  // useEffect(() => {
-  //   setConfig({
-
-  //   })
-  // }, [config])
+  const { cid } = router.query;
 
   return (
     <Layout>
@@ -41,7 +20,7 @@ const Test: NextPage = () => {
           height: { xs: '100vh', md: 'calc(100vh - 230px)' },
         }}
       >
-        <div data-donate3-type="embed" data-donate3-color={'#' + color} data-donate3-title={title} data-donate3-to-address={address} data-donate3-avatar={avatar}></div>
+        <div data-donate3-cid={cid}></div>
       </Box>
     </Layout>
   );

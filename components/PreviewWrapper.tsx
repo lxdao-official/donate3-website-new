@@ -28,4 +28,4 @@ const PreviewWrapper = ({ children, style }: PreviewWrapperProps) => {
   );
 };
 
-export default React.memo(PreviewWrapper);
+export default PreviewWrapper;
