@@ -15,8 +15,8 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
     return (
         <Box
             sx={{
-                width: {xs:'302px' , sm:'302px' , md:'392px'},
-                height: {xs:'360px' , sm:'360px' , md:'360px'},
+                width: {xs:'318px' , sm:'318px' , md:'392px'},
+                height: {xs:'370px' , sm:'370px' , md:'360px'},
 
                 background: '#272e3f',
                 display: 'flex',
@@ -52,7 +52,7 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
             />
             <Typography variant="h3" sx={{
                 fontWeight: 600,
-                fontSize: {xs: '28px', sm: '28px', md: '28px'},
+                fontSize: {xs: '24px', sm: '24px', md: '28px'},
                 lineHeight: {xs: '36px', md: '36px'},
                 color: '#FFFFFF',
                 textAlign: {xs: 'left', lg: 'left'},
@@ -67,7 +67,7 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
                 color: '#FFFFFF',
                 textAlign: {xs: 'left', lg: 'left'},
                 maxWidth: {xs: '537px', sm: '537px'},
-                mt: {xs: '30px', lg: '20px'},
+                mt: {xs: '15px', lg: '20px'},
             }}>
                 {description}
             </Typography>

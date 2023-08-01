@@ -1,8 +1,7 @@
-import Image from 'next/image';
-import { Container, Button, Box, Typography, CssBaseline, Link, Divider, List } from '@mui/material';
+import {  Box, Typography } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
-import { DonateOverview } from "../components/DonateOverview1";
+import { DonateOverview } from "../components/DonateOverview";
 
 
 export function SectionClient() {
@@ -25,49 +24,49 @@ export function SectionClient() {
 
     const donateData = [
         {
-            avatarSrc: "/test/themonkey.png",
-            name: "Bogdan Krivenchenko",
-            website: "www.example.com",
-            description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
-            donationCount: 198,
+            avatarSrc: "/test/lxdao-logo.svg",
+            name: "LXDAO",
+            website: "lxdao.io",
+            description: "LXDAO is an R&D-focused DAO in Web3",
+            donationCount: 68,
             avatarSrcArray: [
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png'
+                '/test/bruce.png',
+                '/test/daodao.png',
+                '/test/muxin.png',
+                '/test/ache.png',
+                '/test/1998.png',
+                '/test/themonkey.png'
             ]
         },
         {
-            avatarSrc: "/test/themonkey.png",
-            name: "Bogdan Krivenchenko",
-            website: "www.example.org",
-            description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
+            avatarSrc: "/test/marry3-logo-rect.png",
+            name: "marry3",
+            website: "marry3.love",
+            description: "Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain",
             donationCount: 150,
             avatarSrcArray: [
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png'
+                '/test/daodao.png',
+                '/test/yoo.png',
+                '/test/nextdao.png',
+                '/test/kenlabs.png',
+                '/test/dotbit.png',
+                '/test/mail3.png'
             ]
         },
         // Add one more data entry as needed
         {
-            avatarSrc: "/test/themonkey.png",
-            name: "Bogdan Krivenchenko",
-            website: "www.example.net",
-            description: "This is a introduction of this creator.This is a introduction of this creator.This is a introduction of this creator.This is a blabla...",
+            avatarSrc: "/test/mail3.png",
+            name: "mail3",
+            website: "mail3.me",
+            description: "Web3 natives deserve a better mail",
             donationCount: 75,
             avatarSrcArray: [
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png',
-                '/test/mypng.png'
+                '/test/mixin.png',
+                '/test/dotbit.png',
+                '/test/bruce.png',
+                '/test/GangsDAO.png',
+                '/test/MetaverseSpace.png',
+                '/test/MetaBank.png'
             ]
         }
     ];
@@ -91,8 +90,8 @@ export function SectionClient() {
 
                 sx={{
                     fontWeight: 800,
-                    fontSize: { xs: '50px', sm: '54px', md: '56px' },
-                    lineHeight: { xs: '37px', md: '64px' },
+                    fontSize: { xs: '30px', sm: '54px', md: '56px' },
+                    lineHeight: { xs: '32px', md: '64px' },
                     color: '#0F172A',
                     textAlign: { xs: 'center', lg: 'center' },
                     mt: { xs: '30px', lg: '86' },
@@ -116,12 +115,12 @@ export function SectionClient() {
                 />
 
                 <Box sx={{ width: "65px" }} />
-                <Box sx={{ display: 'flex', maxWidth: '100%', maxHeight: '100%' }}>
+                <Box sx={{ display: 'flex',alignItems: 'center', maxWidth: '100%', maxHeight: '100%' }}>
                     <Box ml={2}>
                         <Typography variant="h3" sx={{
                             fontWeight: 700,
-                            fontSize: { xs: '28px', sm: '54px', md: '28px' },
-                            lineHeight: { xs: '37px', md: 'px' },
+                            fontSize: { xs: '20px', sm: '20px', md: '28px' },
+                            lineHeight: { xs: '37px', md: '37px' },
                             padding: { xs: '10px', sm: '30px', md: 0 },
                             color: '#0F172A',
                             textAlign: { xs: 'center  ', lg: 'left' },
@@ -132,7 +131,7 @@ export function SectionClient() {
                             sx={{
                                 fontWeight: 400,
                                 fontSize: { xs: '20px', sm: '20px', md: '20px' },
-                                lineHeight: { xs: '36px', md: '36 px' },
+                                lineHeight: { xs: '36px', md: '36px' },
                                 color: '#334155',
                                 textAlign: { xs: 'left ', lg: 'left' },
                                 maxWidth: { xs: '100%', sm: '680px' },

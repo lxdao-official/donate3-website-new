@@ -16,8 +16,8 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
     return (
         <Box
             sx={{
-                width: {xs:'302px' , sm:'302px' , md:'600px'},
-                height: {xs:'360px' , sm:'360px' , md:'340px'},
+                width: {xs:'318px' , sm:'318px' , md:'600px'},
+                height: {xs:'370px' , sm:'370px' , md:'340px'},
                 background: '#272e3f',
                 display: 'flex',
                 flexDirection: 'column',
@@ -53,7 +53,7 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                 variant="h3"
                 sx={{
                     fontWeight: 600,
-                    fontSize: {xs: '20px', sm: '20px', md: '28px'},
+                    fontSize: {xs: '24px', sm: '24px', md: '28px'},
                     lineHeight: {xs: '36px', md: '36px'},
                     color: '#FFFFFF',
                     textAlign: {xs: 'left', lg: 'left'},
@@ -72,7 +72,7 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                     color: '#FFFFFF',
                     textAlign: {xs: 'left', lg: 'left'},
                     maxWidth: {xs: '270px',sm:'270px', md: '537px'},
-                    mt: {xs: '30px', lg: '20px'},
+                    mt: {xs: '15px', lg: '20px'},
                 }}
             >
                 {description}
@@ -94,6 +94,12 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                   border-right: none;
                   border-bottom: none;
                   border-left: none;
+                }10% {
+                  border-top: 2px solid #ccff00;
+                  border-right: none;
+                  border-bottom: none;
+                  border-left: none;
+                  
                 }
                 25% {
                   border-top: 2px solid #ccff00;
