@@ -4,7 +4,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled } from '@mui/material';
+import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
+// import { ChromePicker } from 'react-color';
+
+import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
 
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
@@ -153,6 +156,8 @@ export default function CustomWidget() {
       type: 0,
       color: '#b7d844',
       name: 'Donate3',
+      account: 0,
+      safeAccounts: [{ type: '', value: '' }],
       address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
       avatar: '',
     },
@@ -162,6 +167,8 @@ export default function CustomWidget() {
     type: 0,
     color: '#b7d844',
     name: 'Donate3',
+    account: 0,
+    safeAccounts: [{ type: 'Polygon', value: '' }],
     address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
   });
 
@@ -286,10 +293,12 @@ export default function CustomWidget() {
         <Controller
           name={'color'}
           control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => {
+          rules={{ validate: matchIsValidColor }}
+          render={({ field, field: { onChange, value }, fieldState }) => {
             return (
               <FormInput title="Primary color" error={errors.color?.type}>
+                {/* <MuiColorInput {...field} format="hex" helperText={fieldState.invalid ? 'Color is invalid' : ''} error={fieldState.invalid} />
+              </FormInput> */}
                 <InputBase
                   startAdornment={
                     <>
@@ -316,6 +325,7 @@ export default function CustomWidget() {
             );
           }}
         />
+
         <Controller
           name={'name'}
           control={control}
@@ -344,46 +354,177 @@ export default function CustomWidget() {
             );
           }}
         />
+
         <Controller
-          name={'address'}
+          name={'account'}
           control={control}
           rules={{ required: true }}
           render={({ field: { onChange, value } }) => {
             return (
-              <FormInput
-                title="Receive address"
-                // desc="默认收款地址是钱包登录地址"
-                error={errors.address?.type}
-              >
-                <InputBase
-                  sx={{
-                    mt: 0,
-                    backgroundColor: '#e6e7ea',
-                    height: '40px',
-                    paddingX: '10px',
-                    borderRadius: '4px',
-                  }}
+              <FormInput title="Account" error={errors.account?.type}>
+                <RadioGroup
+                  defaultValue="0"
                   value={value}
-                  onChange={(e: any) => {
-                    let address = e.target.value;
-                    setError('address', {});
+                  onChange={(e) => {
+                    let account = Number(e.target.value);
+                    setError('account', {});
                     setConfig((pre) => ({
                       ...pre,
-                      address: address,
+                      account: account,
                     }));
-                    if (address.slice(0, 2) != '0x') {
-                      setError('address', { type: 'not address' });
-                    }
-                    if (address.length != 42) {
-                      setError('address', { type: 'too long or too short' });
-                    }
                     onChange(e);
                   }}
-                />
+                  name="radio-buttons-group"
+                >
+                  <FormControlLabel
+                    sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px' }}
+                    value="0"
+                    control={<Radio color="default" />}
+                    label={
+                      <Box>
+                        <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                          Eoa
+                        </Typography>
+                        <Typography variant="body2" lineHeight="26px" color="#64748B">
+                          Receive donation from any chain with same address.
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                  <FormControlLabel
+                    sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px' }}
+                    value="1"
+                    control={<Radio color="default" />}
+                    label={
+                      <Box>
+                        <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                          Safe Account
+                        </Typography>
+                        <Typography variant="body2" lineHeight="26px" color="#64748B">
+                          Receive donation from any chain with different address.
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                </RadioGroup>
               </FormInput>
             );
           }}
         />
+
+        {config.account === 0 ? (
+          <Controller
+            name={'address'}
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => {
+              return (
+                <FormInput
+                  title="Receive address"
+                  // desc="默认收款地址是钱包登录地址"
+                  error={errors.address?.type}
+                >
+                  <InputBase
+                    sx={{
+                      mt: 0,
+                      backgroundColor: '#e6e7ea',
+                      height: '40px',
+                      paddingX: '10px',
+                      borderRadius: '4px',
+                    }}
+                    value={value}
+                    onChange={(e: any) => {
+                      let address = e.target.value;
+                      setError('address', {});
+                      setConfig((pre) => ({
+                        ...pre,
+                        address: address,
+                      }));
+                      if (address.slice(0, 2) != '0x') {
+                        setError('address', { type: 'not address' });
+                      }
+                      if (address.length != 42) {
+                        setError('address', { type: 'too long or too short' });
+                      }
+                      onChange(e);
+                    }}
+                  />
+                </FormInput>
+              );
+            }}
+          />
+        ) : (
+          <FormInput
+            title={
+              <span style={{ display: 'flex' }}>
+                <span style={{ flex: 1 }}>Receive address</span>
+                <span
+                  onClick={() =>
+                    setConfig((pre) => {
+                      const newSafeAccounts = [...pre.safeAccounts];
+                      newSafeAccounts.push({ type: 'Polygon', value: '' });
+                      return { ...pre, safeAccounts: newSafeAccounts };
+                    })
+                  }
+                >
+                  + Add
+                </span>
+              </span>
+            }
+            // desc="默认收款地址是钱包登录地址"
+            error={errors.safeAccounts?.type}
+          >
+            {config.safeAccounts.map((item, index) => (
+              <Box display={'flex'} key={'list' + index} mb={1}>
+                <Box width={165} mr={2}>
+                  <Select
+                    fullWidth
+                    sx={{
+                      height: '40px',
+                      backgroundColor: '#e6e7ea',
+                      borderBottomColor: 'transparent',
+                      textIndent: '10px',
+                    }}
+                    defaultValue="Polygon"
+                    value={item.type}
+                    onChange={(e) => {
+                      setConfig((pre) => {
+                        const newSafeAccounts = [...pre.safeAccounts];
+                        newSafeAccounts[index].type = e.target.value;
+                        return { ...pre, safeAccounts: newSafeAccounts };
+                      });
+                    }}
+                  >
+                    <MenuItem value={'Polygon'}>Polygon</MenuItem>
+                    <MenuItem value={'Mainnet1'}>Mainnet1</MenuItem>
+                    <MenuItem value={'Mainnet2'}>Mainnet2</MenuItem>
+                  </Select>
+                </Box>
+                <Box flex={1}>
+                  <InputBase
+                    sx={{
+                      mt: 0,
+                      width: '100%',
+                      backgroundColor: '#e6e7ea',
+                      height: '40px',
+                      paddingX: '10px',
+                      borderRadius: '4px',
+                    }}
+                    value={item.value}
+                    onChange={(e: any) => {
+                      setConfig((pre) => {
+                        const newSafeAccounts = [...pre.safeAccounts];
+                        newSafeAccounts[index].value = e.target.value;
+                        return { ...pre, safeAccounts: newSafeAccounts };
+                      });
+                    }}
+                  />
+                </Box>
+              </Box>
+            ))}
+          </FormInput>
+        )}
+
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <FormInput title="Integrate into your code?">
             <Box
