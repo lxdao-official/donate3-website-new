@@ -16,4 +16,7 @@ export const DEFAULT_CREATE_CONFIG = {
   telegram: '',
 };
 
-// config.type ? 'embed' : 'float'
+export enum EType {
+  'float' = 0,
+  'embed',
+}

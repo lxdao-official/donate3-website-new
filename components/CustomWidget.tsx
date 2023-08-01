@@ -11,7 +11,7 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, EType } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -95,12 +95,25 @@ export default function CustomWidget() {
 
   const storeInfoToNFTStorage = async (data: Partial<ICustomWidget>) => {
     const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '' });
-    const blobData = new Blob([JSON.stringify(data)], {
-      type: 'application/json',
-    });
-    const cid = await client.storeBlob(blobData);
-    console.info(cid, '🐻🐻cid🐻🐻');
-    genInfoByCid(cid);
+    const blobData = new Blob(
+      [
+        JSON.stringify({
+          ...data,
+          type: EType[data?.type!],
+        }),
+      ],
+      {
+        type: 'application/json',
+      }
+    );
+
+    try {
+      const cid = await client.storeBlob(blobData);
+      console.info(cid, '🐻🐻cid🐻🐻');
+      genInfoByCid(cid);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClickConfirmBtn = () => {
