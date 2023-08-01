@@ -137,7 +137,7 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
       </Head>
       <Box
         sx={{
-          background: bgColor,
+          //background: bgColor,
         }}
       >
         <Header />

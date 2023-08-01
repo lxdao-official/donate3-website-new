@@ -1,25 +1,25 @@
 import React from 'react';
 import {Box, Typography} from '@mui/material';
 
-export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, website: string, description: string, donationCount: number,avatarSrcArray: string[] }}) {
+export function DonateOverview({data}: { data: { avatarSrc: string, name: string, website: string, description: string, donationCount: number, avatarSrcArray: string[] } }) {
     const {avatarSrc, name, website, description, donationCount} = data;
 
     return (
         <Box
             sx={{
-                width: {xs:'360px',md:'360px',sm:'392px'},
+                width: {xs: '360px', md: '360px', sm: '392px'},
                 height: '380px',
                 /*marginLeft:{xs:'3px',md:'3px',sm:'41px'},*/
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '35px',
                 boxShadow: 'none',
-                borderRadius:'3%',
-                border:'2px solid',
-                borderColor:'#E2E8F0',
-                marginLeft:{md:'41px'},
+                borderRadius: '3%',
+                border: '0.5px solid',
+                borderColor: '#E2E8F0',
+                marginLeft: {md: '41px'},
                 transition: 'box-shadow 0.3s', // 添加过渡效果
-                mt:{xs:'20px' , lg:'0px'},
+                mt: {xs: '20px', lg: '0px'},
                 '&:hover': {
                     boxShadow: '0px 20px 50px 0px #1D50751F',
                 },
@@ -29,7 +29,7 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                 <Box>
                     <img src={avatarSrc} alt="Avatar" style={{borderRadius: '50%', width: '80px', height: '80px'}}/>
                 </Box>
-                <Box ml={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+                <Box ml={2} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
                     <Typography variant="h3" sx={{
                         fontWeight: 700,
                         fontSize: {xs: '20px', sm: '20px', md: '20px'},
@@ -46,7 +46,13 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                         target="_blank"
                         rel="noopener noreferrer"
 
-                        sx={{fontWeight:400,fontSize:'16px',lineHeight:'28px',color: '#64748B', textDecoration: 'none'}} // 设置 color 属性的值为 '#64748B'
+                        sx={{
+                            fontWeight: 400,
+                            fontSize: '16px',
+                            lineHeight: '28px',
+                            color: '#64748B',
+                            textDecoration: 'none'
+                        }} // 设置 color 属性的值为 '#64748B'
                     >
                         {website}
                     </Typography>
@@ -60,8 +66,8 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                 color: '#64748B',
                 textAlign: {xs: 'left', lg: 'left'},
                 minWidth: {xs: '321px', sm: '321px'},
-                minHeight: {xs: '144px', sm: '144px',lg:'144px'},
-                mt:{xs:'5px',md:'32px',sm:'37px'},
+                minHeight: {xs: '144px', sm: '144px', lg: '144px'},
+                mt: {xs: '5px', md: '32px', sm: '37px'},
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'normal',
@@ -70,13 +76,23 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                 {description}
             </Typography>
 
-            <Box sx={{ mt: { xs: '25px', sm: '25px', md: '25px' }, display: 'flex', alignItems: 'center', mb: { xs: '32px', sm: '32px', md: '32px' } }}>
-                {data.avatarSrcArray.slice(0, 5).map((src, index) => (
+            <Box sx={{
+                mt: {xs: '25px', sm: '25px', md: '25px'},
+                display: 'flex',
+                alignItems: 'center',
+                mb: {xs: '32px', sm: '32px', md: '32px'}
+            }}>
+                {data.avatarSrcArray.slice(0, 4).map((src, index) => (
                     <img
                         key={`avatar-${index}`}
                         src={src}
                         alt={`Avatar ${index + 1}`}
-                        style={{ borderRadius: '50%', width: '30px', height: '30px', marginLeft: index > 0 ? '-10px' : '0' }}
+                        style={{
+                            borderRadius: '50%',
+                            width: '30px',
+                            height: '30px',
+                            marginLeft: index > 0 ? '-10px' : '0'
+                        }}
                     />
                 ))}
                 {donationCount > 0 && (
@@ -92,7 +108,7 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                         <img
                             src={data.avatarSrcArray[data.avatarSrcArray.length - 1]}
                             alt={`Avatar ${data.avatarSrcArray.length}`}
-                            style={{ borderRadius: '50%', width: '100%', height: '100%' }}
+                            style={{borderRadius: '50%', width: '100%', height: '100%'}}
                         />
                         <Box
                             sx={{
@@ -113,8 +129,8 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                                 variant="body2"
                                 sx={{
                                     fontWeight: 700,
-                                    fontSize: { xs: '14px', sm: '14px', md: '14px' },
-                                    lineHeight: { xs: '26px', md: '26px' },
+                                    fontSize: {xs: '14px', sm: '14px', md: '14px'},
+                                    lineHeight: {xs: '26px', md: '26px'},
                                     color: '#FFFFFF',
                                 }}
                             >
@@ -127,11 +143,13 @@ export function DonateOverview({data}: {data:{ avatarSrc: string, name: string, 
                     variant="body2"
                     sx={{
                         fontWeight: 400,
-                        fontSize: { xs: '14px', sm: '14px', md: '14px' },
-                        lineHeight: { xs: '26px', md: '26px' },
+                        fontSize: {xs: '14px', sm: '14px', md: '14px'},
+                        lineHeight: {xs: '26px', md: '26px'},
                         color: '#475569',
-                        marginLeft:'12px',
-                        textAlign: { xs: 'left', lg: 'left' },
+                        marginLeft: '12px',
+                        textAlign: {xs: 'left', lg: 'left'},
+                        //maxHeight:'30px'
+                        whiteSpace: 'nowrap',
                     }}
                 >
                     {donationCount} people have donated

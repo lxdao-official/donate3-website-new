@@ -11,15 +11,14 @@ export function SectionFeacture() {
         <Box
 
             sx={{
-                marginLeft:{xs:'-15px',lg:'-16px'},
-                marginRight:{xs:'-15px',lg:'-16px'},
+                marginLeft:{xs:'-15px',lg:'-1600px'},
+                marginRight:{xs:'-15px',lg:'-1600px'},
                 display: 'flex',
                 flexDirection: {xs: 'column', lg: 'column'},
                 justifyContent: {xs: 'center', lg: 'center'},
                 alignItems: 'center',
                 minHeight: {xs: 'calc(100vh)', md: 'calc(100vh)'},
                 background: '#0F172A',
-
 
             }}
 

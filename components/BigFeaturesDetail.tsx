@@ -17,12 +17,12 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
         <Box
             sx={{
                 width: {xs:'318px' , sm:'318px' , md:'600px'},
-                height: {xs:'370px' , sm:'370px' , md:'340px'},
+                height: {xs:'400px' , sm:'400px' , md:'340px'},
                 background: '#272e3f',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
-                justifyContent: 'center',
+               // justifyContent: 'center',
                 borderRadius: '3%',
                 paddingLeft: '32px',
                 position: 'relative', // Added for absolute positioning of pseudo-element
@@ -45,7 +45,17 @@ export function BigFeaturesDetail({data}: { data: { iconSrc: string, title: stri
                     }}
                 />
             )}
-            <Box component="img" src={iconSrc}  sx={{width: '48px', height: '48px'}}/>
+            <Box
+                component='img'
+                src={iconSrc}
+                alt="Icon"
+                sx={{
+                    width: '48px',
+                    height: '48px',
+                    mt: '43px',
+                    marginLeft:{xs: '13px', lg: '13px'},
+                }}
+            />
 
             {/*<img src={iconSrc} alt="Icon" style={{width: '48px', height: '48px'}}/>*/}
 

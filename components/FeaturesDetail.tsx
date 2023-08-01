@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import { Box, Typography } from '@mui/material';
+import {Box, Typography} from '@mui/material';
 
-export function FeaturesDetail({data}: { data: { iconSrc: string, title: string, description: string } })  {
-    const { iconSrc, title, description } = data;
+export function FeaturesDetail({data}: { data: { iconSrc: string, title: string, description: string } }) {
+    const {iconSrc, title, description} = data;
     const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseEnter = () => {
@@ -15,18 +15,16 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
     return (
         <Box
             sx={{
-                width: {xs:'318px' , sm:'318px' , md:'392px'},
-                height: {xs:'370px' , sm:'370px' , md:'360px'},
-
+                width: {xs: '318px', sm: '318px', md: '392px'},
+                height: {xs: '380px', sm: '380px', md: '360px'},
                 background: '#272e3f',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
-                justifyContent: 'center',
                 borderRadius: '3%',
                 padding: '20px',
                 position: 'relative', // Added for absolute positioning of pseudo-element
-                margin:{xs:'20px',lg:'0px'}
+                margin: {xs: '20px', lg: '0px'}
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -45,10 +43,16 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
                     }}
                 />
             )}
-            <img
+            <Box
+                component='img'
                 src={iconSrc}
                 alt="Icon"
-                style={{width: '48px', height: '48px'}}
+                sx={{
+                    width: '48px',
+                    height: '48px',
+                    mt: '23px',
+                    marginLeft:{xs: '13px', lg: '13px'},
+                }}
             />
             <Typography variant="h3" sx={{
                 fontWeight: 600,
@@ -57,6 +61,7 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
                 color: '#FFFFFF',
                 textAlign: {xs: 'left', lg: 'left'},
                 mt: {xs: '30px', lg: '38px'},
+
             }}>
                 {title}
             </Typography>
@@ -80,35 +85,35 @@ export function FeaturesDetail({data}: { data: { iconSrc: string, title: string,
                 position: relative;
               }
 
-       @keyframes borderGrow {
-  0% {
-    border-top: 2px solid #ccff00;
-    border-right: none;
-    border-bottom: none;
-    border-left: none;
-  }
-  25% {
-    border-top: 2px solid #ccff00;
-    border-right: 2px solid #ccff00;
-    border-bottom: none;
-    border-left: none;
-  }
-  50% {
-    border-top: 2px solid #ccff00;
-    border-right: 2px solid #ccff00;
-    border-bottom: 2px solid #ccff00;
-    border-left: none;
-  }
-  75% {
-    border-top: 2px solid #ccff00;
-    border-right: 2px solid #ccff00;
-    border-bottom: 2px solid #ccff00;
-    border-left: 2px solid #ccff00;
-  }
-  100% {
-    border: 2px solid #ccff00;
-  }
-}
+              @keyframes borderGrow {
+                0% {
+                  border-top: 2px solid #ccff00;
+                  border-right: none;
+                  border-bottom: none;
+                  border-left: none;
+                }
+                25% {
+                  border-top: 2px solid #ccff00;
+                  border-right: 2px solid #ccff00;
+                  border-bottom: none;
+                  border-left: none;
+                }
+                50% {
+                  border-top: 2px solid #ccff00;
+                  border-right: 2px solid #ccff00;
+                  border-bottom: 2px solid #ccff00;
+                  border-left: none;
+                }
+                75% {
+                  border-top: 2px solid #ccff00;
+                  border-right: 2px solid #ccff00;
+                  border-bottom: 2px solid #ccff00;
+                  border-left: 2px solid #ccff00;
+                }
+                100% {
+                  border: 2px solid #ccff00;
+                }
+              }
 
             `}</style>
         </Box>

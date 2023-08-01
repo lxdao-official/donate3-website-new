@@ -87,7 +87,6 @@ export function SectionClient() {
 
             <Typography
                 variant="h1"
-
                 sx={{
                     fontWeight: 800,
                     fontSize: { xs: '30px', sm: '54px', md: '56px' },
