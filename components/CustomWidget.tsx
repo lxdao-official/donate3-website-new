@@ -1,146 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, FormControl, InputBase, Radio, Tooltip, Typography, styled } from '@mui/material';
+import { Box, InputAdornment, InputBase } from '@mui/material';
+import Image from 'next/image';
+import { NFTStorage, Blob } from 'nft.storage';
 
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DONATE_SDK_URL } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, EType } from '@/utils/const';
+import CreateTitle from './create/Title';
+import { throttle } from '@/utils/common';
+import FormInput from './create/FormInput';
+import RadioBox from './create/RadioBox';
+import Card from './create/Card';
+import CodeRegion from './create/CodeRegion';
+import DescEditor from './create/DescEditor';
+import PreviewRegion from './create/PreviewRegion';
 
-function throttle<F extends (...args: any[]) => void>(func: F, wait: number): (this: ThisParameterType<F>, ...args: Parameters<F>) => void {
-  let timer: NodeJS.Timeout | null = null;
-
-  return function (this: ThisParameterType<F>, ...args: Parameters<F>) {
-    const context = this;
-
-    if (timer) {
-      clearTimeout(timer);
-    }
-
-    timer = setTimeout(() => {
-      func.apply(context, args);
-      timer = null;
-    }, wait);
-  };
-}
-
-const FormInput = ({ title, desc, error, children }: any) => {
-  return (
-    <FormControl variant="standard" fullWidth>
-      <Box mb="12px">
-        <Typography
-          sx={{
-            position: 'inherit',
-            fontWeight: '600',
-            fontSize: '14px',
-            lineHeight: '17px',
-            px: '5px',
-            color: '#3e4343',
-          }}
-        >
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: '500',
-            fontSize: '12px',
-            lineHeight: '15px',
-            px: '5px',
-            mr: '3px',
-            color: '#929f9e',
-          }}
-        >
-          {desc}
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: '500',
-            fontSize: '12px',
-            lineHeight: '15px',
-            px: '5px',
-            mr: '3px',
-            color: '#DC0202',
-          }}
-        >
-          {error}
-        </Typography>
-      </Box>
-      {children}
-      {/* <InputBase sx={{ mt: 0 }} /> */}
-    </FormControl>
-  );
-};
-
-const BpIcon = styled('span')(({ theme }) => ({
-  borderRadius: '50%',
-  width: 18,
-  height: 18,
-  backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f1f3f4',
-
-  'input:hover ~ &': {
-    backgroundColor: theme.palette.mode === 'dark' ? '#30404d' : '#e4e4e5',
-  },
-  'input:disabled ~ &': {
-    boxShadow: 'none',
-    background: theme.palette.mode === 'dark' ? 'rgba(57,75,89,.5)' : 'rgba(206,217,224,.5)',
-  },
-}));
-
-const BpCheckedIcon = styled(BpIcon)({
-  backgroundColor: '#CCFF00',
-  '&:before': {
-    display: 'block',
-    width: 18,
-    height: 18,
-    // backgroundImage: 'radial-gradient(#fff,#fff 33%,transparent 33%)',
-    content: '""',
-  },
-  'input:hover ~ &': {
-    backgroundColor: '#a5ce00',
-  },
-});
-
-// Inspired by blueprintjs
-function BpRadio(props: any) {
-  return <Radio disableRipple color="default" checkedIcon={<BpCheckedIcon />} icon={<BpIcon />} {...props} />;
-}
-
-function RadioBox({ onChange, value, title, imgurl, current }: any) {
-  return (
-    <Box
-      onClick={() => {
-        onChange(value);
-      }}
-      sx={{
-        padding: '12px',
-        bgcolor: 'background.paper',
-        width: 200,
-        height: 160,
-        marginRight: '10px',
-        marginBottom: '10px',
-        border: value == current ? '3px solid #CCFF00' : '',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        color: value == current ? '#A9D300' : '#3E4343',
-      }}
-    >
-      <BpRadio checked={value == current} size="small" />
-      <span>{title}</span>
-      <Box component={'img'} src={imgurl} sx={{ borderRadius: 2 }} />
-    </Box>
-  );
+interface ICustomWidget {
+  type: number;
+  color: string;
+  name: string;
+  address: string;
+  avatar: string;
+  description: string;
+  twitter: string;
+  telegram: string;
 }
 
 export default function CustomWidget() {
   const { address } = useAccount();
-  const [file, setFile] = React.useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
-  const [avatar, setAvatar] = React.useState('');
-
-  // const [, user] = useUser(address as string);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [file, setFile] = useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
+  const [donationsCode, setDonationsCode] = useState<string>('');
+  const [donationsLink, setDonationsLink] = useState<string>('');
+  const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
 
   const {
     control,
@@ -149,346 +47,429 @@ export default function CustomWidget() {
     setError,
   } = useForm({
     mode: 'onBlur',
-    defaultValues: {
-      type: 1,
-      color: '#b7d844',
-      name: 'Donate3',
-      address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-      avatar: '',
-    },
+    defaultValues: DEFAULT_CREATE_CONFIG,
   });
-  const [copied, setCopied] = useState(false);
-  const [config, setConfig] = useState({
-    type: 1,
-    color: '#b7d844',
-    name: 'Donate3',
-    address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-  });
+  const [config, setConfig] = useState<Partial<ICustomWidget>>(DEFAULT_CREATE_CONFIG);
 
   const setColorThrottle = throttle((color) => {
     setConfig((pre) => ({ ...pre, color: color }));
   }, 300);
 
-  const [url, setUrl] = useState(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
-
-  useEffect(() => {
-    setUrl(`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`);
-  }, [avatar, config]);
-
   useEffect(() => {
     setValue('address', address as string);
     setConfig((pre) => ({
       ...pre,
-      address: address ? address : '0xe395B9bA2F93236489ac953146485C435D1A267B',
+      address: address || DEFAULT_CREATE_ADDRESS,
     }));
   }, [address, setValue]);
 
+  const confirmBtnDisabled = useMemo(() => {
+    return !config.color || !config.name || !config.address;
+  }, [config]);
+
+  const genDonationsCode = (code: string) => {
+    setDonationsCode(code);
+  };
+
+  const genDonationsLink = (cid: string) => {
+    setDonationsLink(`https://donate3.xyz/donateTo?cid=${cid}`);
+  };
+
+  const genPreviewSrcDoc = (l: string) => {
+    let doc = `<html><head></head><body style="padding-top: 30px;">${l}</body></html>`;
+    console.info(doc, '🍑🍑doc🍑🍑');
+    setPreviewSrcDoc(doc);
+  };
+
+  const genUrl = (cid: string, isSrcDoc?: boolean) => {
+    const url = `<div data-donate3-cid="${cid}" ${isSrcDoc ? 'data-donate3-demo="true"' : ''}></div><script src="${DONATE_SDK_URL}"></script>`;
+    return url;
+  };
+
+  const genInfoByCid = (cid: string) => {
+    setLoading(false);
+    genDonationsCode(genUrl(cid));
+    genDonationsLink(cid);
+    genPreviewSrcDoc(genUrl(cid, true));
+  };
+
+  const storeInfoToNFTStorage = async (data: Partial<ICustomWidget>) => {
+    const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '' });
+    const blobData = new Blob(
+      [
+        JSON.stringify({
+          ...data,
+          type: EType[data?.type!],
+        }),
+      ],
+      {
+        type: 'application/json',
+      }
+    );
+
+    try {
+      const cid = await client.storeBlob(blobData);
+      console.info(cid, '🐻🐻cid🐻🐻');
+      genInfoByCid(cid);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleClickConfirmBtn = () => {
+    setLoading(true);
+    storeInfoToNFTStorage(config);
+  };
+
+  const setAvatarToConfig = (avatar: string) => {
+    setConfig((pre) => ({
+      ...pre,
+      avatar,
+    }));
+  };
+
+  const handleDescEditorChange = (content: string) => {
+    setConfig((pre) => ({
+      ...pre,
+      description: content,
+    }));
+  };
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column-reverse', md: 'row' },
-        justifyContent: { xs: 'start', md: 'space-between' },
-        alignItems: { xs: 'center', md: 'start' },
-        gap: 4,
-      }}
-    >
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-        <Box>
-          <Typography variant="h4" color="#44443F">
-            Create Custom Widget
-          </Typography>
-          <Typography variant="body1" color="#858686">
-            Through simple settings, you can produce a piece of code and put the four seas, and anyone can send you a cross-chain cryptocurrency.
-          </Typography>
-        </Box>
-        <Controller
-          name={'type'}
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <FormInput title="Stylein your website" error={errors.type?.type}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                    <RadioBox
+    <>
+      {/* title */}
+      <CreateTitle />
+
+      {/* center info */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column-reverse', md: 'row' },
+          justifyContent: { xs: 'start', md: 'space-between' },
+          alignItems: { xs: 'center', md: 'start' },
+          gap: 4,
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column' }} flex={1}>
+          {/* Style in your website */}
+          <Card title="Style in your website">
+            <Controller
+              name={'type'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="" error={errors.type?.type}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                      <RadioBox
                         onChange={(e: number) => {
-                            setConfig((pre) => ({
-                                ...pre,
-                                type: e,
-                            }));
-                            onChange(e);
+                          setConfig((pre) => ({
+                            ...pre,
+                            type: e,
+                          }));
+                          onChange(e);
+                        }}
+                        value={0}
+                        current={value}
+                        title="Floating button"
+                        imgUrl="../images/widget_button.jpg"
+                      />
+                      <RadioBox
+                        onChange={(e: number) => {
+                          setConfig((pre) => ({
+                            ...pre,
+                            type: e,
+                          }));
+                          onChange(e);
                         }}
                         value={1}
                         current={value}
                         title="Normal button"
-                        imgurl="../images/widget_hyperlink.png"
+                        imgUrl="../images/widget_hyperlink.png"
+                      />
+                    </Box>
+                  </FormInput>
+                );
+              }}
+            />
+
+            <Controller
+              name={'color'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="Primary color" error={errors.color?.type}>
+                    <InputBase
+                      startAdornment={
+                        <>
+                          <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} />
+                        </>
+                      }
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      onChange={(e: any) => {
+                        setError('color', {});
+                        if (!e.target.value) {
+                          setError('color', { type: 'invalid color' });
+                        }
+                        setConfig((pre) => ({
+                          ...pre,
+                          color: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
                     />
-                  <RadioBox
-                    onChange={(e: number) => {
-                      setConfig((pre) => ({
-                        ...pre,
-                        type: e,
-                      }));
-                      onChange(e);
-                      // console.log({ donate3btn });
-                      // donate3btn?.click();
-                    }}
-                    value={0}
-                    current={value}
-                    title="Floating button"
-                    imgurl="../images/widget_button.jpg"
-                  />
+                  </FormInput>
+                );
+              }}
+            />
+          </Card>
 
-                </Box>
-              </FormInput>
-            );
-          }}
-        />
+          {/* Profile settings */}
+          <Card
+            hasBorder={false}
+            title="Profile settings"
+            style={{
+              paddingTop: '24px',
+            }}
+          >
+            <Controller
+              name={'avatar'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="" error={errors.color?.type}>
+                    <Uploader3
+                      api={'/api/upload/file?name=your-name'}
+                      headers={{
+                        'x-token': 'abcd',
+                      }}
+                      multiple={false}
+                      crop={true} // use default crop options
+                      onChange={(files) => {
+                        setFile(files[0]);
+                      }}
+                      onUpload={(file) => {
+                        setFile(file);
+                      }}
+                      onComplete={(file) => {
+                        setFile(file);
+                      }}
+                      onCropCancel={(file) => {
+                        setFile(null);
+                      }}
+                      onCropEnd={(file) => {
+                        setFile(file);
+                      }}
+                    >
+                      <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                    </Uploader3>
+                  </FormInput>
+                );
+              }}
+            />
 
-        <Controller
-          name={'avatar'}
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <FormInput title="Avatar" error={errors.color?.type}>
-                <div style={{ padding: 10 }}>
-                  <Uploader3
-                    api={'/api/upload/file?name=your-name'}
-                    headers={{
-                      'x-token': 'abcd',
-                    }}
-                    multiple={false}
-                    crop={true} // use default crop options
-                    onChange={(files) => {
-                      setFile(files[0]);
-                    }}
-                    onUpload={(file) => {
-                      setFile(file);
-                    }}
-                    onComplete={(file) => {
-                      setFile(file);
-                    }}
-                    onCropCancel={(file) => {
-                      setFile(null);
-                    }}
-                    onCropEnd={(file) => {
-                      setFile(file);
+            {/* Name */}
+            <Controller
+              name={'name'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="Name" error={errors.name?.type}>
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      onChange={(e: any) => {
+                        let name = e.target.value;
+                        setError('name', {});
+                        if (!name) {
+                          setError('name', { type: 'invalid name' });
+                        }
+                        setConfig((pre) => ({
+                          ...pre,
+                          name: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
+                    />
+                  </FormInput>
+                );
+              }}
+            />
+
+            {/* About me */}
+            <Controller
+              name={'description'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="About me" error={errors.description?.type}>
+                    <DescEditor onChange={handleDescEditorChange} />
+                  </FormInput>
+                );
+              }}
+            />
+
+            {/* Social media */}
+            <Controller
+              name={'twitter'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput
+                    title="Social media"
+                    error={errors.twitter?.type}
+                    style={{
+                      marginBottom: '16px',
                     }}
                   >
-                    <PreviewWrapper style={{ height: '200px', width: '200px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatar} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
-                  </Uploader3>
-                </div>
-              </FormInput>
-            );
-          }}
-        />
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Image src="/images/twitterNew.png" alt="twitter" width="24" height="24" />
+                        </InputAdornment>
+                      }
+                      onChange={(e: any) => {
+                        setConfig((pre) => ({
+                          ...pre,
+                          twitter: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
+                      placeholder="Enter your twitter account"
+                    />
+                  </FormInput>
+                );
+              }}
+            />
 
-        <Controller
-          name={'color'}
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <FormInput title="Primary color" error={errors.color?.type}>
-                <InputBase
-                  startAdornment={
-                    <>
-                      <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} />
-                    </>
-                  }
-                  sx={{
-                    mt: 0,
-                    backgroundColor: '#e6e7ea',
-                    height: '40px',
-                    paddingX: '10px',
-                    borderRadius: '4px',
-                  }}
-                  value={value}
-                  onChange={(e: any) => {
-                    setConfig((pre) => ({
-                      ...pre,
-                      color: e.target.value,
-                    }));
-                    onChange(e);
-                  }}
-                />
-              </FormInput>
-            );
-          }}
-        />
-        <Controller
-          name={'name'}
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <FormInput title="Nickname" error={errors.name?.type}>
-                <InputBase
-                  sx={{
-                    mt: 0,
-                    backgroundColor: '#e6e7ea',
-                    height: '40px',
-                    paddingX: '10px',
-                    borderRadius: '4px',
-                  }}
-                  value={value}
-                  onChange={(e: any) => {
-                    setConfig((pre) => ({
-                      ...pre,
-                      name: e.target.value,
-                    }));
-                    onChange(e);
-                  }}
-                />
-              </FormInput>
-            );
-          }}
-        />
-        <Controller
-          name={'address'}
-          control={control}
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <FormInput
-                title="Receive address"
-                // desc="默认收款地址是钱包登录地址"
-                error={errors.address?.type}
-              >
-                <InputBase
-                  sx={{
-                    mt: 0,
-                    backgroundColor: '#e6e7ea',
-                    height: '40px',
-                    paddingX: '10px',
-                    borderRadius: '4px',
-                  }}
-                  value={value}
-                  onChange={(e: any) => {
-                    let address = e.target.value;
-                    setError('address', {});
-                    setConfig((pre) => ({
-                      ...pre,
-                      address: address,
-                    }));
-                    if (address.slice(0, 2) != '0x') {
-                      setError('address', { type: 'not address' });
-                    }
-                    if (address.length != 42) {
-                      setError('address', { type: 'too long or too short' });
-                    }
-                    onChange(e);
-                  }}
-                />
-              </FormInput>
-            );
-          }}
-        />
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <FormInput title="Integrate into your code?">
-            <Box
-              sx={{
-                height: 'auto',
-                border: '2px dashed #EBEBEC',
-                borderRadius: '4px',
-                wordBreak: 'break-all',
-                color: '#929F9E',
-                backgroundColor: '#f0f0f0',
-                padding: '12px 10px',
-                fontSize: '16px',
-                fontWeight: '500',
+            <Controller
+              name={'telegram'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="" error={errors.telegram?.type}>
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Image src="/images/telegram.png" alt="telegram" width="24" height="24" />
+                        </InputAdornment>
+                      }
+                      value={value}
+                      onChange={(e: any) => {
+                        setConfig((pre) => ({
+                          ...pre,
+                          telegram: e.target.value,
+                        }));
+                        onChange(e);
+                      }}
+                      placeholder="Enter your telegram account"
+                    />
+                  </FormInput>
+                );
+              }}
+            />
+
+            <Controller
+              name={'address'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput
+                    title="Receive address"
+                    // desc="默认收款地址是钱包登录地址"
+                    error={errors.address?.type}
+                  >
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      onChange={(e: any) => {
+                        let address = e.target.value;
+                        setError('address', {});
+                        setConfig((pre) => ({
+                          ...pre,
+                          address: address,
+                        }));
+                        if (address.slice(0, 2) != '0x') {
+                          setError('address', { type: 'not address' });
+                        }
+                        if (address.length != 42) {
+                          setError('address', { type: 'too long or too short' });
+                        }
+                        onChange(e);
+                      }}
+                    />
+                  </FormInput>
+                );
+              }}
+            />
+          </Card>
+
+          <div
+            style={{
+              marginBottom: '18px',
+            }}
+          >
+            <Donate3Btn loadingButton loading={loading} onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
+              Confirm
+            </Donate3Btn>
+            <div
+              style={{
+                fontSize: '14px',
+                lineHeight: '26px',
+                color: 'rgba(100, 116, 139, 1)',
+                paddingTop: '16px',
               }}
             >
-              {`<div data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script>`}
-            </Box>
-          </FormInput>
-          <Box display="flex" gap={2}>
-            <Tooltip title={copied && 'copied!'}>
-              <Donate3Btn
-                onClick={() => {
-                  navigator.clipboard.writeText(url).then(
-                    function () {
-                      setCopied(true);
-                      setTimeout(() => {
-                        setCopied(false);
-                      }, 1000);
-                    },
-                    function (e) {
-                      console.error(e);
-                    }
-                  );
-                }}
-              >
-                <Box component={'img'} src="/icons/copy2.svg" mr="15px"></Box>
-                Copy code
-              </Donate3Btn>
-            </Tooltip>
-          </Box>
+              Code and link will be generated below.
+            </div>
+          </div>
         </Box>
+        <PreviewRegion srcDoc={previewSrcDoc} />
+      </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <FormInput title="Need a link to accept donations?">
-            <Box
-              sx={{
-                height: 'auto',
-                border: '2px dashed #EBEBEC',
-                borderRadius: '4px',
-                wordBreak: 'break-all',
-                color: '#929F9E',
-                backgroundColor: '#f0f0f0',
-                padding: '12px 10px',
-                fontSize: '16px',
-                fontWeight: '500',
-              }}
-            >
-              {`https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`}
-            </Box>
-          </FormInput>
-          <Box display="flex" gap={2}>
-            <Tooltip title={copied && 'copied!'}>
-              <Donate3Btn
-                onClick={() => {
-                  const link = `https://donate3.xyz/donateTo?address=${config.address}&color=${config.color.split('#')[1]}&title=${config.name}&avatar=${avatar}`;
-                  navigator.clipboard.writeText(link).then(
-                    function () {
-                      setCopied(true);
-                      setTimeout(() => {
-                        setCopied(false);
-                      }, 1000);
-                    },
-                    function (e) {
-                      console.error(e);
-                    }
-                  );
-                }}
-              >
-                <Box component={'img'} src="/icons/copy2.svg" mr="15px"></Box>
-                Copy Link
-              </Donate3Btn>
-            </Tooltip>
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ position: 'relative', minWidth: { xs: '280px', sm: '400px' }, height: { xs: '490px', sm: '700px' } }}>
-        <Box
-          component="iframe"
-          sx={{
-            top: { xs: '-105px', sm: 0 },
-            left: { xs: '-60px', sm: 0 },
-            border: '2px solid #929F9E',
-            mx: 'auto',
-            minWidth: '400px',
-            height: '700px',
-            borderRadius: '22px',
-            position: 'absolute',
-            scale: { xs: '0.7', sm: '1' },
-          }}
-          srcDoc={`<html><head></head><body style="padding-top: 30px;"><div 
-          data-donate3-demo="true"
-          data-donate3-type="${config.type ? 'embed' : 'float'}" data-donate3-color="${config.color}" data-donate3-title="${config.name}" data-donate3-to-address="${config.address}" data-donate3-avatar="${avatar}"></div><script src="${DONATE_SDK_URL}"></script></body></html>`}
-        ></Box>
-      </Box>
-    </Box>
+      {/* code */}
+      <CodeRegion code={donationsCode} link={donationsLink} />
+    </>
   );
 }
