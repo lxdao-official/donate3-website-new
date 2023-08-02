@@ -2,7 +2,73 @@ import {  Box, Typography } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 import { DonateOverview } from "../components/DonateOverview";
+import styled from "styled-components";
+const LineText = styled.span`
+  position: relative;
+  //color: #000000;
 
+  line-height: 1;
+  @media (max-width: 600px) {
+    font-size:20px
+  }
+  @media (min-width: 601px) {
+    font-size:28px
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    top: 0px;
+    left: 20px;
+    right: 5px;
+    bottom: 10px;
+    background-image: url(/images/Vector.png);
+    background-repeat: no-repeat;
+    background-size: 105%;
+    opacity: 1; 
+    z-index: -1; 
+    
+    @media (max-width: 600px) {
+      transform: translateY(95%); 
+    }
+    @media (min-width: 601px) {
+      transform: translateY(75%);
+    }
+  }
+`;
+const LineTextt = styled.span`
+  position: relative;
+  //color: #000000;
+
+  line-height: 1;
+  @media (max-width: 600px) {
+    font-size:20px
+  }
+  @media (min-width: 601px) {
+    font-size:28px
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-image: url(/images/Vector.png);
+    background-repeat: no-repeat;
+    background-size: 105%;
+    opacity: 1; 
+    z-index: -1; 
+    
+    @media (max-width: 600px) {
+      transform: translateY(70%); 
+    }
+    @media (min-width: 601px) {
+      transform: translateY(65%); /* 调整图像位置 */
+    }
+  }
+`;
 
 export function SectionClient() {
     const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -125,7 +191,7 @@ export function SectionClient() {
                             textAlign: { xs: 'center  ', lg: 'left' },
                             mt: { xs: '30px', lg: '0' },
                             mb: { xs: '30px', lg: '23px' },
-                        }}>Get funded as public goods</Typography>
+                        }}>Get funded as <LineText>public goods</LineText></Typography>
                         <Typography variant="subtitle1"
                             sx={{
                                 fontWeight: 400,
@@ -157,7 +223,7 @@ export function SectionClient() {
                     mt: { xs: '30px', lg: '119px' },
                 }}
             >
-                Get supported as creators
+                Get supported as <LineTextt>creators</LineTextt>
             </Typography>
 
             <Box sx={{

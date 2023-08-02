@@ -1,9 +1,38 @@
-import { Button, Box, Typography, List} from '@mui/material';
+import {Button, Box, Typography, List} from '@mui/material';
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import React from 'react';
 
 
+
+const LineText = styled.span`
+  position: relative;
+  //color: #000000;
+
+  line-height: 1;
+  @media (max-width: 600px) {
+    font-size:30px
+  }
+
+  @media (min-width: 601px) {
+    font-size:72px
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    top: 0px;
+    left: -10px;
+    right: -10px;
+    bottom: 0;
+    background-image: url(/images/Vector.png);
+    background-repeat: no-repeat;
+    background-size: 105%;
+    opacity: 1; 
+    z-index: -1; 
+    transform: translateY(65%); 
+  }
+`;
 const CircleBg = styled(Box)`
   position: absolute;
 
@@ -26,7 +55,7 @@ const CircleBg = styled(Box)`
     width: 60%;
     height: 50%;
   }
-  
+
 `;
 const CircleBgg = styled(Box)`
   position: absolute;
@@ -76,7 +105,8 @@ const StyledButton = styled(Button)`
       box-shadow: 4px 4px 0px rgba(186, 206, 204, 0.9);
     }
   }
-`;const StyledButton2 = styled(Button)`
+`;
+const StyledButton2 = styled(Button)`
   &.MuiButton-root {
     width: 208px;
     height: 48px;
@@ -97,7 +127,7 @@ const StyledButton = styled(Button)`
     }
 
     &:hover {
-      background:#FEFFE8;
+      background: #FEFFE8;
       box-shadow: 4px 4px 0px #CCFF00;
     }
   }
@@ -147,7 +177,7 @@ export function SectionHero() {
                     maxWidth: {xs: '100%', sm: '1240px'},
                 }}
             >
-                Easy donation, More connection.
+                Easy <LineText>donation</LineText>, More connection.
 
             </Typography>
 
@@ -156,7 +186,7 @@ export function SectionHero() {
                 sx={{
                     fontWeight: 600,
                     fontSize: {xs: '15px', sm: '15px', md: '20px'},
-                    lineHeight: {xs: '30px', md: '36px',lg:'36px'},
+                    lineHeight: {xs: '30px', md: '36px', lg: '36px'},
                     padding: {xs: '10px', sm: '30px', md: 0},
                     color: '#64748B',
                     textAlign: {xs: 'center', lg: 'center'},
