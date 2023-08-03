@@ -20,3 +20,5 @@ export enum EType {
   'float' = 0,
   'embed',
 }
+
+export const DEFAULT_CID = 'bafkreienpukipwckf4g3jcgti7tgvbh5hz7kuubo3pyufjbdzrv6sv5dlm';
