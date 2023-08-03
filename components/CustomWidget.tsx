@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 // import { ChromePicker } from 'react-color';
-import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
+// import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
 
@@ -264,28 +264,34 @@ export default function CustomWidget() {
             <Controller
               name={'color'}
               control={control}
-              rules={{ validate: matchIsValidColor }}
+              rules={{ required: true }}
               render={({ field: { onChange, value } }) => (
                 <FormInput title="Primary color" error={errors.color?.type}>
-                  <MuiColorInput
-                    size="small"
+                  <InputBase
+                    startAdornment={
+                      <>
+                        <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} />
+                      </>
+                    }
                     sx={{
+                      mt: 0,
                       backgroundColor: 'var(--gray-300, #E2E8F0)',
+                      height: '40px',
+                      paddingX: '10px',
                       borderRadius: '4px',
-                      '& fieldset': {
-                        display: 'none',
-                      },
                     }}
                     value={value}
-                    onChange={(c) => {
+                    onChange={(e: any) => {
                       setError('color', {});
+                      if (!e.target.value) {
+                        setError('color', { type: 'invalid color' });
+                      }
                       setConfig((pre) => ({
                         ...pre,
-                        color: c,
+                        color: e.target.value,
                       }));
-                      onChange(c);
+                      onChange(e);
                     }}
-                    format="hex"
                   />
                 </FormInput>
               )}
