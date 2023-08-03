@@ -252,9 +252,28 @@ export default function CustomWidget() {
               name={'color'}
               control={control}
               rules={{ validate: matchIsValidColor }}
-              render={({ field: { onChange, value }, field, fieldState }) => (
+              render={({ field: { onChange, value } }) => (
                 <FormInput title="Primary color" error={errors.color?.type}>
-                  <MuiColorInput {...field} format="hex" helperText={fieldState.invalid ? 'Color is invalid' : ''} error={fieldState.invalid} />
+                  <MuiColorInput
+                    size="small"
+                    sx={{
+                      backgroundColor: 'var(--gray-300, #E2E8F0)',
+                      borderRadius: '4px',
+                      '& fieldset': {
+                        display: 'none',
+                      },
+                    }}
+                    value={value}
+                    onChange={(c) => {
+                      setError('color', {});
+                      setConfig((pre) => ({
+                        ...pre,
+                        color: c,
+                      }));
+                      onChange(c);
+                    }}
+                    format="hex"
+                  />
                 </FormInput>
               )}
             />
