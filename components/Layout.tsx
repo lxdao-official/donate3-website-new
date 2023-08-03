@@ -97,7 +97,7 @@ const Footer = () => (
   </MyContainer>
 );
 
-export function Layout({ children, title = 'Donate3 - Make donate in web3 so easy', bgColor = 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);' }: { children: React.ReactNode; title?: string; bgColor?: string }) {
+export function Layout({ children, title = 'Donate3 - Make donate in web3 so easy', bgColor = '#F1F5F9' }: { children: React.ReactNode; title?: string; bgColor?: string }) {
   return (
     <>
       <Head>
@@ -137,7 +137,7 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
       </Head>
       <Box
         sx={{
-          //background: bgColor,
+          background: bgColor,
         }}
       >
         <Header />
