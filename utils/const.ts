@@ -1,4 +1,4 @@
-export const DONATE_SDK_LATEST_VERSION = '1.0.6';
+export const DONATE_SDK_LATEST_VERSION = '1.0.7';
 
 export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE_SDK_LATEST_VERSION}/dist/webpack/bundle.js`;
 
@@ -27,4 +27,9 @@ export const DEFAULT_CREATE_CONFIG = {
   telegram: '',
 };
 
-// config.type ? 'embed' : 'float'
+export enum EType {
+  'float' = 0,
+  'embed',
+}
+
+export const DEFAULT_CID = 'bafkreienpukipwckf4g3jcgti7tgvbh5hz7kuubo3pyufjbdzrv6sv5dlm';

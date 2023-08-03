@@ -28,8 +28,8 @@ function Header() {
           <Box component="img" src="/logo.svg" />
           {/* <Image src="/logo.svg" alt='' width={50} height={50} /> */}
           <Typography variant="h5" paddingLeft="14px" sx={{
-            lineHeight: '50px',
-              fontSize:'26px',
+            lineHeight: {xs:'50px',lg:'50px'},
+              fontSize:{xs:'20px',lg:'26px'},
             fontWeight: 600,
             ":hover": {
               textShadow: '2px 2px  #bdd75d',
@@ -137,7 +137,7 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
       </Head>
       <Box
         sx={{
-          background: bgColor,
+          //background: bgColor,
         }}
       >
         <Header />

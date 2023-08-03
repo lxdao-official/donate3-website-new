@@ -1,7 +1,5 @@
-import Image from 'next/image';
-import {Container, Button, Box, Typography, CssBaseline, Link, Divider, List} from '@mui/material';
+import { Box, Typography} from '@mui/material';
 import React from 'react';
-import {DonateOverview} from "../components/DonateOverview1";
 import {BigFeaturesDetail} from "../components/BigFeaturesDetail";
 import {FeaturesDetail} from "../components/FeaturesDetail";
 
@@ -13,15 +11,14 @@ export function SectionFeacture() {
         <Box
 
             sx={{
-                marginLeft:'-16px',
-                marginRight:'-16px',
+                marginLeft:{xs:'-15px',lg:'-1600px'},
+                marginRight:{xs:'-15px',lg:'-1600px'},
                 display: 'flex',
                 flexDirection: {xs: 'column', lg: 'column'},
                 justifyContent: {xs: 'center', lg: 'center'},
                 alignItems: 'center',
-                minHeight: {xs: '100vh', md: 'calc(100vh)'},
+                minHeight: {xs: 'calc(100vh)', md: 'calc(100vh)'},
                 background: '#0F172A',
-
 
             }}
 
@@ -97,7 +94,7 @@ export function SectionFeacture() {
                 </Box>
             </Box>
 
-            {/* 新的底部背景色空白 */}
+
             <Box sx={{ height: '126px', background: '#0F172A' }} />
         </Box>
 

@@ -30,7 +30,7 @@ const PreviewFile = ({ file, style, setAvatar }: IPreviewFileProps) => {
 
   return (
     <>
-      <Img3 style={{ maxHeight: '100%', maxWidth: '100%' }} src={src} alt={file.name} />
+      <Img3 style={{ maxHeight: '100%', maxWidth: '100%' }} src={src!} alt={file.name} />
       {file.status === 'uploading' && (
         <Status>
           <Icon icon={'line-md:uploading-loop'} color={'#65a2fa'} fontSize={40} />
