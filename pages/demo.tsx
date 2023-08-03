@@ -3,22 +3,34 @@ import { Box } from '@mui/material';
 
 import { Layout } from '@/components/Layout';
 import { DEFAULT_CID } from '@/utils/const';
+import { getDonateSrcDoc } from '@/utils/common';
 
 const Demo: NextPage = () => {
   return (
     <Layout>
-      <Box
-        sx={{
-          pt: { xs: '65px', md: '0px' },
-          display: 'flex',
-          flexDirection: { xs: 'column-reverse', md: 'row' },
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: { xs: '100vh', md: 'calc(100vh - 230px)' },
+      <div
+        style={{
+          padding: '20px 0',
         }}
       >
-        <div data-donate3-cid={DEFAULT_CID}></div>
-      </Box>
+        <Box
+          component="iframe"
+          sx={{
+            pt: { xs: '65px', md: '0px' },
+            display: 'flex',
+            flexDirection: { xs: 'column-reverse', md: 'row' },
+            justifyContent: 'center',
+            alignItems: 'center',
+            minWidth: '400px',
+            height: '800px',
+            frameBorder: '0',
+            border: '2px solid var(--gray-300, #E2E8F0);',
+            borderRadius: '22px',
+            margin: '0 auto',
+          }}
+          srcDoc={getDonateSrcDoc(DEFAULT_CID)}
+        ></Box>
+      </div>
     </Layout>
   );
 };
