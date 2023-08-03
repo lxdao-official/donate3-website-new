@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 // import { ChromePicker } from 'react-color';
-// import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
+import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
 
@@ -251,39 +251,12 @@ export default function CustomWidget() {
             <Controller
               name={'color'}
               control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <FormInput title="Primary color" error={errors.color?.type}>
-                    <InputBase
-                      startAdornment={
-                        <>
-                          <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} />
-                        </>
-                      }
-                      sx={{
-                        mt: 0,
-                        backgroundColor: 'var(--gray-300, #E2E8F0)',
-                        height: '40px',
-                        paddingX: '10px',
-                        borderRadius: '4px',
-                      }}
-                      value={value}
-                      onChange={(e: any) => {
-                        setError('color', {});
-                        if (!e.target.value) {
-                          setError('color', { type: 'invalid color' });
-                        }
-                        setConfig((pre) => ({
-                          ...pre,
-                          color: e.target.value,
-                        }));
-                        onChange(e);
-                      }}
-                    />
-                  </FormInput>
-                );
-              }}
+              rules={{ validate: matchIsValidColor }}
+              render={({ field: { onChange, value }, field, fieldState }) => (
+                <FormInput title="Primary color" error={errors.color?.type}>
+                  <MuiColorInput {...field} format="hex" helperText={fieldState.invalid ? 'Color is invalid' : ''} error={fieldState.invalid} />
+                </FormInput>
+              )}
             />
           </Card>
 
