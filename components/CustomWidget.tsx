@@ -6,8 +6,7 @@ import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '
 import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
-// import { ChromePicker } from 'react-color';
-// import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
+import { ChromePicker } from 'react-color';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
 
@@ -53,6 +52,7 @@ export default function CustomWidget() {
   const [donationsCode, setDonationsCode] = useState<string>('');
   const [donationsLink, setDonationsLink] = useState<string>('');
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
+  const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
   const {
     control,
@@ -90,6 +90,13 @@ export default function CustomWidget() {
     { id: 59144, network: 'Linea', icon: Linea },
     { id: 424, network: 'PGN', icon: Pgn },
   ];
+
+  const handleOpen = () => {
+    setDisplayColorPicker(true);
+  };
+  const handleClose = () => {
+    setDisplayColorPicker(false);
+  };
 
   const genDonationsCode = (code: string) => {
     setDonationsCode(code);
@@ -270,7 +277,37 @@ export default function CustomWidget() {
                   <InputBase
                     startAdornment={
                       <>
-                        <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} />
+                        <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} onClick={handleOpen} />
+
+                        {displayColorPicker ? (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              zIndex: 2,
+                            }}
+                          >
+                            <div
+                              style={{
+                                position: 'fixed',
+                                top: '0px',
+                                right: '0px',
+                                bottom: '0px',
+                                left: '0px',
+                              }}
+                              onClick={handleClose}
+                            />
+                            <ChromePicker
+                              color={config.color}
+                              onChange={(color) => {
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  color: color.hex,
+                                }));
+                                onChange({ target: { value: color.hex } });
+                              }}
+                            />
+                          </div>
+                        ) : null}
                       </>
                     }
                     sx={{
