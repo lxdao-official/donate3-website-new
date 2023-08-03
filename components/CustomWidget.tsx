@@ -5,6 +5,7 @@ import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
+import SvgIcon from '@mui/material/SvgIcon';
 // import { ChromePicker } from 'react-color';
 // import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
 import Image from 'next/image';
@@ -22,6 +23,15 @@ import Card from './create/Card';
 import CodeRegion from './create/CodeRegion';
 import DescEditor from './create/DescEditor';
 import PreviewRegion from './create/PreviewRegion';
+
+import Delete from '../public/icons/delete.svg';
+import Arbitrum from '../public/icons/networks/arbitrum.svg';
+import Ethereum from '../public/icons/networks/ethereum.svg';
+import Goerli from '../public/icons/networks/goerli.svg';
+import Linea from '../public/icons/networks/linea.svg';
+import Optimism from '../public/icons/networks/optimism.svg';
+import Pgn from '../public/icons/networks/pgn.svg';
+import Polygon from '../public/icons/networks/polygon.svg';
 
 interface ICustomWidget {
   type: number;
@@ -71,7 +81,15 @@ export default function CustomWidget() {
     return !config.color || !config.name || !config.address;
   }, [config]);
 
-  const Internets = ['Ethereum', 'Goerli', 'Optimism', 'Arbitrum', 'Polygon', 'Linea', 'PGN'];
+  const networks = [
+    { id: 1, network: 'Ethereum', icon: Ethereum },
+    { id: 5, network: 'Goerli', icon: Goerli },
+    { id: 69, network: 'Optimism', icon: Optimism },
+    { id: 42161, network: 'Arbitrum', icon: Arbitrum },
+    { id: 137, network: 'Polygon', icon: Polygon },
+    { id: 59144, network: 'Linea', icon: Linea },
+    { id: 424, network: 'PGN', icon: Pgn },
+  ];
 
   const genDonationsCode = (code: string) => {
     setDonationsCode(code);
@@ -110,6 +128,19 @@ export default function CustomWidget() {
   };
 
   const handleClickConfirmBtn = () => {
+    const isAddress = (str: string) => /^0x[0-9a-fA-F]{40}$/.test(str);
+    const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
+    if (config.accountType === 0) {
+      if (!(config.address && isAddress(config.address))) {
+        setError('address', { type: 'not address or too long or too short' });
+        return;
+      }
+    } else {
+      if (!(newSafeAccounts.length && newSafeAccounts.every((item) => item.address && isAddress(item.address)))) {
+        setError('safeAccounts', { type: 'not address or too long or too short' });
+        return;
+      }
+    }
     setLoading(true);
     const newConfig = { ...config };
     if (newConfig.accountType) {
@@ -117,7 +148,6 @@ export default function CustomWidget() {
     } else {
       delete newConfig.safeAccounts;
     }
-    delete newConfig.accountType;
     storeInfoToNFTStorage(newConfig);
   };
 
@@ -137,13 +167,27 @@ export default function CustomWidget() {
 
   const addAccountItem = () => {
     const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
+    const lastItemAddress = newSafeAccounts[newSafeAccounts.length - 1].address;
+    if (!(lastItemAddress && lastItemAddress.startsWith('0x') && lastItemAddress.length === 42)) {
+      setError('safeAccounts', { type: 'not address or too long or too short' });
+      return;
+    }
     if (!newSafeAccounts[newSafeAccounts.length - 1].address) {
       return;
     }
     setConfig((pre) => {
-      newSafeAccounts.push({ internet: '', address: '' });
+      newSafeAccounts.push({ networkId: 1, address: undefined });
       return { ...pre, safeAccounts: newSafeAccounts };
     });
+  };
+
+  const handleDelete = (index: number) => {
+    if (index) {
+      const newSafeAccounts = config.safeAccounts?.filter((item, i) => i !== index);
+      setConfig((pre) => {
+        return { ...pre, safeAccounts: newSafeAccounts };
+      });
+    }
   };
 
   return (
@@ -436,11 +480,11 @@ export default function CustomWidget() {
                       name="radio-buttons-group"
                     >
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px' }}
-                        value="0"
+                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
+                        value={0}
                         control={<Radio color="default" />}
                         label={
-                          <Box>
+                          <Box height={30}>
                             <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
                               Eoa
                             </Typography>
@@ -451,11 +495,11 @@ export default function CustomWidget() {
                         }
                       />
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px' }}
-                        value="1"
+                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', paddingBottom: 5.25 }}
+                        value={1}
                         control={<Radio color="default" />}
                         label={
-                          <Box>
+                          <Box height={30}>
                             <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
                               Safe Account
                             </Typography>
@@ -478,11 +522,7 @@ export default function CustomWidget() {
                 rules={{ required: true }}
                 render={({ field: { onChange, value } }) => {
                   return (
-                    <FormInput
-                      title="Receive address"
-                      // desc="默认收款地址是钱包登录地址"
-                      error={errors.address?.type}
-                    >
+                    <FormInput title="Receive address" error={errors.address?.type}>
                       <InputBase
                         sx={{
                           mt: 0,
@@ -499,10 +539,11 @@ export default function CustomWidget() {
                             ...pre,
                             address: address,
                           }));
-                          if (address.slice(0, 2) != '0x') {
+
+                          if (!address.startsWith('0x')) {
                             setError('address', { type: 'not address' });
                           }
-                          if (address.length != 42) {
+                          if (address.length !== 42) {
                             setError('address', { type: 'too long or too short' });
                           }
                           onChange(e);
@@ -558,19 +599,21 @@ export default function CustomWidget() {
                             borderRadius: '4px',
                             textIndent: '10px',
                             backgroundColor: 'var(--gray-300, #E2E8F0)',
+                            '& svg': { verticalAlign: 'middle' },
                           }}
-                          value={item.internet || Internets[0]}
+                          value={item.networkId || 1}
                           onChange={(e) => {
                             setConfig((pre) => {
                               const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
-                              newSafeAccounts[index].internet = e.target.value;
+                              newSafeAccounts[index].networkId = ~~e.target.value;
                               return { ...pre, safeAccounts: newSafeAccounts };
                             });
                           }}
                         >
-                          {Internets.map((item) => (
-                            <MenuItem value={item} key={item}>
-                              {item}
+                          {networks.map((item: { id: number; network: string; icon: any }) => (
+                            <MenuItem value={item.id} key={item.id}>
+                              <SvgIcon sx={{ mr: 1.25 }} component={item.icon} />
+                              {item.network}
                             </MenuItem>
                           ))}
                         </Select>
@@ -585,8 +628,14 @@ export default function CustomWidget() {
                             paddingX: '10px',
                             borderRadius: '4px',
                           }}
+                          endAdornment={
+                            <InputAdornment sx={{ cursor: 'pointer' }} position="start">
+                              <SvgIcon sx={{ cursor: 'pointer' }} onClick={() => handleDelete(index)} component={Delete} inheritViewBox />
+                            </InputAdornment>
+                          }
                           value={item.address}
                           onChange={(e: any) => {
+                            setError('safeAccounts', { type: '' });
                             setConfig((pre) => {
                               const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
                               newSafeAccounts[index].address = e.target.value;

@@ -11,8 +11,8 @@ export enum AccountType {
   'safeAccount',
 }
 export interface SafeAccount {
-  internet: string;
-  address: string;
+  networkId: number;
+  address: `0x${string}` | undefined;
 }
 export const DEFAULT_CREATE_CONFIG = {
   type: 0,
@@ -20,7 +20,7 @@ export const DEFAULT_CREATE_CONFIG = {
   name: DEFAULT_CREATE_NAME,
   accountType: AccountType.EOA,
   address: DEFAULT_CREATE_ADDRESS,
-  safeAccounts: [{ internet: '', address: '' }],
+  safeAccounts: [{ networkId: 1, address: undefined }],
   avatar: '',
   description: '',
   twitter: '',
