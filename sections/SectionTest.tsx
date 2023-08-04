@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
+//import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
 
 export function SectionTest() {
-    const [selectedValue, setSelectedValue] = React.useState('');
+/*    const [selectedValue, setSelectedValue] = React.useState('');
 
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
-    };
+    };*/
     return (
         <Box
             sx={{
@@ -18,11 +18,11 @@ export function SectionTest() {
             }}
             component="body"
         >
-            <RadioGroup value={selectedValue} onChange={handleChange}>
+{/*            <RadioGroup value={selectedValue} onChange={handleChange}>
                 <FormControlLabel value="option1" control={<Radio />} label="Option 1" />
                 <FormControlLabel value="option2" control={<Radio />} label="Option 2" />
                 <FormControlLabel value="option3" control={<Radio  checked color="#ff0000" />} label="Option 3" />
-            </RadioGroup>
+            </RadioGroup>*/}
 
 
             {/*<style>
