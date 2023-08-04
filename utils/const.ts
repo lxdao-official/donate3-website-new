@@ -20,7 +20,7 @@ export const DEFAULT_CREATE_CONFIG = {
   name: DEFAULT_CREATE_NAME,
   accountType: AccountType.EOA,
   address: DEFAULT_CREATE_ADDRESS,
-  safeAccounts: [{ networkId: 1, address: undefined }],
+  safeAccounts: [{ networkId: 5, address: undefined }],
   avatar: '',
   description: '',
   twitter: '',
