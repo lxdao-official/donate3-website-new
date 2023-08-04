@@ -51,7 +51,7 @@ const CircleBg = styled(Box)`
   }
 
   @media (min-width: 601px) {
-    top: 46%;
+    top: 40%;
     width: 60%;
     height: 50%;
   }
