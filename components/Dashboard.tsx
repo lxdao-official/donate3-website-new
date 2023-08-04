@@ -245,18 +245,17 @@ export default function Dashboard() {
 
   //get params from url
 
-  const readData = async () => {
-    const data = await API.get(`/api/v1/donate/queryDonateDetailsByParam?pageNo=${page}&pageSize=${perPage}&toAddress=${address}`);
-    const res: DonateDetail[] = data?.data?.result?.records;
-    const tmp = res.map((value) => {
-      const formated = formatData(value?.chainType, value?.coinType, value?.createTime, value?.fromAddress, value?.id, value?.message, value?.status, value?.toAddress, value?.updateTime, value?.usdValue, value?.userId, value?.value, value?.hash);
-
-      return formated;
-    });
-    return tmp;
-  };
-
   useEffect(() => {
+    const readData = async () => {
+      const data = await API.get(`/api/v1/donate/queryDonateDetailsByParam?pageNo=${page}&pageSize=${perPage}&toAddress=${address}`);
+      const res: DonateDetail[] = data?.data?.result?.records;
+      const tmp = res.map((value) => {
+        const formated = formatData(value?.chainType, value?.coinType, value?.createTime, value?.fromAddress, value?.id, value?.message, value?.status, value?.toAddress, value?.updateTime, value?.usdValue, value?.userId, value?.value, value?.hash);
+        return formated;
+      });
+      return tmp;
+    };
+
     (async () => {
       if (!address) {
         return;
@@ -267,7 +266,7 @@ export default function Dashboard() {
       setRows(tmp);
       setPagination(tmp?.length);
     })();
-  }, [address, perPage, page, readData]);
+  }, [address, perPage, page]);
 
   useEffect(() => {
     (async () => {
@@ -396,16 +395,16 @@ export default function Dashboard() {
             <TableBody>
               {(perPage > 0
                 ? rows
-                  .filter((row) => {
-                    const chainIds = Object.keys(coinType);
-                    if (chainIds.includes(row?.chainType)) {
-                      return row;
-                    }
-                  })
-                  .sort((a, b) => {
-                    return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
-                  })
-                  .slice(page * perPage, page * perPage + perPage)
+                    .filter((row) => {
+                      const chainIds = Object.keys(coinType);
+                      if (chainIds.includes(row?.chainType)) {
+                        return row;
+                      }
+                    })
+                    .sort((a, b) => {
+                      return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
+                    })
+                    .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateDetail, index) => (
                 <TableRow
