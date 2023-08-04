@@ -34,13 +34,13 @@ export const getDonateSrcDoc = (cid: string) => {
 export const getDynamicDonateUrl = (info: Partial<ICustomWidget>) => {
   const { accountType, address, avatar, color, description, name, safeAccounts, telegram, twitter, type } = info;
   return `<div 
-     data-donate3-type="${EType[type!]}"
-     data-donate3-to-address="${address}"
-     data-donate3-color="${color}"
-     data-donate3-title="${name}"
-     data-donate3-demo="true"
-     data-donate3-avatar="${avatar}"
-     data-donate3-safeAccounts="${safeAccounts && JSON.stringify(safeAccounts)}"
+     data-donate3-type='${EType[type!]}'
+     data-donate3-to-address='${address}'
+     data-donate3-color='${color}'
+     data-donate3-title='${name}'
+     data-donate3-demo='true'
+     data-donate3-avatar='${avatar || ''}'
+     data-donate3-safeAccounts='${safeAccounts && JSON.stringify(safeAccounts)}'
     ></div>
-    <script src="${DONATE_SDK_URL}"></script>`;
+    <script src='${DONATE_SDK_URL}'></script>`;
 };
