@@ -15,7 +15,7 @@ import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
 import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType } from '@/utils/const';
 import CreateTitle from './create/Title';
-import { throttle } from '@/utils/common';
+import { getDonatePreviewSrcDoc, getDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
 import RadioBox from './create/RadioBox';
 import Card from './create/Card';
@@ -107,14 +107,11 @@ export default function CustomWidget() {
   };
 
   const genPreviewSrcDoc = (l: string) => {
-    let doc = `<html><head></head><body style="padding-top: 30px;">${l}</body></html>`;
-    console.info(doc, '🍑🍑doc🍑🍑');
-    setPreviewSrcDoc(doc);
+    setPreviewSrcDoc(getDonatePreviewSrcDoc(l));
   };
 
   const genUrl = (cid: string, isSrcDoc?: boolean) => {
-    const url = `<div data-donate3-cid="${cid}" ${isSrcDoc ? 'data-donate3-demo="true"' : ''}></div><script src="${DONATE_SDK_URL}"></script>`;
-    return url;
+    return getDonateUrl(cid, isSrcDoc);
   };
 
   const genInfoByCid = (cid: string) => {

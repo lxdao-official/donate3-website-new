@@ -1,4 +1,4 @@
-export const DONATE_SDK_LATEST_VERSION = '1.0.7';
+export const DONATE_SDK_LATEST_VERSION = '1.0.9';
 
 export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE_SDK_LATEST_VERSION}/dist/webpack/bundle.js`;
 
@@ -32,4 +32,4 @@ export enum EType {
   'embed',
 }
 
-export const DEFAULT_CID = 'bafkreienpukipwckf4g3jcgti7tgvbh5hz7kuubo3pyufjbdzrv6sv5dlm';
+export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou';
