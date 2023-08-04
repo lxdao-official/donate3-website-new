@@ -18,10 +18,10 @@ export function SectionFeacture() {
                 justifyContent: {xs: 'center', lg: 'center'},
                 alignItems: 'center',
                 minHeight: {xs: 'calc(100vh)', md: 'calc(100vh)'},
-                background: '#0F172A',
+                //background: '#0F172A',
 
             }}
-
+            bgcolor='#0F172A'
         >
 
 
