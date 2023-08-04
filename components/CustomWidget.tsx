@@ -24,12 +24,12 @@ import DescEditor from './create/DescEditor';
 import PreviewRegion from './create/PreviewRegion';
 
 import Delete from '../public/icons/delete.svg';
-import Arbitrum from '../public/icons/networks/arbitrum.svg';
-import Ethereum from '../public/icons/networks/ethereum.svg';
+// import Arbitrum from '../public/icons/networks/arbitrum.svg';
+// import Ethereum from '../public/icons/networks/ethereum.svg';
 import Goerli from '../public/icons/networks/goerli.svg';
-import Linea from '../public/icons/networks/linea.svg';
-import Optimism from '../public/icons/networks/optimism.svg';
-import Pgn from '../public/icons/networks/pgn.svg';
+// import Linea from '../public/icons/networks/linea.svg';
+// import Optimism from '../public/icons/networks/optimism.svg';
+// import Pgn from '../public/icons/networks/pgn.svg';
 import Polygon from '../public/icons/networks/polygon.svg';
 
 interface ICustomWidget {
@@ -193,7 +193,7 @@ export default function CustomWidget() {
       return;
     }
     setConfig((pre) => {
-      newSafeAccounts.push({ networkId: 1, address: undefined });
+      newSafeAccounts.push({ networkId: networks[0].id, address: undefined });
       return { ...pre, safeAccounts: newSafeAccounts };
     });
   };
