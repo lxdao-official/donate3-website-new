@@ -15,7 +15,7 @@ import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
 import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType } from '@/utils/const';
 import CreateTitle from './create/Title';
-import { getDonatePreviewSrcDoc, getDonateUrl, throttle } from '@/utils/common';
+import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
 import RadioBox from './create/RadioBox';
 import Card from './create/Card';
@@ -32,7 +32,7 @@ import Optimism from '../public/icons/networks/optimism.svg';
 import Pgn from '../public/icons/networks/pgn.svg';
 import Polygon from '../public/icons/networks/polygon.svg';
 
-interface ICustomWidget {
+export interface ICustomWidget {
   type: number;
   color: string;
   name: string;
@@ -118,8 +118,11 @@ export default function CustomWidget() {
     setLoading(false);
     genDonationsCode(genUrl(cid));
     genDonationsLink(cid);
-    genPreviewSrcDoc(genUrl(cid, true));
   };
+
+  useEffect(() => {
+    genPreviewSrcDoc(getDynamicDonateUrl(config));
+  }, [config]);
 
   const storeInfoToNFTStorage = async (data: Partial<ICustomWidget>) => {
     const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '' });
