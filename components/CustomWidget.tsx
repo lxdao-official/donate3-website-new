@@ -82,13 +82,13 @@ export default function CustomWidget() {
   }, [config]);
 
   const networks = [
-    { id: 1, network: 'Ethereum', icon: Ethereum },
+    // { id: 1, network: 'Ethereum', icon: Ethereum },
     { id: 5, network: 'Goerli', icon: Goerli },
-    { id: 69, network: 'Optimism', icon: Optimism },
-    { id: 42161, network: 'Arbitrum', icon: Arbitrum },
+    // { id: 69, network: 'Optimism', icon: Optimism },
+    // { id: 42161, network: 'Arbitrum', icon: Arbitrum },
     { id: 137, network: 'Polygon', icon: Polygon },
-    { id: 59144, network: 'Linea', icon: Linea },
-    { id: 424, network: 'PGN', icon: Pgn },
+    // { id: 59144, network: 'Linea', icon: Linea },
+    // { id: 424, network: 'PGN', icon: Pgn },
   ];
 
   const handleOpen = () => {
