@@ -21,7 +21,7 @@ export function SectionFeacture() {
                 background: '#0F172A',
 
             }}
-
+           // bgcolor='#0F172A'
         >
 
 

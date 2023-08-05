@@ -455,7 +455,7 @@ export default function CustomWidget() {
                       value={value}
                       startAdornment={
                         <InputAdornment position="start">
-                          <Image src="/images/twitterNew.png" alt="twitter" width="24" height="24" />
+                          <Image src="/icons/twitter-new.svg" alt="twitter" width="24" height="24" />
                         </InputAdornment>
                       }
                       onChange={(e: any) => {
@@ -489,7 +489,7 @@ export default function CustomWidget() {
                       }}
                       startAdornment={
                         <InputAdornment position="start">
-                          <Image src="/images/telegram.png" alt="telegram" width="24" height="24" />
+                          <Image src="/icons/telegram-new.svg" alt="telegram" width="24" height="24" />
                         </InputAdornment>
                       }
                       value={value}
