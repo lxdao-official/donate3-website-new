@@ -26,9 +26,17 @@ export function DonateOverview({data}: { data: { avatarSrc: string, name: string
             }}
         >
             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Box>
-                    <img src={avatarSrc} alt="Avatar" style={{borderRadius: '50%', width: '80px', height: '80px',borderColor: '#E2E8F0',border:'0.5px solid '}}/>
-                </Box>
+                <Box
+                    component="img"
+                    src={avatarSrc}
+                    alt="Avatar"
+                    style={{
+                        borderRadius: '50%',
+                        width: '80px',
+                        height: '80px',
+                        border: '0.5px solid #E2E8F0'
+                    }}
+                />
                 <Box ml={2} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
                     <Typography variant="h3" sx={{
                         fontWeight: 700,
