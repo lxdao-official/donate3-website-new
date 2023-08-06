@@ -4,9 +4,10 @@ import Image from 'next/image';
 
 import { ICustomWidget } from '../CustomWidget';
 import { DEFAULT_CREATE_CONFIG } from '@/utils/const';
+import IPFSAvatar, { IIPFSAvatarProps, TIPFSSrc } from '../IPFSAvatar/IPFSAvatar';
 
 interface IPersonalDetailsProps {
-  info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram'>;
+  info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram' | 'address'>;
 }
 
 const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps) => {
@@ -17,10 +18,12 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
     const telegramInfo = {
       src: './icons/donateTo/TelegramSvg.svg',
       alt: 'Telegram',
+      link: telegram,
     };
     const twitterInfo = {
       src: './icons/donateTo/TwitterSvg.svg',
       alt: 'Twitter',
+      link: twitter,
     };
 
     twitter && medias.push(telegramInfo);
@@ -28,16 +31,9 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
     return medias;
   }, [twitter, telegram]);
 
-  const medias = [
-    {
-      src: './icons/donateTo/TelegramSvg.svg',
-      alt: 'Telegram',
-    },
-    {
-      src: './icons/donateTo/TwitterSvg.svg',
-      alt: 'Twitter',
-    },
-  ];
+  const handleClickMediaIcon = (link: string) => {
+    window.open(link, 'target');
+  };
 
   return (
     <Box>
@@ -48,7 +44,7 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
           justifyContent: 'flex-start',
         }}
       >
-        <Image src="/images/RadioButtonUncheckedFilled.png" alt="personal" width="88" height="88"></Image>
+        <IPFSAvatar ipfsSrc={info?.avatar as TIPFSSrc} address={info?.address as `0x${string}`} />
         <Box
           sx={{
             fontSize: '20px',
@@ -79,7 +75,7 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
           paddingTop: '24px',
         }}
       >
-        {medias.map(({ src, alt }) => {
+        {memoMedias.map(({ src, alt, link }) => {
           return (
             <Image
               src={src}
@@ -89,7 +85,9 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
               key={src}
               style={{
                 marginRight: '32px',
+                cursor: 'pointer',
               }}
+              onClick={() => handleClickMediaIcon(link)}
             ></Image>
           );
         })}

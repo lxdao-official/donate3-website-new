@@ -33,3 +33,5 @@ export enum EType {
 }
 
 export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou';
+
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
