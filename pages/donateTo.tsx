@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { Layout } from '@/components/Layout';
 import { useRouter } from 'next/router';
@@ -7,7 +8,6 @@ import DonatedCard from '@/components/donateTo/DonatedCard';
 import PersonalDetails from '@/components/donateTo/PersonalDetails';
 import PersonalIntroduction from '@/components/donateTo/PersonalIntroduction';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
-import { use, useEffect, useState } from 'react';
 import { ICustomWidget } from '@/components/CustomWidget';
 
 const DonateTo: NextPage = () => {
@@ -47,7 +47,6 @@ const DonateTo: NextPage = () => {
           padding: '45px 200px',
         }}
       >
-        {/* <div data-donate3-cid={cid}></div> */}
         <Box
           sx={{
             display: 'flex',
