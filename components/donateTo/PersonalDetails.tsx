@@ -8,9 +8,10 @@ import IPFSAvatar, { IIPFSAvatarProps, TIPFSSrc } from '../IPFSAvatar/IPFSAvatar
 
 interface IPersonalDetailsProps {
   info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram' | 'address'>;
+  onDonate: () => void;
 }
 
-const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps) => {
+const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDetailsProps) => {
   const { name, twitter = '', telegram = '' } = info;
 
   const memoMedias = useMemo(() => {
@@ -95,7 +96,6 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
 
       <Button
         variant="contained"
-        href="#contained-buttons"
         style={{
           backgroundColor: '#0F172A',
           fontSize: '20px',
@@ -103,6 +103,7 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG }: IPersonalDetailsProps
           textTransform: 'none',
           marginTop: '24px',
         }}
+        onClick={onDonate}
       >
         Donate3 to me
       </Button>

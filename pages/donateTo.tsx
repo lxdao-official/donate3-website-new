@@ -33,6 +33,10 @@ const DonateTo: NextPage = () => {
     cid && getInfoFromIpfs(cid);
   }, [cid]);
 
+  const handleDonateBtn = () => {
+    router.push(`/demo?cid=${cid}`);
+  };
+
   return (
     <Layout>
       <Box
@@ -59,6 +63,7 @@ const DonateTo: NextPage = () => {
               twitter: info?.twitter!,
               telegram: info?.telegram!,
             }}
+            onDonate={handleDonateBtn}
           />
           <DonatedCard />
         </Box>
