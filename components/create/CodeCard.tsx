@@ -42,7 +42,7 @@ const CodeCard = ({ title, content, btnText, btnImg }: ICodeCardProps) => {
 
           <Tooltip title={copied && 'copied!'}>
             <Donate3Btn
-              style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', left: '10px' }}
+              style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', left: '10px', }}
               onClick={() => {
                 navigator.clipboard.writeText(content).then(
                   function () {
