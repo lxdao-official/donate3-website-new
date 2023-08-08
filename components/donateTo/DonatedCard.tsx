@@ -25,12 +25,8 @@ interface IDonatedCardProps {
 }
 
 const DonatedCard = ({ info }: IDonatedCardProps) => {
+  const { chain } = useNetwork();
   const { isConnected } = useAccount();
-  const { chain, chains } = useNetwork();
-
-  console.log('account', isConnected);
-  console.log('chain-chains', chain, chains);
-
   const [ranking, setRanking] = useState<IRankingItem[]>([]);
 
   const queryDonatesRanking = (params: IRankingParams) => {
