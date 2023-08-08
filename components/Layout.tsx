@@ -142,9 +142,9 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
       <Box
 
         sx={{
-         // background: bgColor,
-            //zIndex:1
-           // ...LineText, // 包含styled-component样式的对象
+          background: bgColor,
+          zIndex: 1
+          //  ...LineText, // 包含styled-component样式的对象
         }}
       >
         <Header />

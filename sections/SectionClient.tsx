@@ -1,74 +1,9 @@
-import {  Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 import { DonateOverview } from "../components/DonateOverview";
 import styled from "styled-components";
-const LineText = styled.span`
-  position: relative;
-  //color: #000000;
-
-  line-height: 1;
-  @media (max-width: 600px) {
-    font-size:20px
-  }
-  @media (min-width: 601px) {
-    font-size:28px
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    background-color: transparent;
-    top: 0px;
-    left: 20px;
-    right: 5px;
-    bottom: 10px;
-    background-image: url(/images/Vector.png);
-    background-repeat: no-repeat;
-    background-size: 105%;
-    opacity: 1; 
-    z-index: -1; 
-    
-    @media (max-width: 600px) {
-      transform: translateY(95%); 
-    }
-    @media (min-width: 601px) {
-      transform: translateY(75%);
-    }
-  }
-`;
-const LineTextt = styled.span`
-  position: relative;
-  //color: #000000;
-
-  line-height: 1;
-  @media (max-width: 600px) {
-    font-size:20px
-  }
-  @media (min-width: 601px) {
-    font-size:28px
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    background-color: transparent;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    background-image: url(/images/Vector.png);
-    background-repeat: no-repeat;
-    background-size: 105%;
-    opacity: 1; 
-    z-index: -1; 
-    
-    @media (max-width: 600px) {
-      transform: translateY(70%); 
-    }
-    @media (min-width: 601px) {
-      transform: translateY(65%); /* 调整图像位置 */
-    }
-  }
-`;
+import MultiLine from '@/components/MultiLine';
 
 export function SectionClient() {
     const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -154,7 +89,7 @@ export function SectionClient() {
             <Typography
                 variant="h1"
                 sx={{
-                    fontWeight: 800,
+                    fontWeight: 900,
                     fontSize: { xs: '30px', sm: '54px', md: '56px' },
                     lineHeight: { xs: '32px', md: '64px' },
                     color: '#0F172A',
@@ -180,7 +115,7 @@ export function SectionClient() {
                 />
 
                 <Box sx={{ width: "65px" }} />
-                <Box sx={{ display: 'flex',alignItems: 'center', maxWidth: '100%', maxHeight: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', maxWidth: '100%', maxHeight: '100%' }}>
                     <Box ml={2}>
                         <Typography variant="h3" sx={{
                             fontWeight: 700,
@@ -191,7 +126,7 @@ export function SectionClient() {
                             textAlign: { xs: 'center  ', lg: 'left' },
                             mt: { xs: '30px', lg: '0' },
                             mb: { xs: '30px', lg: '23px' },
-                        }}>Get funded as <LineText>public goods</LineText></Typography>
+                        }}>Get funded as <MultiLine>public goods</MultiLine></Typography>
                         <Typography variant="subtitle1"
                             sx={{
                                 fontWeight: 400,
@@ -215,7 +150,7 @@ export function SectionClient() {
                 sx={{
                     fontWeight: 700,
                     fontSize: { xs: '25px', sm: '28px', md: '28px' },
-                    lineHeight: { xs: '30px', md: '56px' },
+                    lineHeight: { xs: '30px', md: '30px' },
                     padding: { xs: '10px', sm: '30px', md: 0 },
                     color: '#000000',
                     textAlign: { xs: 'center', lg: 'center' },
@@ -223,7 +158,7 @@ export function SectionClient() {
                     mt: { xs: '30px', lg: '119px' },
                 }}
             >
-                Get supported as <LineTextt>creators</LineTextt>
+                Get supported as <MultiLine>creators</MultiLine>
             </Typography>
 
             <Box sx={{
