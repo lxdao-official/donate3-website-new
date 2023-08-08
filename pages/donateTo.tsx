@@ -1,29 +1,89 @@
 import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-
 import { Layout } from '@/components/Layout';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
-const Test: NextPage = () => {
+import DonatedCard from '@/components/donateTo/DonatedCard';
+import PersonalDetails from '@/components/donateTo/PersonalDetails';
+import PersonalIntroduction from '@/components/donateTo/PersonalIntroduction';
+import { getFasterIpfsLink } from '@/utils/ipfsTools';
+import { ICustomWidget } from '@/components/CustomWidget';
+
+const DonateTo: NextPage = () => {
   const router = useRouter();
-  const { cid } = router.query;
+  const cid = router.query?.cid as string;
+  const [info, setInfo] = useState<Partial<ICustomWidget>>();
+
+  // If specified, use the gateway
+  const getInfoFromIpfs = async (cid: string) => {
+    try {
+      const info = await getFasterIpfsLink({
+        ipfs: `https://nftstorage.link/ipfs/${cid}`,
+        timeout: 4000,
+      });
+      setInfo(info);
+    } catch (error) {
+      console.error('error', 'getFasterIpfsLink-error');
+    }
+  };
+
+  useEffect(() => {
+    cid && getInfoFromIpfs(cid);
+  }, [cid]);
+
+  const handleDonateBtn = () => {
+    router.push(`/demo?cid=${cid}`);
+  };
 
   return (
-    <Layout>
+    <Layout
+      style={{
+        backgroundColor: '#f9fafc',
+      }}
+    >
       <Box
         sx={{
-          pt: { xs: '65px', md: '0px' },
           display: 'flex',
-          flexDirection: { xs: 'column-reverse', md: 'row' },
-          justifyContent: 'center',
+          flexDirection: 'column',
           alignItems: 'center',
-          height: { xs: '100vh', md: 'calc(100vh - 230px)' },
+          padding: '45px 200px',
         }}
       >
-        <div data-donate3-cid={cid}></div>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          <PersonalDetails
+            info={{
+              name: info?.name!,
+              avatar: info?.avatar!,
+              twitter: info?.twitter!,
+              telegram: info?.telegram!,
+            }}
+            onDonate={handleDonateBtn}
+          />
+          <DonatedCard
+            info={{
+              address: info?.address!,
+              safeAccounts: info?.safeAccounts!,
+              accountType: info?.accountType!,
+            }}
+          />
+        </Box>
+
+        <PersonalIntroduction
+          info={{
+            description: info?.description!,
+          }}
+        />
       </Box>
     </Layout>
   );
 };
 
-export default Test;
+export default DonateTo;

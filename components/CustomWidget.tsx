@@ -107,7 +107,6 @@ export default function CustomWidget() {
   };
 
   const genPreviewSrcDoc = (l: string) => {
-    console.log(getDonatePreviewSrcDoc(l))
     setPreviewSrcDoc(getDonatePreviewSrcDoc(l));
   };
 
