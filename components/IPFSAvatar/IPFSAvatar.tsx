@@ -12,13 +12,14 @@ export type TIPFSSrc = `https://nftstorage.link/ipfs/${string}`;
 export interface IIPFSAvatarProps {
   children?: React.ReactNode;
   className?: string;
-  ipfsSrc: TIPFSSrc;
+  ipfsSrc?: TIPFSSrc;
   address?: `0x${string}`;
+  style?: React.CSSProperties;
 }
 
 // avatar for ipfs
 // ipfs src >> base64 >> default img
-const IPFSAvatar = ({ className, ipfsSrc, address }: IIPFSAvatarProps) => {
+const IPFSAvatar = ({ className, ipfsSrc, address, style }: IIPFSAvatarProps) => {
   let cx = classNames.bind(styles);
 
   const base64Hash = address?.length === 42 ? getNounsBase64(address || ZERO_ADDRESS) : null;
@@ -29,13 +30,12 @@ const IPFSAvatar = ({ className, ipfsSrc, address }: IIPFSAvatarProps) => {
     const SRC = base64Hash ? `data:image/svg+xml;base64,${base64Hash}` : DEFAULT_AVATAR;
 
     return ipfsSrc ? (
-      <Img3 className={cx(styles.avatar, className)} src={ipfsSrc} alt="Avatar" />
+      <Img3 className={cx(styles.avatar, className)} src={ipfsSrc} alt="Avatar" style={style} />
     ) : (
-      // <img alt={ALT} src={SRC} className={cx(styles.avatar, className)}  width="88" height="88"/>
       // eslint-disable-next-line @next/next/no-img-element
-      <img alt={ALT} src={SRC} className={cx(styles.avatar, className)} />
+      <img alt={ALT} src={SRC} className={cx(styles.avatar, className)} style={style} />
     );
-  }, [base64Hash, className, cx, ipfsSrc]);
+  }, [base64Hash, className, cx, ipfsSrc, style]);
 
   return <>{memoImgNodes}</>;
 };
