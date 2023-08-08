@@ -5,9 +5,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import LXDAOFooter from './LXDAOFooter';
 
-function MyContainer({ children }: { children: React.ReactNode }) {
+function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <Container maxWidth={false} sx={{ maxWidth: '1512px' }}>
+    <Container maxWidth={false} sx={{ maxWidth: '1512px' }} style={style}>
       {children}
     </Container>
   );
@@ -27,14 +27,18 @@ function Header() {
         >
           <Box component="img" src="/logo.svg" />
           {/* <Image src="/logo.svg" alt='' width={50} height={50} /> */}
-          <Typography variant="h5" paddingLeft="14px" sx={{
-            lineHeight: {xs:'50px',lg:'50px'},
-              fontSize:{xs:'20px',lg:'26px'},
-            fontWeight: 600,
-            ":hover": {
-              textShadow: '2px 2px  #bdd75d',
-            }
-          }}>
+          <Typography
+            variant="h5"
+            paddingLeft="14px"
+            sx={{
+              lineHeight: { xs: '50px', lg: '50px' },
+              fontSize: { xs: '20px', lg: '26px' },
+              fontWeight: 600,
+              ':hover': {
+                textShadow: '2px 2px  #bdd75d',
+              },
+            }}
+          >
             Donate3
           </Typography>
         </Box>
@@ -97,7 +101,7 @@ const Footer = () => (
   </MyContainer>
 );
 
-export function Layout({ children, title = 'Donate3 - Make donate in web3 so easy', bgColor = 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);' }: { children: React.ReactNode; title?: string; bgColor?: string }) {
+export function Layout({ style, children, title = 'Donate3 - Make donate in web3 so easy', bgColor = 'linear-gradient(180deg, #FDFAF8 0%, #FDFAF8 49.35%, #D8E0E0 72.79%, #A8C4C2 100%);' }: { style: React.CSSProperties; children: React.ReactNode; title?: string; bgColor?: string }) {
   return (
     <>
       <Head>
@@ -136,13 +140,15 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         />
       </Head>
       <Box
-        sx={{
-          //background: bgColor,
-        }}
+        sx={
+          {
+            //background: bgColor,
+          }
+        }
       >
         <Header />
         <CssBaseline />
-        <MyContainer>{children}</MyContainer>
+        <MyContainer style={style}>{children}</MyContainer>
         <Divider />
         <LXDAOFooter />
         {/* <Footer /> */}

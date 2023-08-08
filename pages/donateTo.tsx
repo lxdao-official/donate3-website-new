@@ -13,7 +13,6 @@ import { ICustomWidget } from '@/components/CustomWidget';
 const DonateTo: NextPage = () => {
   const router = useRouter();
   const cid = router.query?.cid as string;
-
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
 
   // If specified, use the gateway
@@ -38,7 +37,11 @@ const DonateTo: NextPage = () => {
   };
 
   return (
-    <Layout>
+    <Layout
+      style={{
+        backgroundColor: '#f9fafc',
+      }}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -64,7 +67,13 @@ const DonateTo: NextPage = () => {
             }}
             onDonate={handleDonateBtn}
           />
-          <DonatedCard />
+          <DonatedCard
+            info={{
+              address: info?.address!,
+              safeAccounts: info?.safeAccounts!,
+              accountType: info?.accountType!,
+            }}
+          />
         </Box>
 
         <PersonalIntroduction

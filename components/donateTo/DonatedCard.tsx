@@ -1,7 +1,11 @@
-import React, { use, useEffect, useMemo, useState } from 'react';
+import React, { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
+import { useAccount, useNetwork } from 'wagmi';
+
 import API from '@/common/API';
 import Avatars from './Avatars';
+import { ICustomWidget } from '../CustomWidget';
+import { AccountType } from '@/utils/const';
 
 const MAX_COUNT = 10;
 
@@ -11,15 +15,27 @@ interface IRankingItem {
   top: string;
 }
 
-const DonatedCard = () => {
+interface IRankingParams {
+  chainId: number;
+  address: `0x${string}`;
+}
+
+interface IDonatedCardProps {
+  info: Pick<ICustomWidget, 'address' | 'safeAccounts' | 'accountType'>;
+}
+
+const DonatedCard = ({ info }: IDonatedCardProps) => {
+  const { isConnected } = useAccount();
+  const { chain, chains } = useNetwork();
+
+  console.log('account', isConnected);
+  console.log('chain-chains', chain, chains);
+
   const [ranking, setRanking] = useState<IRankingItem[]>([]);
 
-  const getRankingList = async () => {
+  const queryDonatesRanking = (params: IRankingParams) => {
     API.get('/donates/ranking', {
-      params: {
-        chainId: 137,
-        address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-      },
+      params,
       baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => {
@@ -27,9 +43,44 @@ const DonatedCard = () => {
     });
   };
 
+  const genDonatesRankingParamsCB = useCallback((): IRankingParams | null => {
+    const currentChainId = chain?.id!;
+
+    if (info?.accountType == AccountType.safeAccount) {
+      // safeAccount
+      // safeAccount账户需要取当前网络的链ID对应的safeAccount，如果没有则返回null
+      const selectedSafeAccount = info?.safeAccounts?.filter((item) => item?.networkId == currentChainId)?.[0];
+
+      if (selectedSafeAccount?.address) {
+        return {
+          chainId: currentChainId,
+          address: selectedSafeAccount?.address as `0x${string}`,
+        };
+      } else {
+        return null;
+      }
+    } else {
+      // EOA
+      // EOA账户直接取
+      return {
+        chainId: currentChainId,
+        address: info?.address! as `0x${string}`,
+      };
+    }
+  }, [chain, info]);
+
+  const getRankingListCallBack = useCallback(() => {
+    const params = genDonatesRankingParamsCB();
+    if (params?.address && params?.chainId) {
+      queryDonatesRanking(params!);
+    }
+  }, [genDonatesRankingParamsCB]);
+
   useEffect(() => {
-    getRankingList();
-  }, []);
+    if (isConnected && info) {
+      getRankingListCallBack();
+    }
+  }, [getRankingListCallBack, isConnected, info]);
 
   const memoLeastTenList = useMemo(() => {
     let finalRankings = ranking;
@@ -48,39 +99,61 @@ const DonatedCard = () => {
   return (ranking || [])?.length > 0 ? (
     <Box
       sx={{
-        padding: '60px 40px 40px 40px',
-        borderRadius: '8px',
-        width: '344px',
-        boxSizing: 'border-box',
-        textAlign: 'center',
+        position: 'relative',
       }}
     >
       <Box
         sx={{
-          fontSize: '56px',
-          fontWeight: 800,
-          lineHeight: '64px',
-          marginBottom: '13px',
-          color: 'rgba(15, 23, 42, 1)',
+          padding: '60px 40px 40px 40px',
+          borderRadius: '8px',
+          width: '344px',
+          boxSizing: 'border-box',
+          textAlign: 'center',
+          backgroundColor: '#fff',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
-        {ranking?.length}
+        <Box
+          sx={{
+            fontSize: '56px',
+            fontWeight: 800,
+            lineHeight: '64px',
+            marginBottom: '13px',
+            color: 'rgba(15, 23, 42, 1)',
+          }}
+        >
+          {ranking?.length}
+        </Box>
+        <Box
+          sx={{
+            fontSize: '16px',
+            fontWeight: 400,
+            lineHeight: '28px',
+            color: 'rgba(100, 116, 139, 1)',
+            marginBottom: '24px',
+          }}
+        >
+          people have donated
+        </Box>
+
+        <Box>
+          <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
+        </Box>
       </Box>
+      {/* mask */}
       <Box
         sx={{
-          fontSize: '16px',
-          fontWeight: 400,
-          lineHeight: '28px',
-          color: 'rgba(100, 116, 139, 1)',
-          marginBottom: '24px',
+          width: '92%',
+          height: '92%',
+          backgroundColor: '#CCFF00',
+          borderRadius: '8px',
+          position: 'absolute',
+          bottom: '-10px',
+          right: '-10px',
+          zIndex: 0,
         }}
-      >
-        people have donated
-      </Box>
-
-      <Box>
-        <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
-      </Box>
+      ></Box>
     </Box>
   ) : (
     <></>
