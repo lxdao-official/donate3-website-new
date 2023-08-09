@@ -208,7 +208,7 @@ export function SectionHero() {
                     Set up now
                 </StyledButton2>
 
-                <StyledButton onClick={() => router.push('/demo')}>
+                <StyledButton onClick={() => window.location.href = `${window.location.origin}/demo`}>
                     Demo
                 </StyledButton>
 

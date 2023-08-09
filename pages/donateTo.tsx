@@ -33,7 +33,7 @@ const DonateTo: NextPage = () => {
   }, [cid]);
 
   const handleDonateBtn = () => {
-    router.push(`/demo?cid=${cid}`);
+    window.location.href = `${window.location.origin}/demo?cid=${cid}`;
   };
 
   return (
