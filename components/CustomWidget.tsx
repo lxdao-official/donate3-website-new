@@ -24,11 +24,11 @@ import DescEditor from './create/DescEditor';
 import PreviewRegion from './create/PreviewRegion';
 
 import Delete from '../public/icons/delete.svg';
-// import Arbitrum from '../public/icons/networks/arbitrum.svg';
-// import Ethereum from '../public/icons/networks/ethereum.svg';
+import Arbitrum from '../public/icons/networks/arbitrum.svg';
+import Ethereum from '../public/icons/networks/ethereum.svg';
 import Goerli from '../public/icons/networks/goerli.svg';
-// import Linea from '../public/icons/networks/linea.svg';
-// import Optimism from '../public/icons/networks/optimism.svg';
+import Linea from '../public/icons/networks/linea.svg';
+import Optimism from '../public/icons/networks/optimism.svg';
 // import Pgn from '../public/icons/networks/pgn.svg';
 import Polygon from '../public/icons/networks/polygon.svg';
 
@@ -82,12 +82,12 @@ export default function CustomWidget() {
   }, [config]);
 
   const networks = [
-    // { id: 1, network: 'Ethereum', icon: Ethereum },
+    { id: 1, network: 'Ethereum', icon: Ethereum },
     { id: 5, network: 'Goerli', icon: Goerli },
-    // { id: 69, network: 'Optimism', icon: Optimism },
-    // { id: 42161, network: 'Arbitrum', icon: Arbitrum },
+    { id: 69, network: 'Optimism', icon: Optimism },
+    { id: 42161, network: 'Arbitrum', icon: Arbitrum },
     { id: 137, network: 'Polygon', icon: Polygon },
-    // { id: 59144, network: 'Linea', icon: Linea },
+    { id: 59144, network: 'Linea', icon: Linea },
     // { id: 424, network: 'PGN', icon: Pgn },
   ];
 
