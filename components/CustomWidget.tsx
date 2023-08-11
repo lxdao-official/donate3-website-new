@@ -534,7 +534,7 @@ export default function CustomWidget() {
                         label={
                           <Box height={30}>
                             <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
-                              Eoa
+                              EOA
                             </Typography>
                             <Typography variant="body2" lineHeight="26px" color="#64748B">
                               Receive donation from any chain with same address.
