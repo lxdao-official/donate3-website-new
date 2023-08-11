@@ -458,13 +458,19 @@ export default function CustomWidget() {
                         </InputAdornment>
                       }
                       onChange={(e: any) => {
+                        let twitter = e.target.value;
+                        setError('twitter', {});
+                        if (!twitter.startsWith('@')) {
+                          setError('twitter', { type: 'invalid twitter, must starts with @, like @donate3' });
+                          return;
+                        }
                         setConfig((pre) => ({
                           ...pre,
-                          twitter: e.target.value,
+                          twitter: `https://twitter.com/${e.target.value.slice(1)}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your twitter account"
+                      placeholder="Enter your twitter account：@xxxx"
                     />
                   </FormInput>
                 );
@@ -493,13 +499,19 @@ export default function CustomWidget() {
                       }
                       value={value}
                       onChange={(e: any) => {
+                        let telegram = e.target.value;
+                        setError('telegram', {});
+                        if (!telegram.startsWith('@')) {
+                          setError('telegram', { type: 'invalid telegram, must starts with @, like @donate3' });
+                          return;
+                        }
                         setConfig((pre) => ({
                           ...pre,
-                          telegram: e.target.value,
+                          telegram: `https://t.me/${e.target.value.slice(1)}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your telegram account"
+                      placeholder="Enter your telegram account：@xxxx"
                     />
                   </FormInput>
                 );
