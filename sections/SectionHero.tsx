@@ -2,35 +2,8 @@ import { Button, Box, Typography, List } from '@mui/material';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import React from 'react';
+import MultiLine from '@/components/MultiLine';
 
-const LineText = styled.span`
-  position: relative;
-  //color: #000000;
-
-  line-height: 1;
-  @media (max-width: 600px) {
-    font-size: 30px;
-  }
-
-  @media (min-width: 601px) {
-    font-size: 72px;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    background-color: transparent;
-    top: 0px;
-    left: -10px;
-    right: -10px;
-    bottom: 0;
-    background-image: url(/images/Vector.png);
-    background-repeat: no-repeat;
-    background-size: 105%;
-    opacity: 1;
-    z-index: -1;
-    transform: translateY(65%);
-  }
-`;
 const CircleBg = styled(Box)`
   position: absolute;
 
@@ -49,7 +22,7 @@ const CircleBg = styled(Box)`
   }
 
   @media (min-width: 601px) {
-    top: 46%;
+    top: 40%;
     width: 60%;
     height: 50%;
   }
@@ -167,7 +140,7 @@ export function SectionHero() {
           maxWidth: { xs: '100%', sm: '1240px' },
         }}
       >
-        Easy <LineText>donation</LineText>, More connection.
+        Easy <MultiLine>donation</MultiLine>, More connection.
       </Typography>
 
       <Typography
@@ -196,7 +169,7 @@ export function SectionHero() {
       >
         <StyledButton2 onClick={() => router.push('/create')}>Set up now</StyledButton2>
 
-        <StyledButton onClick={() => router.push('/demo')}>Demo</StyledButton>
+        <StyledButton onClick={() => (window.location.href = `${window.location.origin}/demo`)}>Demo</StyledButton>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', mt: '27px' }}>

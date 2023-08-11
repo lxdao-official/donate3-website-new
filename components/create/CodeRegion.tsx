@@ -20,13 +20,13 @@ const CodeRegion = ({ code, link }: ICodeRegionProps) => {
           title: 'Integrate into your code?',
           content: code,
           btnText: 'Copy code',
-          btnImg: '/images/copyGroup.png',
+          btnImg: '/images/copy.svg',
         },
         {
           title: 'Need a link to accept donations?',
           content: link,
           btnText: 'Copy Link',
-          btnImg: '/images/copyLink.png',
+          btnImg: '/images/link.svg',
         },
       ];
       setCodeCards(cards!);
