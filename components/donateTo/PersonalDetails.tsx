@@ -27,8 +27,8 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDe
       link: twitter,
     };
 
-    twitter && medias.push(telegramInfo);
     telegram && medias.push(twitterInfo);
+    twitter && medias.push(telegramInfo);
     return medias;
   }, [twitter, telegram]);
 
@@ -87,6 +87,7 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDe
               style={{
                 marginRight: '32px',
                 cursor: 'pointer',
+                display: 'inline-block',
               }}
               onClick={() => handleClickMediaIcon(link)}
             ></Image>
