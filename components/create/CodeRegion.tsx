@@ -26,7 +26,7 @@ const CodeRegion = ({ code, link }: ICodeRegionProps) => {
           title: 'Need a link to accept donations?',
           content: link,
           btnText: 'Copy Link',
-          btnImg: '/images/Link.svg',
+          btnImg: '/images/link.svg',
         },
       ];
       setCodeCards(cards!);
