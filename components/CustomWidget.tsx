@@ -24,11 +24,11 @@ import DescEditor from './create/DescEditor';
 import PreviewRegion from './create/PreviewRegion';
 
 import Delete from '../public/icons/delete.svg';
-// import Arbitrum from '../public/icons/networks/arbitrum.svg';
-// import Ethereum from '../public/icons/networks/ethereum.svg';
+import Arbitrum from '../public/icons/networks/arbitrum.svg';
+import Ethereum from '../public/icons/networks/ethereum.svg';
 import Goerli from '../public/icons/networks/goerli.svg';
-// import Linea from '../public/icons/networks/linea.svg';
-// import Optimism from '../public/icons/networks/optimism.svg';
+import Linea from '../public/icons/networks/linea.svg';
+import Optimism from '../public/icons/networks/optimism.svg';
 // import Pgn from '../public/icons/networks/pgn.svg';
 import Polygon from '../public/icons/networks/polygon.svg';
 
@@ -82,12 +82,12 @@ export default function CustomWidget() {
   }, [config]);
 
   const networks = [
-    // { id: 1, network: 'Ethereum', icon: Ethereum },
+    { id: 1, network: 'Ethereum', icon: Ethereum },
     { id: 5, network: 'Goerli', icon: Goerli },
-    // { id: 69, network: 'Optimism', icon: Optimism },
-    // { id: 42161, network: 'Arbitrum', icon: Arbitrum },
+    { id: 10, network: 'Optimism', icon: Optimism },
+    { id: 42161, network: 'Arbitrum', icon: Arbitrum },
     { id: 137, network: 'Polygon', icon: Polygon },
-    // { id: 59144, network: 'Linea', icon: Linea },
+    { id: 59144, network: 'Linea', icon: Linea },
     // { id: 424, network: 'PGN', icon: Pgn },
   ];
 
@@ -454,17 +454,23 @@ export default function CustomWidget() {
                       value={value}
                       startAdornment={
                         <InputAdornment position="start">
-                          <Image src="/images/twitterNew.png" alt="twitter" width="24" height="24" />
+                          <Image src="/icons/twitter-new.svg" alt="twitter" width="24" height="24" />
                         </InputAdornment>
                       }
                       onChange={(e: any) => {
+                        let twitter = e.target.value;
+                        setError('twitter', {});
+                        if (!twitter.startsWith('@')) {
+                          setError('twitter', { type: 'invalid twitter, must starts with @, like @donate3' });
+                          return;
+                        }
                         setConfig((pre) => ({
                           ...pre,
-                          twitter: e.target.value,
+                          twitter: `https://twitter.com/${e.target.value.slice(1)}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your twitter account"
+                      placeholder="Enter your twitter account：@xxxx"
                     />
                   </FormInput>
                 );
@@ -488,18 +494,24 @@ export default function CustomWidget() {
                       }}
                       startAdornment={
                         <InputAdornment position="start">
-                          <Image src="/images/telegram.png" alt="telegram" width="24" height="24" />
+                          <Image src="/icons/telegram-new.svg" alt="telegram" width="24" height="24" />
                         </InputAdornment>
                       }
                       value={value}
                       onChange={(e: any) => {
+                        let telegram = e.target.value;
+                        setError('telegram', {});
+                        if (!telegram.startsWith('@')) {
+                          setError('telegram', { type: 'invalid telegram, must starts with @, like @donate3' });
+                          return;
+                        }
                         setConfig((pre) => ({
                           ...pre,
-                          telegram: e.target.value,
+                          telegram: `https://t.me/${e.target.value.slice(1)}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your telegram account"
+                      placeholder="Enter your telegram account：@xxxx"
                     />
                   </FormInput>
                 );
@@ -534,7 +546,7 @@ export default function CustomWidget() {
                         label={
                           <Box height={30}>
                             <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
-                              Eoa
+                              EOA
                             </Typography>
                             <Typography variant="body2" lineHeight="26px" color="#64748B">
                               Receive donation from any chain with same address.

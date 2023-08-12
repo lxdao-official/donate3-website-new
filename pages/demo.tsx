@@ -1,11 +1,25 @@
+'use client';
+
 import type { NextPage } from 'next';
 import { Box } from '@mui/material';
 
 import { Layout } from '@/components/Layout';
 import { DEFAULT_CID } from '@/utils/const';
-import { getDonateSrcDoc } from '@/utils/common';
+import { use, useEffect, useState } from 'react';
 
 const Demo: NextPage = () => {
+  const [cid, setCid] = useState(DEFAULT_CID);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // browser code
+
+      const paramArr = new URLSearchParams(window.location.search);
+      const cid = paramArr.get('cid') || DEFAULT_CID;
+      setCid(cid);
+    }
+  }, []);
+
   return (
     <Layout>
       <div
@@ -14,7 +28,6 @@ const Demo: NextPage = () => {
         }}
       >
         <Box
-          component="iframe"
           sx={{
             pt: { xs: '65px', md: '0px' },
             display: 'flex',
@@ -24,12 +37,12 @@ const Demo: NextPage = () => {
             minWidth: '400px',
             height: '800px',
             frameBorder: '0',
-            border: '2px solid var(--gray-300, #E2E8F0);',
             borderRadius: '22px',
             margin: '0 auto',
           }}
-          srcDoc={getDonateSrcDoc(DEFAULT_CID)}
-        ></Box>
+        >
+          <div data-donate3-cid={cid}></div>
+        </Box>
       </div>
     </Layout>
   );

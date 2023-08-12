@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -20,5 +20,27 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  background: linear-gradient(180deg, #fdfaf8 0%, #fdfaf8 49.35%, #d8e0e0 72.79%, #a8c4c2 100%);
+} */
+
+.border_ani_start {
+  background-color: #272e3f;
+}
+
+.border_ani {
+  background: conic-gradient(from 0deg, transparent 0 var(--angle), #272e3f var(--angle) 360deg);
+  /* animation-fill-mode: forwards; */
+  /* animation-play-state: paused; */
+  animation: rotate 800ms 1 normal forwards ease-in-out;
+}
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }

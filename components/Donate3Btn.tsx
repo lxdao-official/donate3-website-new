@@ -36,6 +36,7 @@ export default function Donate3Btn({ children, variant, sx, onClick, disabled, l
         fontWeight: '600',
         textTransform: 'capitalize',
         width: 'full',
+        bgcolor: '#fff',
         ...sx,
       }}
       fullWidth
