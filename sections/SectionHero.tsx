@@ -106,12 +106,14 @@ const StyledButton2 = styled(Button)`
 enum supportList {
   ethereum = 'ethereum',
   polygon = 'polygon',
-  // optimism = 'optimism',
+  optimism = 'optimism',
   // gnosis = 'gnosis',
   // avalanche = 'avalanche',
   // fantom = 'fantom',
-  // arbitrum = 'arbitrum',
+  arbitrum = 'arbitrum',
   // bsc = 'bsc',
+  linea = 'linea',
+  goerli = 'goerli',
 }
 
 export function SectionHero() {
