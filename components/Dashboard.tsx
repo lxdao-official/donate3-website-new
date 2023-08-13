@@ -153,7 +153,6 @@ interface DonateDetail {
   usdValue: string | undefined;
   userId: string | undefined;
   value: number;
-  uid: string;
   hash: string;
 }
 
