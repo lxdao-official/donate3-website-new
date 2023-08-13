@@ -14,7 +14,7 @@ import { DONATE_SDK_URL } from '@/utils/const';
 import { Linea } from '@/utils/linea';
 
 const { chains, publicClient } = configureChains(
-  [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia],
+  [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia, optimismGoerli],
   // [mainnet, polygon, optimism, arbitrum, zora],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),

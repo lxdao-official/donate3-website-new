@@ -40,7 +40,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function formatData(chainType: string = '1', coinType: number = 0, createTime: number[] = [], fromAddress: string, id: string, message: string = '0', status: number = 1, toAddress: string, updateTime: number[] = [], usdValue: string = '0', userId: string = '', value: number = 0, hash: string = '') {
+function formatData(chainType: string = '1', coinType: number = 0, createTime: number[] = [], fromAddress: string, id: string, message: string = '0', status: number = 1, toAddress: string, updateTime: number[] = [], usdValue: string = '0', userId: string = '', value: number = 0, hash: string = '', uid: string = '') {
   return {
     chainType,
     coinType,
@@ -55,6 +55,7 @@ function formatData(chainType: string = '1', coinType: number = 0, createTime: n
     userId,
     value,
     hash,
+    uid
   };
 }
 
@@ -124,6 +125,7 @@ interface Coin {
   name: string;
   icon: string;
   explorer: string;
+  eas: string;
 }
 
 interface CoinList {
@@ -154,6 +156,7 @@ interface DonateDetail {
   userId: string | undefined;
   value: number;
   hash: string;
+  uid: string;
 }
 
 interface DonateHistory {
@@ -170,6 +173,7 @@ interface DonateHistory {
   erc20: string;
   amount: number;
   price: string;
+  uid: string;
 }
 
 interface TotalList {
@@ -208,7 +212,8 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
-          explorer: 'https://mumbai.polygonscan.com/tx/',
+          explorer: 'https://mumbai.polygonscan.com/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -219,7 +224,8 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
-          explorer: 'https://polygonscan.com/tx/',
+          explorer: 'https://polygonscan.com/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -230,7 +236,32 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/ethereum.svg',
-          explorer: 'https://goerli.etherscan.io/tx/',
+          explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+        },
+      },
+    },
+    '420': {
+      name: 'Optimistic Goerli',
+      icon: '/icons/support/optimism.svg',
+      coin: {
+        0: {
+          name: 'Optimistic Goerli',
+          icon: '/icons/support/ethereum.svg',
+          explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+        },
+      },
+    },
+    '11155111': {
+      name: 'Sepolia',
+      icon: '/icons/support/ethereum.svg',
+      coin: {
+        0: {
+          name: 'MATIC',
+          icon: '/icons/support/ethereum.svg',
+          explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -276,7 +307,7 @@ export default function Dashboard() {
 
       const res: DonateHistory[] = data?.data?.data;
       const tmp = res.map((value) => {
-        const formated = formatData(`${value?.chainId}`, 0, value?.timestamp as unknown as number[], value?.from, `${value?.id}`, value?.message, 1, value?.to, [], '0', '', Number(value?.money) / 1000000000000000000, value?.transactionHash);
+        const formated = formatData(`${value?.chainId}`, 0, value?.timestamp as unknown as number[], value?.from, `${value?.id}`, value?.message, 1, value?.to, [], '0', '', Number(value?.money) / 1000000000000000000, value?.transactionHash, value?.uid);
         return formated;
       });
       return tmp;
@@ -415,22 +446,23 @@ export default function Dashboard() {
                 <StyledTableCell align="center">Token</StyledTableCell>
                 <StyledTableCell align="center">Blockchain</StyledTableCell>
                 <StyledTableCell align="center">Message</StyledTableCell>
+                <StyledTableCell align="center">EAS UID</StyledTableCell>
                 <StyledTableCell align="center">Hash</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {(perPage > 0
                 ? rows
-                    .filter((row) => {
-                      const chainIds = Object.keys(coinType);
-                      if (chainIds.includes(row?.chainType)) {
-                        return row;
-                      }
-                    })
-                    // .sort((a, b) => {
-                    //   return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
-                    // })
-                    .slice(page * perPage, page * perPage + perPage)
+                  .filter((row) => {
+                    const chainIds = Object.keys(coinType);
+                    if (chainIds.includes(row?.chainType)) {
+                      return row;
+                    }
+                  })
+                  // .sort((a, b) => {
+                  //   return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
+                  // })
+                  .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateDetail, index) => {
                 // console.log(row, 'row');
@@ -483,8 +515,17 @@ export default function Dashboard() {
                     <StyledTableCell align="center">
                       <Stack direction={'column'} alignItems="center">
                         <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                          <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + row?.hash} target="_blank">
-                            {row?.hash.slice(0, 5) + '...' + row?.hash.slice(-5, -1)}
+                          <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].eas + 'attestation/view/' + row?.uid} target="_blank">
+                            {row?.uid ? row?.uid?.slice(0, 5) + '...' + row?.uid?.slice(-5) : ''}
+                          </Link>
+                        </Typography>
+                      </Stack>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <Stack direction={'column'} alignItems="center">
+                        <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                          <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + 'tx/' + row?.hash} target="_blank">
+                            {row?.hash.slice(0, 5) + '...' + row?.hash.slice(-5)}
                           </Link>
                         </Typography>
                       </Stack>

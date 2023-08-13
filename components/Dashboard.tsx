@@ -153,6 +153,7 @@ interface DonateDetail {
   usdValue: string | undefined;
   userId: string | undefined;
   value: number;
+  uid: string;
   hash: string;
 }
 
@@ -191,7 +192,7 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
-          explorer: 'https://mumbai.polygonscan.com/tx/',
+          explorer: 'https://mumbai.polygonscan.com/',
         },
       },
     },
@@ -202,7 +203,7 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
-          explorer: 'https://polygonscan.com/tx/',
+          explorer: 'https://polygonscan.com/',
         },
       },
     },
@@ -213,7 +214,7 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/ethereum.svg',
-          explorer: 'https://goerli.etherscan.io/tx/',
+          explorer: 'https://goerli.etherscan.io/',
         },
       },
     },
@@ -395,16 +396,16 @@ export default function Dashboard() {
             <TableBody>
               {(perPage > 0
                 ? rows
-                    .filter((row) => {
-                      const chainIds = Object.keys(coinType);
-                      if (chainIds.includes(row?.chainType)) {
-                        return row;
-                      }
-                    })
-                    .sort((a, b) => {
-                      return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
-                    })
-                    .slice(page * perPage, page * perPage + perPage)
+                  .filter((row) => {
+                    const chainIds = Object.keys(coinType);
+                    if (chainIds.includes(row?.chainType)) {
+                      return row;
+                    }
+                  })
+                  .sort((a, b) => {
+                    return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
+                  })
+                  .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateDetail, index) => (
                 <TableRow
@@ -419,7 +420,7 @@ export default function Dashboard() {
                     <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
                       {/* <Box width={40} component="img" src={row?.avatar} /> */}
                       <Tooltip title={row?.fromAddress} placement="bottom">
-                        <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + row?.fromAddress} target="_blank">
+                        <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + 'address/' + row?.fromAddress} target="_blank">
                           <Typography>{row?.fromAddress.slice(0, 6) + '...' + row?.fromAddress.slice(-5, -1)}</Typography>
                         </Link>
                       </Tooltip>
@@ -455,7 +456,7 @@ export default function Dashboard() {
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                        <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + row?.hash} target="_blank">
+                        <Link underline="none" href={coinType[row?.chainType as string]?.coin[0].explorer + 'tx/' + row?.hash} target="_blank">
                           {row?.hash.slice(0, 5) + '...' + row?.hash.slice(-5, -1)}
                         </Link>
                       </Typography>
