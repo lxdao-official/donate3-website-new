@@ -104,7 +104,7 @@ export default function CustomWidget() {
   };
 
   const genDonationsLink = (cid: string) => {
-    setDonationsLink(`https://donate3.xyz/donateTo?cid=${cid}`);
+    setDonationsLink(`https://superhack-donate3.0xhardman.xyz/donateTo?cid=${cid}`);
   };
 
   const genPreviewSrcDoc = (l: string) => {
