@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {Box, InputBase, Typography} from '@mui/material';
 import { Layout } from '@/components/Layout';
 import { useRouter } from 'next/router';
 
@@ -8,13 +8,26 @@ import DonatedCard from '@/components/donateTo/DonatedCard';
 import PersonalDetails from '@/components/donateTo/PersonalDetails';
 import PersonalIntroduction from '@/components/donateTo/PersonalIntroduction';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
-import { ICustomWidget } from '@/components/CustomWidget';
+import { ICustomWidget } from '@/components/CustomWidgetTest';
+import API from "@/common/API";
+import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import {Controller} from "react-hook-form";
+import FormInput from "@/components/create/FormInput";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+
+
 
 const DonateTo: NextPage = () => {
   const router = useRouter();
   const cid = router.query?.cid as string;
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
-
+    const [showProgress, setShowProgress] = useState(1);
   // If specified, use the gateway
   const getInfoFromIpfs = async (cid: string) => {
     try {
@@ -23,10 +36,16 @@ const DonateTo: NextPage = () => {
         timeout: 4000,
       });
       setInfo(info);
+      /*设置progress卡片渲染*/
+      setShowProgress(info?.progressType)
+      console.log(info?.progressType);
     } catch (error) {
       console.error('error', 'getFasterIpfsLink-error');
     }
   };
+
+
+
 
   useEffect(() => {
     cid && getInfoFromIpfs(cid);
@@ -67,20 +86,40 @@ const DonateTo: NextPage = () => {
             }}
             onDonate={handleDonateBtn}
           />
-          <DonatedCard
-            info={{
-              address: info?.address!,
-              safeAccounts: info?.safeAccounts!,
-              accountType: info?.accountType!,
-            }}
-          />
+
+            {showProgress === 0 ? (
+                <DonatedCardWithProgress
+                    info={{
+                        address: info?.address!,
+                        safeAccounts: info?.safeAccounts!,
+                        accountType: info?.accountType!,
+                        fundsGoal: info?.fundsGoal!,
+                        startTime: info?.startTime!,
+                        endTime: info?.endTime!,
+                    }}
+                />
+            ) : (
+                <DonatedCard
+                    info={{
+                        address: info?.address!,
+                        safeAccounts: info?.safeAccounts!,
+                        accountType: info?.accountType!,
+                    }}
+                />
+            )}
+
         </Box>
+
+
+
 
         <PersonalIntroduction
           info={{
             description: info?.description!,
           }}
         />
+
+
       </Box>
     </Layout>
   );
