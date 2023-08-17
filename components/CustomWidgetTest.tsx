@@ -817,7 +817,7 @@ export default function CustomWidget() {
                                       }}
                                   />
                                   <Controller
-                                      name={'selectDay'}
+                                      name={'startTime'}
                                       control={control}
                                       rules={{ required: true }}
                                       render={({ }) => {
@@ -843,7 +843,7 @@ export default function CustomWidget() {
                                       }}
                                   />
                                   <Controller
-                                      name={'selectEndDate'}
+                                      name={'endTime'}
                                       control={control}
                                       rules={{ required: true }}
                                       render={({  }) => {

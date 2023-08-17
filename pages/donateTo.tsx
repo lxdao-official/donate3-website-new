@@ -37,8 +37,10 @@ const DonateTo: NextPage = () => {
       });
       setInfo(info);
       /*设置progress卡片渲染*/
-      setShowProgress(info?.progressType)
-      console.log(info?.progressType);
+        if (info && 'progressType' in info) {
+            setShowProgress(info.progressType as number);
+        }
+      //console.log(info?.progressType);
     } catch (error) {
       console.error('error', 'getFasterIpfsLink-error');
     }

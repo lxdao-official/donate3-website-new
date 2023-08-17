@@ -30,6 +30,9 @@ export const DEFAULT_CREATE_CONFIG = {
   description: '',
   twitter: '',
   telegram: '',
+  fundsGoal: 0,
+  startTime:'',
+  endTime:''
 };
 
 export enum EType {
