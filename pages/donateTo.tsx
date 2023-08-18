@@ -8,7 +8,7 @@ import DonatedCard from '@/components/donateTo/DonatedCard';
 import PersonalDetails from '@/components/donateTo/PersonalDetails';
 import PersonalIntroduction from '@/components/donateTo/PersonalIntroduction';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
-import { ICustomWidget } from '@/components/CustomWidgetTest';
+import { ICustomWidget } from '@/components/CustomWidget';
 import API from "@/common/API";
 import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
 import Accordion from "@mui/material/Accordion";
