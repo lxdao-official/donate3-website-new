@@ -334,19 +334,19 @@ export default function Dashboard() {
     })();
   }, [rows]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API_KEY}`, {
-          method: 'GET',
-        });
-        const data = await res.json();
-        setPrice(data.result.ethusd);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  });
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const res = await fetch(`https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API_KEY}`, {
+  //         method: 'GET',
+  //       });
+  //       const data = await res.json();
+  //       setPrice(data.result.ethusd);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   })();
+  // });
   const downloadFile = () => {
     let data = [
       {
