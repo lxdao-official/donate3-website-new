@@ -1,19 +1,20 @@
-import '@/styles/globals.css'
+import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora } from 'wagmi/chains';
+import { configureChains, createConfig, sepolia, WagmiConfig } from 'wagmi';
+import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora, arbitrumGoerli, optimismGoerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { DONATE_SDK_URL } from '@/utils/const';
+import { Linea } from '@/utils/linea';
 
 const { chains, publicClient } = configureChains(
-  [goerli, polygon, polygonMumbai],
+  [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia, optimismGoerli],
   // [mainnet, polygon, optimism, arbitrum, zora],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
@@ -34,29 +35,23 @@ const wagmiConfig = createConfig({
 });
 
 const theme = createTheme({
-
   typography: {
     fontFamily: ['inter', 'sans-serif'].join(','),
     /*Arial, sans-serif', */
   },
 
   components: {
-
     MuiContainer: {
-
       styleOverrides: {
-
         // maxWidthMd: {
         //   maxWidth: 320,
         // },
         maxWidthLg: {
-
           maxWidth: '1300px',
         },
       },
     },
   },
-
 });
 
 export default function App({ Component, pageProps }: AppProps) {

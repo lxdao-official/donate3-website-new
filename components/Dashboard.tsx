@@ -184,7 +184,7 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
-          explorer: 'https://mumbai.polygonscan.com/tx/',
+          explorer: 'https://mumbai.polygonscan.com/',
         },
       },
     },
@@ -195,7 +195,7 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
-          explorer: 'https://polygonscan.com/tx/',
+          explorer: 'https://polygonscan.com/',
         },
       },
     },
@@ -206,7 +206,7 @@ export default function Dashboard() {
         0: {
           name: 'MATIC',
           icon: '/icons/support/ethereum.svg',
-          explorer: 'https://goerli.etherscan.io/tx/',
+          explorer: 'https://goerli.etherscan.io/',
         },
       },
     },

@@ -88,6 +88,7 @@ export default function CustomWidget() {
     { id: 42161, network: 'Arbitrum', icon: Arbitrum },
     { id: 137, network: 'Polygon', icon: Polygon },
     { id: 59144, network: 'Linea', icon: Linea },
+    { id: 420, network: 'Optimism Goerli', icon: Optimism },
     // { id: 424, network: 'PGN', icon: Pgn },
   ];
 
