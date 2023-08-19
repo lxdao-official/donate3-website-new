@@ -57,16 +57,16 @@ const theme = createTheme({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <MetaMaskContextProvider>
-      <ThemeProvider theme={theme}>
-        <WagmiConfig config={wagmiConfig}>
-          <RainbowKitProvider chains={chains}>
-            {/*<CssBaseline />*/}
-            <Component {...pageProps} />
-            <Script src={DONATE_SDK_URL} />
-          </RainbowKitProvider>
-        </WagmiConfig>
-      </ThemeProvider>
-    </MetaMaskContextProvider>
+    // <MetaMaskContextProvider>
+    <ThemeProvider theme={theme}>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains}>
+          {/*<CssBaseline />*/}
+          <Component {...pageProps} />
+          <Script src={DONATE_SDK_URL} />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </ThemeProvider>
+    // </MetaMaskContextProvider>
   );
 }
