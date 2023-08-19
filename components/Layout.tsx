@@ -4,6 +4,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import LXDAOFooter from './LXDAOFooter';
 import ConnectPart from './ConnectPart';
+import SDKContainer from './SDKContainer';
+import { ConnectBtn } from './ConnectBtn';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
@@ -43,7 +45,10 @@ function Header() {
           </Typography>
         </Box>
 
-        <ConnectPart />
+        <>
+          <SDKContainer />
+          <ConnectBtn />
+        </>
       </Box>
     </MyContainer>
   );

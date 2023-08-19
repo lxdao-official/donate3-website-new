@@ -1,3 +1,5 @@
+'use client'; // This is a client component 👈🏽
+
 import { Box } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import { useAccount } from 'wagmi';
