@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import Donate3Btn from './Donate3Btn';
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
+import { useLottie } from 'lottie-react';
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -20,6 +21,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useTheme } from '@mui/material/styles';
+import loadingAnimation from '../public/loading/donate3Loading.json';
 
 import API from '../common/API';
 import { json } from 'stream/consumers';
@@ -183,6 +185,15 @@ export default function Dashboard() {
     setAddressStr(address as string);
   }, [address]);
 
+  const options = {
+    animationData: loadingAnimation,
+    loop: true,
+  };
+  const { View } = useLottie(options, {
+    width: '80px',
+    height: '80px',
+  });
+
   const coinType: ChainList = {
     '80001': {
       name: 'Polygon Mubai',
@@ -336,7 +347,7 @@ export default function Dashboard() {
   return (
     <Grid item xs={8} mb="40px">
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
-        <CircularProgress color="inherit" />
+        {View}
       </Backdrop>
       <Stack mt="30px">
         <Typography variant="h4" color="#44443F">

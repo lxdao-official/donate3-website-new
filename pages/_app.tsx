@@ -12,6 +12,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { DONATE_SDK_URL } from '@/utils/const';
 import { Linea } from '@/utils/linea';
+import { MetaMaskContextProvider } from '@/utils/hooks/useMataMask';
 
 const { chains, publicClient } = configureChains(
   [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia],
@@ -56,14 +57,16 @@ const theme = createTheme({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
-          {/*<CssBaseline />*/}
-          <Component {...pageProps} />
-          <Script src={DONATE_SDK_URL} />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </ThemeProvider>
+    <MetaMaskContextProvider>
+      <ThemeProvider theme={theme}>
+        <WagmiConfig config={wagmiConfig}>
+          <RainbowKitProvider chains={chains}>
+            {/*<CssBaseline />*/}
+            <Component {...pageProps} />
+            <Script src={DONATE_SDK_URL} />
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </ThemeProvider>
+    </MetaMaskContextProvider>
   );
 }
