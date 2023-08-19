@@ -6,7 +6,7 @@ import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '
 import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
-
+import TextField from '@mui/material/TextField';
 import { ChromePicker } from 'react-color';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
@@ -67,6 +67,7 @@ export interface ICustomWidget {
   fundsGoal?: number;
   startTime?:string;
   endTime?:string;
+  reason?:string;
 }
 
 export default function CustomWidget() {
@@ -858,13 +859,41 @@ export default function CustomWidget() {
                                                                       ...pre,
                                                                       endTime: newValue?.toString(),
                                                                   }));
-                                                                  // onChange(newValue); // 更新控制器的值
+                                                                  // onChange(newValue);
                                                               }}
                                                   />
 
                                               </LocalizationProvider>
 
 
+                                          );
+                                      }}
+                                  />
+                                  <Controller
+                                      name={'reason'}
+                                      control={control}
+                                      rules={{ required: true }}
+                                      render={({ field: {  } }) => {
+                                          return (
+                                              <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
+                                                  <TextField
+                                                      id="standard-multiline-static"
+                                                      //label="Multiline"
+                                                      multiline
+                                                      rows={4}
+                                                      //defaultValue="Default Valuea"
+                                                      variant="standard"
+                                                      onChange={(e: any) => {
+                                                          let fundsReason = e.target.value;
+                                                          setConfig((pre) => ({
+                                                              ...pre,
+                                                              reason: fundsReason,
+                                                          }));
+                                                          //onChange(e);
+                                                      }}
+                                                  />
+
+                                              </FormInput>
                                           );
                                       }}
                                   />

@@ -11,15 +11,6 @@ import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import { ICustomWidget } from '@/components/CustomWidget';
 import API from "@/common/API";
 import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import {Controller} from "react-hook-form";
-import FormInput from "@/components/create/FormInput";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 
 
 
@@ -98,6 +89,7 @@ const DonateTo: NextPage = () => {
                         fundsGoal: info?.fundsGoal!,
                         startTime: info?.startTime!,
                         endTime: info?.endTime!,
+                        reason: info?.reason!
                     }}
                 />
             ) : (

@@ -22,7 +22,7 @@ interface IRankingParams {
 }
 
 interface IDonatedCardProps {
-    info: Pick<ICustomWidget, 'address' | 'safeAccounts' | 'accountType' | 'fundsGoal' | 'startTime' | 'endTime'>;
+    info: Pick<ICustomWidget, 'address' | 'safeAccounts' | 'accountType' | 'fundsGoal' | 'startTime' | 'endTime' | 'reason'>;
 }
 
 interface DonateTotalMoney {
@@ -33,7 +33,7 @@ interface DonateTotalMoney {
 }
 
 interface DonateData {
-    [key: string]: DonateTotalMoney[];
+    [key: string]: DonateTotalMoney;
 }
 
 
@@ -46,6 +46,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     const [goalMoney, setGoalMoney] = useState(1);
     const remainingTime = '8M 25D remaining';
     const [progressValue, setProgressValue] = useState(0);
+    const [reason,setReason] = useState<String>();
     const descriptionContent = 'This is the reason and introduction. This is bla a reason and this is my blabla bla...';
 
     require('dayjs/locale/en');
@@ -63,15 +64,17 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 //address: info?.address
             },
             /*本地测试环境,提交需注意*/
-            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_LOCAL,
+            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
         });
 
         const donateTotalMony: DonateData = await data?.data?.data;
-
+        console.log(donateTotalMony);
         if (donateTotalMony) {
             for (const key in donateTotalMony) {
                 //console.log(parseFloat(donateTotalMony[key][0].totalMoney));
-                const totalMoney = donateTotalMony[key][0].totalMoney;
+
+                //const totalMoney = donateTotalMony[key][0].totalMoney;
+                const totalMoney = donateTotalMony[key].totalMoney;
                 sum += totalMoney;
             }
         }
@@ -81,31 +84,14 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             setTotalMoney(sum);
             let goal: number = info?.fundsGoal!;
             setGoalMoney(goal);
-            /*  setGoalMoney(prevState => {
-
-
-                  if (typeof info?.fundsGoal === 'number') {
-                      return prevState + info.fundsGoal;
-                  }
-
-                  const defaultValue = 0;
-                  return prevState + defaultValue;
-                  //console.log()
-
-              } );*/
             const progress = (sum / goal * 100);
-            /* console.log(goal)
-             console.log(sum)
-             console.log(progress)*/
-            //console.log(goalMoney)
-
             if (progress < 100) {
                 setProgressValue(progress);
             } else {
                 setProgressValue(100);
             }
         }
-
+        setReason(info?.reason!);
 
     };
     /*拿到目前捐赠人数*/
@@ -317,7 +303,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                     {donatePeopleCount} people have donated
                 </Typography>
 
-                <Typography variant="body2" sx={{mt: '16px',}}>{descriptionContent}</Typography>
+                <Typography noWrap variant="body2" sx={{mt: '16px',height:'40px'}}>{reason}</Typography>
             </Box>
 
 
