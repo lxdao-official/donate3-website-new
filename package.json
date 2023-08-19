@@ -17,6 +17,8 @@
     "@lxdao/uploader3": "^1.2.2",
     "@lxdao/uploader3-connector": "^1.0.1",
     "@metamask/detect-provider": "^2.0.0",
+    "@metamask/sdk": "^0.5.6",
+    "@metamask/sdk-react": "^0.5.6",
     "@mui/icons-material": "^5.13.7",
     "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.13.7",
