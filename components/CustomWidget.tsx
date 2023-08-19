@@ -96,12 +96,11 @@ export default function CustomWidget() {
             }else {
                 progressType = 1
             }
-            //console.log(progressType)
+            //设置是否带进度条
             setConfig((pre) => ({
                 ...pre,
                 progressType: progressType,
             }));
-            //console.log(config.progressType)
         };
 
 
