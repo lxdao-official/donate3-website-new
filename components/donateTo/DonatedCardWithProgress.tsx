@@ -57,9 +57,10 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     const queryDonatesSetRaised = async (params: IRankingItem) => {
         let sum = 0;
 
-        const data = await API.get('/donates/donation-amount', {
+        const data = await API.get('/donates/total-donation-sum', {
             params: {
-                address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
+                //address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
+                address: params.address!,
                 //params,
                 //address: info?.address
             },
@@ -67,9 +68,11 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
         });
 
-        const donateTotalMony: DonateData = await data?.data?.data;
-        console.log(donateTotalMony);
-        if (donateTotalMony) {
+        //const donateTotalMony: DonateData = await data?.data;
+        sum = await data?.data?.data;
+        //console.log(sum);
+        //console.log(donateTotalMony);
+       /* if (donateTotalMony) {
             for (const key in donateTotalMony) {
                 //console.log(parseFloat(donateTotalMony[key][0].totalMoney));
 
@@ -77,7 +80,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 const totalMoney = donateTotalMony[key].totalMoney;
                 sum += totalMoney;
             }
-        }
+        }*/
 
         //setGoalMoney(info?.fundsGoal);
         if (params) {
@@ -117,15 +120,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
     };
 
-    useEffect(() => {
-        if (isConnected && info) {
-            const item: IRankingItem = {
-                address: `0x123456789abcdef`,
-            };
-            queryDonatesSetRaised(item);
-            queryDonatesSetPeople(item);
-        }
-    }, [isConnected, info]);
+
 
 
     /*
@@ -141,6 +136,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
   总结起来，这段代码定义了一个函数 queryDonatesRanking，用于向后端 API 发起获取捐赠排行榜数据的请求，并根据响应结果更新排行榜数据。
     * */
     const queryDonatesRanking = (params: IRankingParams) => {
+        //params.address = '0xe395B9bA2F93236489ac953146485C435D1A267B';
         API.get('/donates/ranking', {
             params,
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
@@ -193,6 +189,8 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         const params = genDonatesRankingParamsCB();
         if (params?.address && params?.chainId) {
             queryDonatesRanking(params!);
+
+            queryDonatesSetRaised(params!);
         }
     }, [genDonatesRankingParamsCB]);
 
@@ -200,8 +198,16 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     useEffect() 将自动调用 getRankingListCallBack() 来获取捐赠排行榜数据。这
     样可以确保在连接成功且相关信息可用时，及时获取和更新排行榜数据。*/
 
+/*    useEffect(() => {
+        if (isConnected && info) {
+
+            //queryDonatesSetPeople(item);
+        }
+    }, [isConnected, info]);*/
+
     useEffect(() => {
         if (isConnected && info) {
+
             getRankingListCallBack();
         }
     }, [getRankingListCallBack, isConnected, info]);
@@ -296,11 +302,14 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                     Start time: {startTime}
 
                 </Typography>
-
+                <Box>
+                    <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
+                </Box>
                 <Typography variant="body2"
                             sx={{mt: '16px', fontSize: '14px', lineHeight: '26px', fontWeight: 400, color: '#64748B'}}>
                     {/*  Start time: {startTime}*/}
-                    {donatePeopleCount} people have donated
+                    {ranking?.length} people have donated
+                    {/*{donatePeopleCount} people have donated*/}
                 </Typography>
 
                 <Typography noWrap variant="body2" sx={{mt: '16px',height:'40px'}}>{reason}</Typography>

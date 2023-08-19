@@ -82,7 +82,7 @@ export default function CustomWidget() {
     const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>();
     const [selectedEndDate, setSelectedEndDate] = useState<Dayjs | null>();
     const [expanded, setExpanded] = useState<string | false>(false);
-    const [showSetProgress, setShowSetProgress] = useState(false);
+    //const [showSetProgress, setShowSetProgress] = useState(false);
 
     //设置是否有进度
     const handleChange =
@@ -586,11 +586,11 @@ export default function CustomWidget() {
                           ...pre,
                           accountType: account,
                         }));
-                        if (account==1){
+                     /*   if (account==1){
                             setShowSetProgress(true)
                         }else {
                             setShowSetProgress(false);
-                        }
+                        }*/
                         onChange(e);
                       }}
                       name="radio-buttons-group"
@@ -767,9 +767,15 @@ export default function CustomWidget() {
             )}
 
 
-              {config.accountType === 0 ? (
+              {/*{config.accountType === 0 ? (
+
+
+              /* ) : (
+                  <></>
+              )}
+              */}
                   <Box>
-                      <Accordion  disabled={showSetProgress} expanded={expanded === 'panel1'} onChange={
+                      <Accordion  expanded={expanded === 'panel1'} onChange={
 
                           handleChange('panel1')
 
@@ -780,7 +786,7 @@ export default function CustomWidget() {
                               id="panel1bh-header"
                           >
                               <Typography sx={{ width: '100%', flexShrink: 0 }}>
-                                  Do you need to set a donation progress?(Only Eoa Account)
+                                  Do you need to set a donation progress?
                               </Typography>
                               {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
                           </AccordionSummary>
@@ -858,6 +864,7 @@ export default function CustomWidget() {
                                                                   setConfig((pre) => ({
                                                                       ...pre,
                                                                       endTime: newValue?.toString(),
+                                                                      // startTime: dayjs(newValue).valueOf().toString(),
                                                                   }));
                                                                   // onChange(newValue);
                                                               }}
@@ -904,9 +911,7 @@ export default function CustomWidget() {
 
 
                   </Box>
-              ) : (
-                  <></>
-              )}
+
 
 
           </Card>
