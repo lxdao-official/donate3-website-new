@@ -41,21 +41,20 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     const {chain} = useNetwork();
     const {isConnected} = useAccount();
     const [ranking, setRanking] = useState<IRankingItem[]>([]);
-    const [donatePeopleCount, setDonatePeopleCount] = useState(0);
+
     const [totalMoney, setTotalMoney] = useState(0);
     const [goalMoney, setGoalMoney] = useState(1);
-    const remainingTime = '8M 25D remaining';
+    //const remainingTime = '8M 25D remaining';
+    const [remainingTime, setRemainingTime] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState(0);
     const [reason,setReason] = useState<String>();
-    const descriptionContent = 'This is the reason and introduction. This is bla a reason and this is my blabla bla...';
 
     require('dayjs/locale/en');
-    //const dateStr = "2023-08-12T16:00:00.000Z";
     const startTime = dayjs(info?.startTime).format('DD/MM/YYYY');
 
     /*拿到目前资金以及设置进度*/
     const queryDonatesSetRaised = async (params: IRankingItem) => {
-        let sum = 0;
+        let sum:number;
 
         const data = await API.get('/donates/total-donation-sum', {
             params: {
@@ -65,24 +64,12 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 //address: info?.address
             },
             /*本地测试环境,提交需注意*/
+            //baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
         });
 
-        //const donateTotalMony: DonateData = await data?.data;
         sum = await data?.data?.data;
-        //console.log(sum);
-        //console.log(donateTotalMony);
-       /* if (donateTotalMony) {
-            for (const key in donateTotalMony) {
-                //console.log(parseFloat(donateTotalMony[key][0].totalMoney));
 
-                //const totalMoney = donateTotalMony[key][0].totalMoney;
-                const totalMoney = donateTotalMony[key].totalMoney;
-                sum += totalMoney;
-            }
-        }*/
-
-        //setGoalMoney(info?.fundsGoal);
         if (params) {
             setTotalMoney(sum);
             let goal: number = info?.fundsGoal!;
@@ -97,28 +84,44 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         setReason(info?.reason!);
 
     };
+    const remainDateInit = () => {
+        //const startTime = info?.startTime;
+        const endTime = info?.endTime;
+
+
+        if (endTime) {
+            const remainingMilliseconds = endTime - dayjs().valueOf();
+            const remainingDays = Math.ceil(remainingMilliseconds / (1000 * 60 * 60 * 24));
+            const remainingYears = Math.floor(remainingDays / 365);
+            const remainingMonths = Math.floor((remainingDays % 365) / 30);
+            const remainingDay = remainingDays % 30;
+            setRemainingTime(`${remainingYears}Y ${remainingMonths}M ${remainingDay}D `);
+        }
+
+        return null; // 如果没有有效的 startTime 和 endTime，则返回 null 或其他适当的值
+    };
     /*拿到目前捐赠人数*/
-    const queryDonatesSetPeople = async (params: IRankingItem) => {
+  /*  const queryDonatesSetPeople = async (params: IRankingItem) => {
 
         const data = await API.get('/donates/donationsCount', {
             params: {
                 address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
                 //address: info?.address
             },
-            /*本地测试环境,提交需注意*/
+            /!*本地测试环境,提交需注意*!/
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_LOCAL,
         });
 
-        /*   const tmp = res.map((value) => {
+        /!*   const tmp = res.map((value) => {
                const formated = formatData(`${value?.chainId}`, 0, value?.timestamp as unknown as number[], value?.from, `${value?.id}`, value?.message, 1, value?.to, [], '0', '', Number(value?.money) / 1000000000000000000, value?.transactionHash);
                return formated;
-           });*/
+           });*!/
 
         const donateCount: number = await data?.data?.data?.data;
 
         setDonatePeopleCount(donateCount);
 
-    };
+    };*/
 
 
 
@@ -191,6 +194,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             queryDonatesRanking(params!);
 
             queryDonatesSetRaised(params!);
+            remainDateInit();
         }
     }, [genDonatesRankingParamsCB]);
 
@@ -257,7 +261,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                 sx={{fontSize: '16px', lineHeight: '28px', fontWeight: 600}}>Progress</Typography>
                     <Typography variant="body2"
                                 sx={{color: '#64748B', fontSize: '14px', lineHeight: '26px', fontWeight: 400}}>
-                        {remainingTime}
+                        {remainingTime}remaining
                     </Typography>
                 </Box>
 

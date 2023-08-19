@@ -65,8 +65,8 @@ export interface ICustomWidget {
   twitter: string;
   telegram: string;
   fundsGoal?: number;
-  startTime?:string;
-  endTime?:string;
+  startTime?:number;
+  endTime?:number;
   reason?:string;
 }
 
@@ -79,8 +79,8 @@ export default function CustomWidget() {
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
-    const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>();
-    const [selectedEndDate, setSelectedEndDate] = useState<Dayjs | null>();
+    const [selectedStartDate, setSelectedStartDate] = useState<number>();
+    const [selectedEndDate, setSelectedEndDate] = useState<number>();
     const [expanded, setExpanded] = useState<string | false>(false);
     //const [showSetProgress, setShowSetProgress] = useState(false);
 
@@ -832,14 +832,16 @@ export default function CustomWidget() {
                                               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                   <DatePicker label="Select Start Date" value={selectedStartDate}
                                                               onChange={(newValue) => {
-                                                                  // let startTime = newValue; // 使用新的选定日期值
-                                                                  console.log(newValue);
-                                                                  setSelectedStartDate(newValue);
-                                                                  console.log(selectedStartDate); // 打印field.value的值
+                                                                  let startTime =dayjs(newValue).valueOf();
+                                                                  console.log(startTime);
+
+                                                                  setSelectedStartDate(startTime);
+
 
                                                                   setConfig((pre) => ({
                                                                       ...pre,
-                                                                      startTime: newValue?.toString(),
+                                                                      startTime: startTime,
+
                                                                   }));
 
                                                               }}
@@ -859,20 +861,21 @@ export default function CustomWidget() {
                                                   <DatePicker sx={{marginLeft:'40px'}} label="Select End Date" value={selectedEndDate}
 
                                                               onChange={(newValue) => {
-                                                                  //let endTime = newValue; // 使用新的选定日期值
-                                                                  setSelectedEndDate(newValue);
-                                                                  setConfig((pre) => ({
-                                                                      ...pre,
-                                                                      endTime: newValue?.toString(),
-                                                                      // startTime: dayjs(newValue).valueOf().toString(),
-                                                                  }));
-                                                                  // onChange(newValue);
+                                                                  let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
+
+                                                                  if(endTime<selectedStartDate!){
+                                                                      alert("End Date Shold Bigger Than Start Date")
+                                                                      setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
+                                                                  }else{
+                                                                      setSelectedEndDate(endTime);
+                                                                      setConfig((pre) => ({
+                                                                          ...pre,
+                                                                          endTime: endTime,
+                                                                      }));
+                                                                  }
                                                               }}
                                                   />
-
                                               </LocalizationProvider>
-
-
                                           );
                                       }}
                                   />
