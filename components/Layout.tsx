@@ -45,10 +45,7 @@ function Header() {
           </Typography>
         </Box>
 
-        <>
-          <SDKContainer />
-          <ConnectBtn />
-        </>
+        <SDKContainer />
       </Box>
     </MyContainer>
   );
