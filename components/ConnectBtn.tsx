@@ -1,6 +1,9 @@
+'use client'; // This is a client component 👈🏽
+
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Donate3Btn from './Donate3Btn';
-export const ConnectBtn = () => {
+import { Box } from '@mui/material';
+const ConnectBtn = () => {
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
@@ -23,15 +26,15 @@ export const ConnectBtn = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <Donate3Btn sx={{ weight:'600',height: '43px' ,fontsize:'14px'}} onClick={openConnectModal}>
-                    Connect Wallet
+                  <Donate3Btn sx={{ weight: '600', height: '43px', fontsize: '14px' }} onClick={openConnectModal}>
+                    <Box>Connect Wallet</Box>
                   </Donate3Btn>
                 );
               }
               if (chain.unsupported) {
                 return (
                   <Donate3Btn sx={{ height: '43px' }} onClick={openChainModal}>
-                    Wrong network
+                    <Box>Wrong network</Box>
                   </Donate3Btn>
                 );
               }
@@ -79,3 +82,5 @@ export const ConnectBtn = () => {
     </ConnectButton.Custom>
   );
 };
+
+export default ConnectBtn;
