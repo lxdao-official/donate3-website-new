@@ -8,12 +8,6 @@ import Donate3Btn from './Donate3Btn';
 import { ConnectBtn } from './ConnectBtn';
 import { useAccount } from 'wagmi';
 
-declare global {
-  interface Window {
-    ethereum?: SDKProvider;
-  }
-}
-
 export default function SDKContainer() {
   const [sdk, setSDK] = useState<MetaMaskSDK>();
   const [chain, setChain] = useState('');
@@ -34,14 +28,14 @@ export default function SDKContainer() {
         method: 'eth_requestAccounts',
         params: [],
       })
-      .then((accounts) => {
+      .then((accounts: string[]) => {
         if (accounts) {
           console.debug(`connect:: accounts result`, accounts);
           setAccount((accounts as string[])[0]);
           setConnected(true);
         }
       })
-      .catch((e) => console.log('request accounts ERR', e));
+      .catch((e: any) => console.log('request accounts ERR', e));
   };
 
   useEffect(() => {
