@@ -58,10 +58,8 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
         const data = await API.get('/donates/total-donation-sum', {
             params: {
-                //address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
                 address: params.address!,
-                //params,
-                //address: info?.address
+
             },
             /*本地测试环境,提交需注意*/
             //baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
@@ -85,20 +83,34 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
     };
     const remainDateInit = () => {
-        //const startTime = info?.startTime;
         const endTime = info?.endTime;
-
-
         if (endTime) {
             const remainingMilliseconds = endTime - dayjs().valueOf();
-            const remainingDays = Math.ceil(remainingMilliseconds / (1000 * 60 * 60 * 24));
-            const remainingYears = Math.floor(remainingDays / 365);
-            const remainingMonths = Math.floor((remainingDays % 365) / 30);
-            const remainingDay = remainingDays % 30;
-            setRemainingTime(`${remainingYears}Y ${remainingMonths}M ${remainingDay}D `);
+            if(remainingMilliseconds>0){
+                const remainingDays = Math.ceil(remainingMilliseconds / (1000 * 60 * 60 * 24));
+                const remainingYears = Math.floor(remainingDays / 365);
+                const remainingMonths = Math.floor((remainingDays % 365) / 30);
+                const remainingDay = remainingDays % 30;
+                if(remainingYears>0){
+
+                    setRemainingTime(`${remainingYears}Y ${remainingMonths}M ${remainingDay}D remaining`);
+                }else {
+                    if(remainingMonths > 0){
+                    setRemainingTime(` ${remainingMonths}M ${remainingDay}D remaining`);
+
+                }else {
+                        setRemainingTime(`${remainingDay}D remaining`);
+                    }
+
+                }
+
+            }else{
+                setRemainingTime("pass the deadline but you could donate whatever")
+            }
+
         }
 
-        return null; // 如果没有有效的 startTime 和 endTime，则返回 null 或其他适当的值
+        return null;
     };
     /*拿到目前捐赠人数*/
   /*  const queryDonatesSetPeople = async (params: IRankingItem) => {
@@ -126,18 +138,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
 
 
-    /*
-    定义了一个名为 queryDonatesRanking 的函数，该函数用于向后端 API 发起获取捐赠排行榜数据的请求。
 
-  具体来说，queryDonatesRanking 函数使用 API.get() 方法发送 GET 请求到 /donates/ranking 路径，并传递一个包含以下内容的配置对象作为参数：
-
-  params: 由调用者提供的 IRankingParams 对象，包含了请求排行榜所需的参数。
-  baseURL: 这里使用了 process.env.NEXT_PUBLIC_BACKEND_API_NEW 变量作为请求的基础 URL。
-  headers: 设置请求头，指定为 'Content-Type': 'application/json'，表示请求的数据类型为 JSON 格式。
-  在请求成功后，通过 .then() 方法处理响应结果 res，并将 res?.data?.data（如果存在）赋值给 setRanking() 函数，用于更新排行榜数据。
-
-  总结起来，这段代码定义了一个函数 queryDonatesRanking，用于向后端 API 发起获取捐赠排行榜数据的请求，并根据响应结果更新排行榜数据。
-    * */
     const queryDonatesRanking = (params: IRankingParams) => {
         //params.address = '0xe395B9bA2F93236489ac953146485C435D1A267B';
         API.get('/donates/ranking', {
@@ -149,14 +150,6 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         });
     };
 
-    /*函数主要逻辑如下：
-
-  通过 chain?.id! 获取当前网络的链ID，并将其赋值给 currentChainId 变量。
-  根据 info?.accountType 判断账户类型是 AccountType.safeAccount 还是其他类型。
-  如果账户类型是 AccountType.safeAccount，则从 info?.safeAccounts 中筛选出网络ID与 currentChainId 相同的安全账户对象，并取第一个匹配项赋值给 selectedSafeAccount 变量。
-  如果 selectedSafeAccount?.address 存在，则返回包含当前链ID和安全账户地址的对象。
-  如果没有符合条件的安全账户，则返回 null。
-  如果账户类型不是安全账户（即 EOA 账户），直接使用当前链ID和 info?.address 生成并返回对象。*/
     const genDonatesRankingParamsCB = useCallback((): IRankingParams | null => {
         const currentChainId = chain?.id!;
 
@@ -182,12 +175,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             };
         }
     }, [chain, info]);
-    /*
-    * 通过将 genDonatesRankingParamsCB 添加到依赖项数组中，
-    * 可以确保当 genDonatesRankingParamsCB 发生变化时，
-    * useCallback() 将重新创建并返回一个新的记忆化的回调函数。
-    * 这样可以避免在没有必要时重复创建回调函数，
-    * 提高性能，并且确保只有在依赖项改变时才会重新创建回调函数。*/
+
     const getRankingListCallBack = useCallback(() => {
         const params = genDonatesRankingParamsCB();
         if (params?.address && params?.chainId) {
@@ -198,16 +186,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         }
     }, [genDonatesRankingParamsCB]);
 
-    /*当连接状态发生改变且账户信息可用时，
-    useEffect() 将自动调用 getRankingListCallBack() 来获取捐赠排行榜数据。这
-    样可以确保在连接成功且相关信息可用时，及时获取和更新排行榜数据。*/
 
-/*    useEffect(() => {
-        if (isConnected && info) {
-
-            //queryDonatesSetPeople(item);
-        }
-    }, [isConnected, info]);*/
 
     useEffect(() => {
         if (isConnected && info) {
@@ -216,10 +195,6 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         }
     }, [getRankingListCallBack, isConnected, info]);
 
-    /*通过将 ranking 添加到依赖项数组中，
-    可以确保当 ranking 发生变化时，useMemo() 将重新运行，
-    并返回更新后的计算结果。这样可以避免在没有必要时重复计算，
-    提高性能，并且确保只有在依赖项改变时才会重新计算并返回新的结果。*/
     const memoLeastTenList = useMemo(() => {
         let finalRankings = ranking;
         const length = ranking?.length || 0;
@@ -228,24 +203,25 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         }
         return finalRankings!.map(({address}) => address);
     }, [ranking]);
-    /*通过将 ranking 添加到依赖项数组中，
-    可以确保当 ranking 发生变化时，useMemo() 将重新运行，
-    并返回更新后的计算结果。这样可以避免在没有必要时重复计算，提高性能，
-    并且确保只有在依赖项改变时才会重新计算并返回新的结果。*/
+
     const memoUnDisplayCount = useMemo(() => {
         const count = (ranking || [])?.length || 0;
         return count <= MAX_COUNT ? 0 : count - MAX_COUNT;
     }, [ranking]);
-    return (<Box
+    return (
+
+        <Box
         sx={{
             position: 'relative',
+            backgroundColor: '#F8FAFC',
+            borderRadius: '8px',
         }}
     >
         <Box
             sx={{
-                padding: '28px 40px 40px 40px',
+
                 borderRadius: '8px',
-                width: '380px',
+                width: '360px',
                 boxSizing: 'border-box',
                 textAlign: 'center',
                 backgroundColor: '#fff',
@@ -254,70 +230,74 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             }}
         >
             {/*进度条*/}
-            <Box sx={{}}>
+            <Box sx={{backgroundColor:'#F8FAFC',borderRadius: '8px', }}>
 
-                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography variant="body2"
-                                sx={{fontSize: '16px', lineHeight: '28px', fontWeight: 600}}>Progress</Typography>
-                    <Typography variant="body2"
-                                sx={{color: '#64748B', fontSize: '14px', lineHeight: '26px', fontWeight: 400}}>
-                        {remainingTime}remaining
-                    </Typography>
+               <Box sx={{ margin: '28px 40px 0px 40px',paddingBottom:'12px'}}>
+                   <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                       <Typography variant="body2"
+                                   sx={{fontSize: '16px', lineHeight: '28px', fontWeight: 600}}>Progress</Typography>
+                       <Typography variant="body2"
+                                   sx={{color: '#64748B', fontSize: '14px', lineHeight: '26px', fontWeight: 400}}>
+                           {remainingTime}
+                       </Typography>
+                   </Box>
+
+                   {/*          <progress max="2500" value="1300" style={{height:'32px',width: '100%'}}></progress>*/}
+
+                   <LinearProgress variant="determinate" value={progressValue} color='inherit'
+                                   sx={{mt: '16px', borderRadius: '8px', height: '12px', width: '100%'}}/>
+
+                   <Box sx={{mt: '16px', display: 'flex', justifyContent: 'space-between', marginTop: '10px'}}>
+                       <Box>
+                           <Typography variant="body1"
+                                       sx={{fontSize: '14px', lineHeight: '26px', fontWeight: 600, color: '#64748B'}}>
+                               Funds Raised
+                           </Typography>
+                           <Typography variant="body1">{Math.floor(totalMoney)}U</Typography>
+                       </Box>
+
+                       <Box>
+                           <Typography variant="body1"
+                                       sx={{fontSize: '14px', lineHeight: '26px', fontWeight: 600, color: '#64748B'}}>
+                               Funds Goal
+                           </Typography>
+                           <Typography variant="body1">
+                               {/*   {fundsGoal}*/}
+                               {goalMoney}U
+                           </Typography>
+                       </Box>
+
+                   </Box>
+
+
+                   <Typography variant="body2" sx={{
+                       mt: '16px',
+                       md: '16px',
+                       textAlign: 'left',
+                       fontSize: '14px',
+                       lineHeight: '26px',
+                       fontWeight: 400,
+                       color: '#64748B'
+                   }}>Start time: {startTime}</Typography>
+               </Box>
+
                 </Box>
 
-                {/*          <progress max="2500" value="1300" style={{height:'32px',width: '100%'}}></progress>*/}
 
-                <LinearProgress variant="determinate" value={progressValue} color='inherit'
-                                sx={{mt: '16px', borderRadius: '8px', height: '12px', width: '100%'}}/>
+              <Box sx={{padding: '0px 34px 14px 34px'}}>
+                  <Box>
+                      <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
+                  </Box>
+                  <Typography variant="body2"
+                              sx={{mt: '16px', fontSize: '14px', lineHeight: '26px', fontWeight: 400, color: '#64748B'}}>
+                      {/*  Start time: {startTime}*/}
+                      {ranking?.length} people have donated
+                      {/*{donatePeopleCount} people have donated*/}
+                  </Typography>
 
-                <Box sx={{mt: '16px', display: 'flex', justifyContent: 'space-between', marginTop: '10px'}}>
-                    <Box>
-                        <Typography variant="body1"
-                                    sx={{fontSize: '14px', lineHeight: '26px', fontWeight: 600, color: '#64748B'}}>
-                            Funds Raised
-                        </Typography>
-                        <Typography variant="body1">{Math.floor(totalMoney)}U</Typography>
-                    </Box>
+                  <Typography noWrap variant="body2" sx={{mt: '16px',height:'40px',textAlign:'left', fontSize: '14px', lineHeight: '26px', fontWeight: 400, color: '#64748B'}}>{reason}</Typography>
+              </Box>
 
-                    <Box>
-                        <Typography variant="body1"
-                                    sx={{fontSize: '14px', lineHeight: '26px', fontWeight: 600, color: '#64748B'}}>
-                            Funds Goal
-                        </Typography>
-                        <Typography variant="body1">
-                            {/*   {fundsGoal}*/}
-                            {goalMoney}U
-                        </Typography>
-                    </Box>
-
-                </Box>
-
-
-                <Typography variant="body2" sx={{
-                    mt: '16px',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    lineHeight: '26px',
-                    fontWeight: 400,
-                    color: '#64748B'
-                }}>
-                    {/* Start time: {startTime}*/}
-
-                    Start time: {startTime}
-
-                </Typography>
-                <Box>
-                    <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
-                </Box>
-                <Typography variant="body2"
-                            sx={{mt: '16px', fontSize: '14px', lineHeight: '26px', fontWeight: 400, color: '#64748B'}}>
-                    {/*  Start time: {startTime}*/}
-                    {ranking?.length} people have donated
-                    {/*{donatePeopleCount} people have donated*/}
-                </Typography>
-
-                <Typography noWrap variant="body2" sx={{mt: '16px',height:'40px'}}>{reason}</Typography>
-            </Box>
 
 
         </Box>

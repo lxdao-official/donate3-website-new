@@ -51,7 +51,8 @@ const DonateTo: NextPage = () => {
   return (
     <Layout
       style={{
-        backgroundColor: '#f9fafc',
+          /*backgroundColor: '#f9fafc',*/
+          backgroundColor: '#ffffff',
       }}
     >
       <Box

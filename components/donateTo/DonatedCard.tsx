@@ -90,7 +90,8 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
     const count = (ranking || [])?.length || 0;
     return count <= MAX_COUNT ? 0 : count - MAX_COUNT;
   }, [ranking]);
-return(<Box
+return(
+    <Box
     sx={{
         position: 'relative',
     }}
