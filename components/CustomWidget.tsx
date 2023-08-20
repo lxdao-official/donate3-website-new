@@ -225,7 +225,7 @@ export default function CustomWidget() {
           gap: 4,
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column' }} flex={1}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '50%' }} flex={1}>
           {/* Style in your website */}
           <Card title="Style in your website">
             <Controller
