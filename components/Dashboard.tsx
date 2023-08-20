@@ -256,11 +256,11 @@ export default function Dashboard() {
     },
     '59144': {
       name: 'Linea',
-      icon: '/icons/support/ethereum.svg',
+      icon: '/icons/support/linea.svg',
       coin: {
         0: {
           name: 'ETH',
-          icon: '/icons/support/ethereum.svg',
+          icon: '/icons/support/linea.svg',
           explorer: 'https://lineascan.build/tx',
         },
       },
@@ -457,16 +457,16 @@ export default function Dashboard() {
             <TableBody>
               {(perPage > 0
                 ? rows
-                    .filter((row) => {
-                      const chainIds = Object.keys(coinType);
-                      if (chainIds.includes(row?.chainId.toString())) {
-                        return row;
-                      }
-                    })
-                    .sort((a, b) => {
-                      return (sort ? 1 : -1) * (Number(a.timestamp) - Number(b.timestamp));
-                    })
-                    .slice(page * perPage, page * perPage + perPage)
+                  .filter((row) => {
+                    const chainIds = Object.keys(coinType);
+                    if (chainIds.includes(row?.chainId.toString())) {
+                      return row;
+                    }
+                  })
+                  .sort((a, b) => {
+                    return (sort ? 1 : -1) * (Number(a.timestamp) - Number(b.timestamp));
+                  })
+                  .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateItem, index) => (
                 <TableRow

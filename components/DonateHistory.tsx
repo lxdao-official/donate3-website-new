@@ -217,7 +217,7 @@ export default function Dashboard() {
 
   const coinType: ChainList = {
     '80001': {
-      name: 'Polygon Mubai',
+      name: 'Polygon Mumbai',
       icon: '/icons/support/polygon.svg',
       coin: {
         0: {
@@ -252,14 +252,50 @@ export default function Dashboard() {
         },
       },
     },
-    '420': {
-      name: 'Optimistic Goerli',
+    '1': {
+      name: 'Ethereum',
+      icon: '/icons/support/ethereum.svg',
+      coin: {
+        0: {
+          name: 'ETH',
+          icon: '/icons/support/ethereum.svg',
+          explorer: 'https://etherscan.io/tx/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+        },
+      },
+    },
+    '10': {
+      name: 'Optimism',
       icon: '/icons/support/optimism.svg',
       coin: {
         0: {
-          name: 'Optimistic Goerli',
+          name: 'ETH',
           icon: '/icons/support/ethereum.svg',
-          explorer: 'https://goerli.etherscan.io/',
+          explorer: 'https://optimistic.etherscan.io/tx/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+        },
+      },
+    },
+    '42161': {
+      name: 'Arbitrum',
+      icon: '/icons/support/arbitrum.svg',
+      coin: {
+        0: {
+          name: 'ETH',
+          icon: '/icons/support/arbitrum.svg',
+          explorer: 'https://arbiscan.io/tx/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+        },
+      },
+    },
+    '59144': {
+      name: 'Linea',
+      icon: '/icons/support/linea.svg',
+      coin: {
+        0: {
+          name: 'ETH',
+          icon: '/icons/support/linea.svg',
+          explorer: 'https://lineascan.build/tx',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
@@ -285,6 +321,10 @@ export default function Dashboard() {
     '80001': 0.0,
     '137': 0.0,
     '5': 0.0,
+    '1': 0.0,
+    '10': 0.0,
+    '42161': 0.0,
+    '59144': 0.0,
   });
   const [perPage, setPerPage] = useState(25);
   const [price, setPrice] = useState(0.0);
@@ -342,6 +382,10 @@ export default function Dashboard() {
         '80001': 0.0,
         '137': 0.0,
         '5': 0.0,
+        '1': 0.0,
+        '10': 0.0,
+        '42161': 0.0,
+        '59144': 0.0,
       };
       const totalc = rows.reduce((pre, cur) => {
         if (!Object.keys(initialTotalList).includes(cur.chainType)) {

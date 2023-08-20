@@ -1,14 +1,14 @@
-import React, { use, useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import { useAccount, useNetwork } from 'wagmi';
-import { LinearProgress, CircularProgress } from '@mui/material';
+import React, {use, useCallback, useEffect, useMemo, useState} from 'react';
+import {Box, Typography} from '@mui/material';
+import {useAccount, useNetwork} from 'wagmi';
+import {LinearProgress, CircularProgress} from '@mui/material';
 import API from '@/common/API';
 import Avatars from './Avatars';
-import { ICustomWidget } from '../CustomWidget';
-import { AccountType } from '@/utils/const';
-import { fontColor } from "suneditor/src/plugins";
+import {ICustomWidget} from '../CustomWidget';
+import {AccountType} from '@/utils/const';
+import {fontColor} from "suneditor/src/plugins";
 //import {Dayjs}  from 'dayjs';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 
 const MAX_COUNT = 10;
 
@@ -37,14 +37,13 @@ interface DonateData {
 }
 
 
-const DonatedCard = ({ info }: IDonatedCardProps) => {
-    const { chain } = useNetwork();
-    const { isConnected } = useAccount();
+const DonatedCard = ({info}: IDonatedCardProps) => {
+    const {chain} = useNetwork();
+    const {isConnected} = useAccount();
     const [ranking, setRanking] = useState<IRankingItem[]>([]);
 
     const [totalMoney, setTotalMoney] = useState(0);
     const [goalMoney, setGoalMoney] = useState(0);
-    //const remainingTime = '8M 25D remaining';
     const [remainingTime, setRemainingTime] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState(0);
     const [reason, setReason] = useState<String>();
@@ -61,8 +60,7 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
                 address: params.address!,
 
             },
-            /*本地测试环境,提交需注意*/
-            //baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
+            /*测试环境,提交需注意*/
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
         });
 
@@ -79,7 +77,8 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
                 setProgressValue(100);
             }
         }
-        setReason(info?.reason!);
+        const reasonFromInfo =info?.reason
+        setReason(reasonFromInfo);
 
     };
     const remainDateInit = () => {
@@ -114,7 +113,7 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
     };
     /*拿到目前捐赠人数*/
     /*  const queryDonatesSetPeople = async (params: IRankingItem) => {
-  
+
           const data = await API.get('/donates/donationsCount', {
               params: {
                   address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
@@ -123,20 +122,17 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
               /!*本地测试环境,提交需注意*!/
               baseURL: process.env.NEXT_PUBLIC_BACKEND_API_LOCAL,
           });
-  
+
           /!*   const tmp = res.map((value) => {
                  const formated = formatData(`${value?.chainId}`, 0, value?.timestamp as unknown as number[], value?.from, `${value?.id}`, value?.message, 1, value?.to, [], '0', '', Number(value?.money) / 1000000000000000000, value?.transactionHash);
                  return formated;
              });*!/
-  
+
           const donateCount: number = await data?.data?.data?.data;
-  
+
           setDonatePeopleCount(donateCount);
-  
+
       };*/
-
-
-
 
 
     const queryDonatesRanking = (params: IRankingParams) => {
@@ -144,7 +140,7 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
         API.get('/donates/ranking', {
             params,
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         }).then((res) => {
             setRanking(res?.data?.data || []);
         });
@@ -187,7 +183,6 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
     }, [genDonatesRankingParamsCB]);
 
 
-
     useEffect(() => {
         if (isConnected && info) {
 
@@ -201,7 +196,7 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
         if (length > MAX_COUNT) {
             finalRankings = ranking?.slice(0, MAX_COUNT);
         }
-        return finalRankings!.map(({ address }) => address);
+        return finalRankings!.map(({address}) => address);
     }, [ranking]);
 
     const memoUnDisplayCount = useMemo(() => {
@@ -230,14 +225,18 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
                 }}
             >
                 {/*进度条*/}
-                <Box sx={{ backgroundColor: '#F8FAFC', borderRadius: '8px', }}>
+                <Box sx={{backgroundColor: '#F8FAFC', borderRadius: '8px',}}>
 
-                    <Box sx={{ margin: '28px 40px 0px 40px', paddingBottom: '12px' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Box sx={{margin: '28px 40px 0px 40px', paddingBottom: '12px'}}>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                             <Typography variant="body2"
-                                sx={{ fontSize: '16px', lineHeight: '28px', fontWeight: 600 }}>Progress</Typography>
+                                        sx={{
+                                            fontSize: '16px',
+                                            lineHeight: '28px',
+                                            fontWeight: 600
+                                        }}>Progress</Typography>
                             <Typography variant="body2"
-                                sx={{ color: '#64748B', fontSize: '14px', lineHeight: '26px', fontWeight: 400 }}>
+                                        sx={{color: '#64748B', fontSize: '14px', lineHeight: '26px', fontWeight: 400}}>
                                 {remainingTime}
                             </Typography>
                         </Box>
@@ -245,12 +244,17 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
                         {/*          <progress max="2500" value="1300" style={{height:'32px',width: '100%'}}></progress>*/}
 
                         <LinearProgress variant="determinate" value={progressValue} color='inherit'
-                            sx={{ mt: '16px', borderRadius: '8px', height: '12px', width: '100%' }} />
+                                        sx={{mt: '16px', borderRadius: '8px', height: '12px', width: '100%'}}/>
 
-                        <Box sx={{ mt: '16px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                        <Box sx={{mt: '16px', display: 'flex', justifyContent: 'space-between', marginTop: '10px'}}>
                             <Box>
                                 <Typography variant="body1"
-                                    sx={{ fontSize: '14px', lineHeight: '26px', fontWeight: 600, color: '#64748B' }}>
+                                            sx={{
+                                                fontSize: '14px',
+                                                lineHeight: '26px',
+                                                fontWeight: 600,
+                                                color: '#64748B'
+                                            }}>
                                     Funds Raised
                                 </Typography>
                                 <Typography variant="body1">{Math.floor(totalMoney)}U</Typography>
@@ -258,7 +262,12 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
 
                             <Box>
                                 <Typography variant="body1"
-                                    sx={{ fontSize: '14px', lineHeight: '26px', fontWeight: 600, color: '#64748B' }}>
+                                            sx={{
+                                                fontSize: '14px',
+                                                lineHeight: '26px',
+                                                fontWeight: 600,
+                                                color: '#64748B'
+                                            }}>
                                     Funds Goal
                                 </Typography>
                                 <Typography variant="body1">
@@ -284,20 +293,31 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
                 </Box>
 
 
-                <Box sx={{ padding: '0px 34px 14px 34px' }}>
+                <Box sx={{padding: '0px 34px 14px 34px'}}>
                     <Box>
-                        <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
+                        <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount}/>
                     </Box>
                     <Typography variant="body2"
-                        sx={{ mt: '16px', fontSize: '14px', lineHeight: '26px', fontWeight: 400, color: '#64748B' }}>
+                                sx={{
+                                    mt: '16px',
+                                    fontSize: '14px',
+                                    lineHeight: '26px',
+                                    fontWeight: 400,
+                                    color: '#64748B'
+                                }}>
                         {/*  Start time: {startTime}*/}
                         {ranking?.length} people have donated
                         {/*{donatePeopleCount} people have donated*/}
                     </Typography>
 
-                    <Typography noWrap variant="body2" sx={{ mt: '16px', height: '40px', textAlign: 'left', fontSize: '14px', lineHeight: '26px', fontWeight: 400, color: '#64748B' }}>{reason}</Typography>
+                    <Typography noWrap variant="body2"
+                                sx={{
+                                    mt: '16px', height: '40px', textAlign: 'left', fontSize: '14px',
+                                    lineHeight: '26px', fontWeight: 400, color: '#64748B'
+                                }}>
+                        {reason}
+                    </Typography>
                 </Box>
-
 
 
             </Box>
