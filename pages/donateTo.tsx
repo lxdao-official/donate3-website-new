@@ -23,7 +23,6 @@ const DonateTo: NextPage = () => {
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
   const [loading, setLoading] = useState<boolean>(true);
 
-    const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const options = {
     animationData: loadingAnimation,
@@ -128,9 +127,6 @@ const DonateTo: NextPage = () => {
 
         </Box>
 
-
-
-
         <PersonalIntroduction
           info={{
             description: info?.description!,
@@ -139,6 +135,7 @@ const DonateTo: NextPage = () => {
 
 
       </Box>
+
     </Layout>
   );
 };

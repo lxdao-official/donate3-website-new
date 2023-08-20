@@ -1,15 +1,16 @@
 import React, {use, useCallback, useEffect, useMemo, useState} from 'react';
 import {Box, Typography} from '@mui/material';
 import {useAccount, useNetwork} from 'wagmi';
-import {LinearProgress, CircularProgress} from '@mui/material';
+
 import API from '@/common/API';
 import Avatars from './Avatars';
 import {ICustomWidget} from '../CustomWidget';
 import {AccountType} from '@/utils/const';
-import {fontColor} from "suneditor/src/plugins";
-//import {Dayjs}  from 'dayjs';
 import dayjs, {Dayjs} from 'dayjs';
-
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 const MAX_COUNT = 10;
 
 interface IRankingItem {
@@ -48,9 +49,28 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     const [progressValue, setProgressValue] = useState(0);
     const [reason, setReason] = useState<String>();
 
+    const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+        marginTop:'16px',
+        height: 10,
+        borderRadius: 5,
+        [`&.${linearProgressClasses.colorPrimary}`]: {
+            backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        },
+        [`& .${linearProgressClasses.bar}`]: {
+            borderRadius: 5,
+            backgroundColor: theme.palette.mode === 'light' ? '#0F172A' : '#0F172A',
+        },
+    }));
     require('dayjs/locale/en');
     const startTime = dayjs(info?.startTime).format('DD/MM/YYYY');
 
+    const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+    ))({
+        [`& .${tooltipClasses.tooltip}`]: {
+            maxWidth: 312,
+        },
+    });
     /*拿到目前资金以及设置进度*/
     const queryDonatesSetRaised = async (params: IRankingItem) => {
         let sum: number;
@@ -71,7 +91,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             let goal: number = info?.fundsGoal!;
             setGoalMoney(goal);
             //const progress = (sum / goal * 100);
-            const progress = (500 / goal * 100);
+            const progress = (sum / goal * 100);
             if (progress < 100) {
                 setProgressValue(progress);
             } else {
@@ -206,6 +226,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     }, [ranking]);
     return (
 
+
         <Box
             sx={{
                 position: 'relative',
@@ -214,6 +235,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 mt:{xs:'30px'}
             }}
         >
+
             <Box
                 sx={{
 
@@ -242,9 +264,9 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                 {remainingTime}
                             </Typography>
                         </Box>
-
-                        <LinearProgress variant="determinate" value={progressValue} color='inherit'
-                                        sx={{mt: '16px', borderRadius: '8px', height: '12px', width: '100%'}}/>
+                        <BorderLinearProgress variant="determinate" value={progressValue} />
+                      {/*  <LinearProgress variant="determinate" value={progressValue} color='inherit'
+                                        sx={{mt: '16px', borderRadius: '8px', height: '12px', width: '100%'}}/>*/}
 
                         <Box sx={{mt: '16px', display: 'flex', justifyContent: 'space-between', marginTop: '10px'}}>
                             <Box>
@@ -314,18 +336,48 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                     fontWeight: 400,
                                     color: '#64748B'
                                 }}>
-                        {/*  Start time: {startTime}*/}
                         {ranking?.length} people have donated
-                        {/*{donatePeopleCount} people have donated*/}
                     </Typography>
 
-                    <Typography noWrap variant="body2"
-                                sx={{
-                                    mt: '16px', height: '40px', textAlign: 'left', fontSize: '14px',
-                                    lineHeight: '26px', fontWeight: 400, color: '#64748B'
-                                }}>
-                        {reason}
-                    </Typography>
+
+                    <Box
+                    sx={{mt:'16px',display:'flex',flexDirection:'flex-end',maxHeight:'40px'}}
+                    >
+                        <Typography
+                            variant="body2"
+                            sx={{
+
+                                fontSize: '14px',
+                                lineHeight: '20px',
+                                fontWeight: 400,
+                                color: '#64748B',
+                                display: '-webkit-box',
+                                WebkitLineClamp: '2',
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxHeight: '40px',
+                                wordWrap: 'break-word',
+                            }}
+                        >
+                            {reason}
+
+                        </Typography>
+
+                        <CustomWidthTooltip title={reason}>
+                        {/*<Button  sx={{  m: 1,textTransform:"none" }}>More</Button>*/}
+                        <Typography
+                            sx={{
+                            mt:'20px',
+                            height: '40px',
+                            textAlign: 'left',
+                            fontSize: '14px',
+                            lineHeight: '20px',
+                            color:'#437EF7'
+                            }}>More</Typography>
+                        </CustomWidthTooltip>
+                    </Box>
+
                 </Box>
 
 
