@@ -785,7 +785,7 @@ export default function CustomWidget() {
                   id="panel1bh-header"
                 >
                   <Typography sx={{ width: '100%', flexShrink: 0 }}>
-                    Do you need to set a donation progress?
+                    Do you want to set a funds-raised progress?
                   </Typography>
                   {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
                 </AccordionSummary>
@@ -881,7 +881,7 @@ export default function CustomWidget() {
                     <Controller
                       name={'reason'}
                       control={control}
-                      rules={{ required: true }}
+                      rules={{ required: false }}
                       render={({ field: { } }) => {
                         return (
                           <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
