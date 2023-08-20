@@ -14,6 +14,7 @@ import loadingAnimation from '../public/loading/donate3Loading.json';
 import API from "@/common/API";
 import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
 
+import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
 
 
 const DonateTo: NextPage = () => {
@@ -21,6 +22,7 @@ const DonateTo: NextPage = () => {
   const cid = router.query?.cid as string;
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
   const [loading, setLoading] = useState<boolean>(true);
+
 
   const options = {
     animationData: loadingAnimation,
@@ -65,8 +67,8 @@ const DonateTo: NextPage = () => {
   return (
     <Layout
       style={{
-        backgroundColor: '#f9fafc',
-        // backgroundColor: '#ffffff',
+        //backgroundColor: '#f9fafc',
+         backgroundColor: '#ffffff',
       }}
     >
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
@@ -81,10 +83,12 @@ const DonateTo: NextPage = () => {
           padding: '45px 200px',
         }}
       >
+          {/* xs: '30px', sm: '54px', md: '72px'*/}
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
+              flexDirection: {xs:'column',sm:'column',md : 'row',},
+            justifyContent: {xs:'',md:'space-between',},
             alignItems: 'center',
             width: '100%',
           }}
@@ -123,9 +127,6 @@ const DonateTo: NextPage = () => {
 
         </Box>
 
-
-
-
         <PersonalIntroduction
           info={{
             description: info?.description!,
@@ -134,6 +135,7 @@ const DonateTo: NextPage = () => {
 
 
       </Box>
+
     </Layout>
   );
 };
