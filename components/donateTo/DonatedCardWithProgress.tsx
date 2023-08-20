@@ -70,7 +70,8 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             setTotalMoney(sum);
             let goal: number = info?.fundsGoal!;
             setGoalMoney(goal);
-            const progress = (sum / goal * 100);
+            //const progress = (sum / goal * 100);
+            const progress = (500 / goal * 100);
             if (progress < 100) {
                 setProgressValue(progress);
             } else {
@@ -104,7 +105,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 }
 
             } else {
-                setRemainingTime("pass the deadline but you could donate whatever")
+                setRemainingTime(" ")
             }
 
         }
@@ -210,6 +211,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 position: 'relative',
                 backgroundColor: '#F8FAFC',
                 borderRadius: '8px',
+                mt:{xs:'30px'}
             }}
         >
             <Box
@@ -229,19 +231,17 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
                     <Box sx={{margin: '28px 40px 0px 40px', paddingBottom: '12px'}}>
                         <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                            <Typography variant="body2"
+                            <Typography
                                         sx={{
                                             fontSize: '16px',
                                             lineHeight: '28px',
-                                            fontWeight: 600
+                                            fontWeight: 'bold'
                                         }}>Progress</Typography>
-                            <Typography variant="body2"
+                            <Typography
                                         sx={{color: '#64748B', fontSize: '14px', lineHeight: '26px', fontWeight: 400}}>
                                 {remainingTime}
                             </Typography>
                         </Box>
-
-                        {/*          <progress max="2500" value="1300" style={{height:'32px',width: '100%'}}></progress>*/}
 
                         <LinearProgress variant="determinate" value={progressValue} color='inherit'
                                         sx={{mt: '16px', borderRadius: '8px', height: '12px', width: '100%'}}/>
@@ -257,7 +257,12 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                             }}>
                                     Funds Raised
                                 </Typography>
-                                <Typography variant="body1">{Math.floor(totalMoney)}U</Typography>
+                                <Typography variant="h3"sx={{
+                                    fontSize: '28px',
+                                    lineHeight: '36px',
+                                    fontWeight: 600,
+                                    color: '#0F172A'
+                                }}>{Math.floor(totalMoney)}U</Typography>
                             </Box>
 
                             <Box>
@@ -270,8 +275,12 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                             }}>
                                     Funds Goal
                                 </Typography>
-                                <Typography variant="body1">
-                                    {/*   {fundsGoal}*/}
+                                <Typography variant="h3"sx={{
+                                    fontSize: '28px',
+                                    lineHeight: '36px',
+                                    fontWeight: 600,
+                                    color: '#0F172A'
+                                }}>
                                     {goalMoney}U
                                 </Typography>
                             </Box>
