@@ -219,8 +219,8 @@ export default function CustomWidget() {
       <Box
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'column-reverse', md: 'row' },
-          justifyContent: { xs: 'start', md: 'space-between' },
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: { xs: 'center', md: 'space-between' },
           alignItems: { xs: 'center', md: 'start' },
           gap: 4,
         }}

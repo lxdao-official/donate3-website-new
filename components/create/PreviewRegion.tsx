@@ -20,7 +20,11 @@ const PreviewRegion = ({ srcDoc }: IPreviewRegionProps) => {
           minWidth: '400px',
           height: '800px',
           borderRadius: '22px',
-          position: 'absolute',
+          position: {
+            xs: 'static',
+            sm: 'static',
+            md: 'absolute',
+          },
           scale: { xs: '0.7', sm: '1' },
         }}
         srcDoc={srcDoc}
