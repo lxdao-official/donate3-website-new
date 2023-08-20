@@ -11,8 +11,7 @@ const MAX_COUNT = 10;
 
 interface IRankingItem {
   address: `0x${string}`;
-  totaldonation: string;
-  top: string;
+
 }
 
 interface IRankingParams {
@@ -91,68 +90,69 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
     const count = (ranking || [])?.length || 0;
     return count <= MAX_COUNT ? 0 : count - MAX_COUNT;
   }, [ranking]);
-
-  return (ranking || [])?.length > 0 ? (
+return(
     <Box
-      sx={{
+    sx={{
         position: 'relative',
-      }}
-    >
-      <Box
+    }}
+>
+    <Box
         sx={{
-          padding: '60px 40px 40px 40px',
-          borderRadius: '8px',
-          width: '344px',
-          boxSizing: 'border-box',
-          textAlign: 'center',
-          backgroundColor: '#fff',
-          position: 'relative',
-          zIndex: 1,
+            padding: '60px 40px 40px 40px',
+            borderRadius: '8px',
+            width: '344px',
+            boxSizing: 'border-box',
+            textAlign: 'center',
+            backgroundColor: '#fff',
+            position: 'relative',
+            zIndex: 1,
         }}
-      >
+    >
         <Box
-          sx={{
-            fontSize: '56px',
-            fontWeight: 800,
-            lineHeight: '64px',
-            marginBottom: '13px',
-            color: 'rgba(15, 23, 42, 1)',
-          }}
+            sx={{
+                fontSize: '56px',
+                fontWeight: 800,
+                lineHeight: '64px',
+                marginBottom: '13px',
+                color: 'rgba(15, 23, 42, 1)',
+            }}
         >
-          {ranking?.length}
+            {ranking?.length}
         </Box>
         <Box
-          sx={{
-            fontSize: '16px',
-            fontWeight: 400,
-            lineHeight: '28px',
-            color: 'rgba(100, 116, 139, 1)',
-            marginBottom: '24px',
-          }}
+            sx={{
+                fontSize: '16px',
+                fontWeight: 400,
+                lineHeight: '28px',
+                color: 'rgba(100, 116, 139, 1)',
+                marginBottom: '24px',
+            }}
         >
-          people have donated
+            people have donated
         </Box>
 
         <Box>
-          <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
+            <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount} />
         </Box>
-      </Box>
-      {/* mask */}
-      <Box
-        sx={{
-          width: '92%',
-          height: '92%',
-          backgroundColor: '#CCFF00',
-          borderRadius: '8px',
-          position: 'absolute',
-          bottom: '-10px',
-          right: '-10px',
-          zIndex: 0,
-        }}
-      ></Box>
     </Box>
+    {/* mask */}
+    <Box
+        sx={{
+            width: '92%',
+            height: '92%',
+            backgroundColor: '#CCFF00',
+            borderRadius: '8px',
+            position: 'absolute',
+            bottom: '-10px',
+            right: '-10px',
+            zIndex: 0,
+        }}
+    ></Box>
+</Box>)
+  /*return (ranking || [])?.length > 0 ? (
+
   ) : (
     <></>
-  );
+  );*/
 };
 export default React.memo(DonatedCard);
