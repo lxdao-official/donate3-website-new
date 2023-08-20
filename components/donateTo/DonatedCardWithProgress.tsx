@@ -132,28 +132,6 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
         return null;
     };
-    /*拿到目前捐赠人数*/
-    /*  const queryDonatesSetPeople = async (params: IRankingItem) => {
-
-          const data = await API.get('/donates/donationsCount', {
-              params: {
-                  address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-                  //address: info?.address
-              },
-              /!*本地测试环境,提交需注意*!/
-              baseURL: process.env.NEXT_PUBLIC_BACKEND_API_LOCAL,
-          });
-
-          /!*   const tmp = res.map((value) => {
-                 const formated = formatData(`${value?.chainId}`, 0, value?.timestamp as unknown as number[], value?.from, `${value?.id}`, value?.message, 1, value?.to, [], '0', '', Number(value?.money) / 1000000000000000000, value?.transactionHash);
-                 return formated;
-             });*!/
-
-          const donateCount: number = await data?.data?.data?.data;
-
-          setDonatePeopleCount(donateCount);
-
-      };*/
 
 
     const queryDonatesRanking = (params: IRankingParams) => {
@@ -325,7 +303,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
 
                 <Box sx={{padding: '0px 34px 14px 34px'}}>
-                    <Box>
+                    <Box sx={{mt:'10px'}}>
                         <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount}/>
                     </Box>
                     <Typography variant="body2"
@@ -341,12 +319,11 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
 
                     <Box
-                    sx={{mt:'16px',display:'flex',flexDirection:'flex-end',maxHeight:'40px'}}
+                    sx={{mt:'16px',maxHeight:'40px'}}
                     >
                         <Typography
                             variant="body2"
                             sx={{
-
                                 fontSize: '14px',
                                 lineHeight: '20px',
                                 fontWeight: 400,
@@ -358,25 +335,23 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                 textOverflow: 'ellipsis',
                                 maxHeight: '40px',
                                 wordWrap: 'break-word',
+                                textAlign: 'center',
                             }}
                         >
                             {reason}
-
                         </Typography>
-
-                        <CustomWidthTooltip title={reason}>
+                    </Box>
+                    <CustomWidthTooltip title={reason}>
                         {/*<Button  sx={{  m: 1,textTransform:"none" }}>More</Button>*/}
                         <Typography
                             sx={{
-                            mt:'20px',
-                            height: '40px',
-                            textAlign: 'left',
-                            fontSize: '14px',
-                            lineHeight: '20px',
-                            color:'#437EF7'
+                                height: '40px',
+                                textAlign: 'right',
+                                fontSize: '14px',
+                                lineHeight: '20px',
+                                color:'#437EF7'
                             }}>More</Typography>
-                        </CustomWidthTooltip>
-                    </Box>
+                    </CustomWidthTooltip>
 
                 </Box>
 
