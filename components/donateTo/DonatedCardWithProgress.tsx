@@ -303,7 +303,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
 
                 <Box sx={{padding: '0px 34px 14px 34px'}}>
-                    <Box>
+                    <Box sx={{mt:'10px'}}>
                         <Avatars list={memoLeastTenList} unDisplayCount={memoUnDisplayCount}/>
                     </Box>
                     <Typography variant="body2"
