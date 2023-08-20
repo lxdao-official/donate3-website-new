@@ -93,6 +93,7 @@ export default function CustomWidget() {
       if (isExpanded) {
         progressType = 0;
       } else {
+        alert("you have cancled set raised account with raised progress")
         progressType = 1
       }
       //设置是否带进度条
