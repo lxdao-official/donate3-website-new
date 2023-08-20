@@ -319,12 +319,11 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
 
                     <Box
-                    sx={{mt:'16px',display:'flex',flexDirection:'flex-end',maxHeight:'40px'}}
+                    sx={{mt:'16px',maxHeight:'40px'}}
                     >
                         <Typography
                             variant="body2"
                             sx={{
-
                                 fontSize: '14px',
                                 lineHeight: '20px',
                                 fontWeight: 400,
@@ -336,6 +335,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                 textOverflow: 'ellipsis',
                                 maxHeight: '40px',
                                 wordWrap: 'break-word',
+                                textAlign: 'center',
                             }}
                         >
                             {reason}
