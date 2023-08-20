@@ -120,6 +120,7 @@ interface Coin {
   name: string;
   icon: string;
   explorer: string;
+  eas: string;
 }
 
 interface CoinList {
@@ -196,6 +197,7 @@ export default function Dashboard() {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
           explorer: 'https://mumbai.polygonscan.com/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -207,6 +209,7 @@ export default function Dashboard() {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
           explorer: 'https://polygonscan.com/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -218,6 +221,7 @@ export default function Dashboard() {
           name: 'MATIC',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -229,6 +233,7 @@ export default function Dashboard() {
           name: 'ETH',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://etherscan.io/tx/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -240,6 +245,7 @@ export default function Dashboard() {
           name: 'ETH',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://optimistic.etherscan.io/tx/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -251,6 +257,7 @@ export default function Dashboard() {
           name: 'ETH',
           icon: '/icons/support/arbitrum.svg',
           explorer: 'https://arbiscan.io/tx/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -262,6 +269,31 @@ export default function Dashboard() {
           name: 'ETH',
           icon: '/icons/support/linea.svg',
           explorer: 'https://lineascan.build/tx',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+        },
+      },
+    },
+    '11155111': {
+      name: 'Sepolia',
+      icon: '/icons/support/ethereum.svg',
+      coin: {
+        0: {
+          name: 'MATIC',
+          icon: '/icons/support/ethereum.svg',
+          explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://sepolia.easscan.org/',
+        },
+      },
+    },
+    '420': {
+      name: 'Optimistic Goerli',
+      icon: '/icons/support/optimism.svg',
+      coin: {
+        0: {
+          name: 'Optimistic Goerli',
+          icon: '/icons/support/ethereum.svg',
+          explorer: 'https://goerli-optimism.etherscan.io//',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
     },
@@ -278,6 +310,7 @@ export default function Dashboard() {
     '10': 0.0,
     '42161': 0.0,
     '59144': 0.0,
+    '420': 0.0,
   });
   const [perPage, setPerPage] = useState(25);
   // const [price, setPrice] = useState(0.0);
@@ -333,6 +366,7 @@ export default function Dashboard() {
         '10': 0.0,
         '42161': 0.0,
         '59144': 0.0,
+        '420': 0.0,
       };
       const totalc = rows.reduce((pre, cur) => {
         if (!Object.keys(initialTotalList).includes(cur.chainId.toString())) {
@@ -450,6 +484,7 @@ export default function Dashboard() {
                 <StyledTableCell align="center">Time</StyledTableCell>
                 <StyledTableCell align="center">Token</StyledTableCell>
                 <StyledTableCell align="center">Blockchain</StyledTableCell>
+                <StyledTableCell align="center">EAS UID</StyledTableCell>
                 <StyledTableCell align="center">Message</StyledTableCell>
                 <StyledTableCell align="center">Hash</StyledTableCell>
               </TableRow>
@@ -505,6 +540,15 @@ export default function Dashboard() {
                     <Stack direction="row" gap={1.5} justifyContent="center">
                       <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.icon} />
                       <Typography>{coinType[row?.chainId.toString()]?.name}</Typography>
+                    </Stack>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <Stack direction={'column'} alignItems="center">
+                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                        <Link underline="none" href={coinType[row?.chainId]?.coin[0].eas + 'attestation/view/' + row?.uid} target="_blank">
+                          {row?.uid ? row?.uid?.slice(0, 5) + '...' + row?.uid?.slice(-5) : ''}
+                        </Link>
+                      </Typography>
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell align="center">

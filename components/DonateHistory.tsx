@@ -308,6 +308,18 @@ export default function Dashboard() {
           name: 'MATIC',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://sepolia.easscan.org/',
+        },
+      },
+    },
+    '420': {
+      name: 'Optimistic Goerli',
+      icon: '/icons/support/optimism.svg',
+      coin: {
+        0: {
+          name: 'Optimistic Goerli',
+          icon: '/icons/support/optimism.svg',
+          explorer: 'https://goerli-optimism.etherscan.io/',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
       },
@@ -325,6 +337,7 @@ export default function Dashboard() {
     '10': 0.0,
     '42161': 0.0,
     '59144': 0.0,
+    '420': 0.0,
   });
   const [perPage, setPerPage] = useState(25);
   const [price, setPrice] = useState(0.0);
@@ -386,6 +399,7 @@ export default function Dashboard() {
         '10': 0.0,
         '42161': 0.0,
         '59144': 0.0,
+        '420': 0.0,
       };
       const totalc = rows.reduce((pre, cur) => {
         if (!Object.keys(initialTotalList).includes(cur.chainType)) {
