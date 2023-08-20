@@ -1,4 +1,4 @@
-export const DONATE_SDK_LATEST_VERSION = '1.0.23';
+export const DONATE_SDK_LATEST_VERSION = '1.0.25';
 
 export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE_SDK_LATEST_VERSION}/dist/webpack/bundle.js`;
 
@@ -31,9 +31,9 @@ export const DEFAULT_CREATE_CONFIG = {
   twitter: '',
   telegram: '',
   fundsGoal: 1,
-  startTime:0,
-  endTime:0,
-  reason:'',
+  startTime: 0,
+  endTime: 0,
+  reason: '',
 };
 
 export enum EType {
