@@ -5,7 +5,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useAccount } from 'wagmi';
 
 import { MetaMaskConnectBtn } from './MetaMaskConnectBtn';
-import { ConnectBtn } from './ConnectBtn';
+import ConnectBtn from './ConnectBtn';
 import { useMetaMask } from '@/utils/hooks/useMataMask';
 
 const ConnectPart = () => {

@@ -15,13 +15,13 @@ import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
 import {
-    DEFAULT_CREATE_ADDRESS,
-    DEFAULT_CREATE_CONFIG,
-    DONATE_SDK_URL,
-    AccountType,
-    SafeAccount,
-    EType,
-    AccountProgressType
+  DEFAULT_CREATE_ADDRESS,
+  DEFAULT_CREATE_CONFIG,
+  DONATE_SDK_URL,
+  AccountType,
+  SafeAccount,
+  EType,
+  AccountProgressType
 } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
@@ -42,7 +42,6 @@ import Optimism from '../public/icons/networks/optimism.svg';
 import Polygon from '../public/icons/networks/polygon.svg';
 
 import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -57,7 +56,7 @@ export interface ICustomWidget {
   color: string;
   name: string;
   accountType: AccountType;
-  progressType:AccountProgressType;
+  progressType: AccountProgressType;
   address?: string;
   safeAccounts?: SafeAccount[];
   avatar: string;
@@ -65,9 +64,9 @@ export interface ICustomWidget {
   twitter: string;
   telegram: string;
   fundsGoal?: number;
-  startTime?:number;
-  endTime?:number;
-  reason?:string;
+  startTime?: number;
+  endTime?: number;
+  reason?: string;
 }
 
 export default function CustomWidget() {
@@ -79,29 +78,29 @@ export default function CustomWidget() {
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
-    const [selectedStartDate, setSelectedStartDate] = useState<number>();
-    const [selectedEndDate, setSelectedEndDate] = useState<number>();
-    const [expanded, setExpanded] = useState<string | false>(false);
-    //const [showSetProgress, setShowSetProgress] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState<number>();
+  const [selectedEndDate, setSelectedEndDate] = useState<number>();
+  const [expanded, setExpanded] = useState<string | false>(false);
+  //const [showSetProgress, setShowSetProgress] = useState(false);
 
-    //设置是否有进度
-    const handleChange =
-        (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+  //设置是否有进度
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
 
-            setExpanded(isExpanded ? panel : false);
-            //1默认表示没有进度条
-            let progressType = 1;
-            if(isExpanded){
-                progressType = 0;
-            }else {
-                progressType = 1
-            }
-            //设置是否带进度条
-            setConfig((pre) => ({
-                ...pre,
-                progressType: progressType,
-            }));
-        };
+      setExpanded(isExpanded ? panel : false);
+      //1默认表示没有进度条
+      let progressType = 1;
+      if (isExpanded) {
+        progressType = 0;
+      } else {
+        progressType = 1
+      }
+      //设置是否带进度条
+      setConfig((pre) => ({
+        ...pre,
+        progressType: progressType,
+      }));
+    };
 
 
   const {
@@ -586,11 +585,11 @@ export default function CustomWidget() {
                           ...pre,
                           accountType: account,
                         }));
-                     /*   if (account==1){
-                            setShowSetProgress(true)
-                        }else {
-                            setShowSetProgress(false);
-                        }*/
+                        /*   if (account==1){
+                               setShowSetProgress(true)
+                           }else {
+                               setShowSetProgress(false);
+                           }*/
                         onChange(e);
                       }}
                       name="radio-buttons-group"
@@ -767,153 +766,153 @@ export default function CustomWidget() {
             )}
 
 
-              {/*{config.accountType === 0 ? (
+            {/*{config.accountType === 0 ? (
 
 
               /* ) : (
                   <></>
               )}
               */}
+            <Box>
+              <Accordion expanded={expanded === 'panel1'} onChange={
+
+                handleChange('panel1')
+
+              }>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
+                >
+                  <Typography sx={{ width: '100%', flexShrink: 0 }}>
+                    Do you need to set a donation progress?
+                  </Typography>
+                  {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
+                </AccordionSummary>
+                <AccordionDetails>
+                  {/*期望得到的goal*/}
                   <Box>
-                      <Accordion  expanded={expanded === 'panel1'} onChange={
+                    <Controller
+                      name={'fundsGoal'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field: { onChange, value } }) => {
+                        return (
+                          <FormInput title="Expected funds goal ( USDT-based)" /*error={errors.name?.type}*/>
+                            <InputBase
+                              sx={{
+                                mt: 0,
+                                backgroundColor: 'var(--gray-300, #E2E8F0)',
+                                height: '40px',
+                                paddingX: '10px',
+                                borderRadius: '4px',
+                              }}
+                              type="number"
+                              value={value}
+                              onChange={(e: any) => {
+                                let goal = e.target.value;
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  fundsGoal: goal,
+                                }));
+                                onChange(e);
+                              }}
+                            />
+                          </FormInput>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'startTime'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ }) => {
+                        return (
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker label="Select Start Date" value={selectedStartDate}
+                              onChange={(newValue) => {
+                                let startTime = dayjs(newValue).valueOf();
+                                console.log(startTime);
 
-                          handleChange('panel1')
-
-                      }>
-                          <AccordionSummary
-                              expandIcon={<ExpandMoreIcon />}
-                              aria-controls="panel1bh-content"
-                              id="panel1bh-header"
-                          >
-                              <Typography sx={{ width: '100%', flexShrink: 0 }}>
-                                  Do you need to set a donation progress?
-                              </Typography>
-                              {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
-                          </AccordionSummary>
-                          <AccordionDetails>
-                              {/*期望得到的goal*/}
-                              <Box>
-                                  <Controller
-                                      name={'fundsGoal'}
-                                      control={control}
-                                      rules={{ required: true }}
-                                      render={({ field: { onChange, value } }) => {
-                                          return (
-                                              <FormInput title="Expected funds goal ( USDT-based)" /*error={errors.name?.type}*/>
-                                                  <InputBase
-                                                      sx={{
-                                                          mt: 0,
-                                                          backgroundColor: 'var(--gray-300, #E2E8F0)',
-                                                          height: '40px',
-                                                          paddingX: '10px',
-                                                          borderRadius: '4px',
-                                                      }}
-                                                      type="number"
-                                                      value={value}
-                                                      onChange={(e: any) => {
-                                                          let goal = e.target.value;
-                                                          setConfig((pre) => ({
-                                                              ...pre,
-                                                              fundsGoal: goal,
-                                                          }));
-                                                          onChange(e);
-                                                      }}
-                                                  />
-                                              </FormInput>
-                                          );
-                                      }}
-                                  />
-                                  <Controller
-                                      name={'startTime'}
-                                      control={control}
-                                      rules={{ required: true }}
-                                      render={({ }) => {
-                                          return (
-                                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                  <DatePicker label="Select Start Date" value={selectedStartDate}
-                                                              onChange={(newValue) => {
-                                                                  let startTime =dayjs(newValue).valueOf();
-                                                                  console.log(startTime);
-
-                                                                  setSelectedStartDate(startTime);
+                                setSelectedStartDate(startTime);
 
 
-                                                                  setConfig((pre) => ({
-                                                                      ...pre,
-                                                                      startTime: startTime,
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  startTime: startTime,
 
-                                                                  }));
+                                }));
 
-                                                              }}
-                                                  />
+                              }}
+                            />
 
-                                              </LocalizationProvider>
-                                          );
-                                      }}
-                                  />
-                                  <Controller
-                                      name={'endTime'}
-                                      control={control}
-                                      rules={{ required: true }}
-                                      render={({  }) => {
-                                          return (
-                                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                  <DatePicker sx={{marginLeft:'40px'}} label="Select End Date" value={selectedEndDate}
+                          </LocalizationProvider>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'endTime'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ }) => {
+                        return (
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker sx={{ marginLeft: '40px' }} label="Select End Date" value={selectedEndDate}
 
-                                                              onChange={(newValue) => {
-                                                                  let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
+                              onChange={(newValue) => {
+                                let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
 
-                                                                  if(endTime<selectedStartDate!){
-                                                                      alert("End Date Shold Bigger Than Start Date")
-                                                                      setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
-                                                                  }else{
-                                                                      setSelectedEndDate(endTime);
-                                                                      setConfig((pre) => ({
-                                                                          ...pre,
-                                                                          endTime: endTime,
-                                                                      }));
-                                                                  }
-                                                              }}
-                                                  />
-                                              </LocalizationProvider>
-                                          );
-                                      }}
-                                  />
-                                  <Controller
-                                      name={'reason'}
-                                      control={control}
-                                      rules={{ required: true }}
-                                      render={({ field: {  } }) => {
-                                          return (
-                                              <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
-                                                  <TextField
-                                                      id="standard-multiline-static"
-                                                      //label="Multiline"
-                                                      multiline
-                                                      rows={4}
-                                                      //defaultValue="Default Valuea"
-                                                      variant="standard"
-                                                      onChange={(e: any) => {
-                                                          let fundsReason = e.target.value;
-                                                          setConfig((pre) => ({
-                                                              ...pre,
-                                                              reason: fundsReason,
-                                                          }));
-                                                          //onChange(e);
-                                                      }}
-                                                  />
+                                if (endTime < selectedStartDate!) {
+                                  alert("End Date Shold Bigger Than Start Date")
+                                  setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
+                                } else {
+                                  setSelectedEndDate(endTime);
+                                  setConfig((pre) => ({
+                                    ...pre,
+                                    endTime: endTime,
+                                  }));
+                                }
+                              }}
+                            />
+                          </LocalizationProvider>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'reason'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field: { } }) => {
+                        return (
+                          <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
+                            <TextField
+                              id="standard-multiline-static"
+                              //label="Multiline"
+                              multiline
+                              rows={4}
+                              //defaultValue="Default Valuea"
+                              variant="standard"
+                              onChange={(e: any) => {
+                                let fundsReason = e.target.value;
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  reason: fundsReason,
+                                }));
+                                //onChange(e);
+                              }}
+                            />
 
-                                              </FormInput>
-                                          );
-                                      }}
-                                  />
-                              </Box>
-
-                          </AccordionDetails>
-                      </Accordion>
-
-
+                          </FormInput>
+                        );
+                      }}
+                    />
                   </Box>
+
+                </AccordionDetails>
+              </Accordion>
+
+
+            </Box>
 
 
 
