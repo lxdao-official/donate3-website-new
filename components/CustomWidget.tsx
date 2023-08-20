@@ -6,6 +6,7 @@ import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '
 import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
+import TextField from '@mui/material/TextField';
 import { ChromePicker } from 'react-color';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
@@ -13,7 +14,15 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType } from '@/utils/const';
+import {
+  DEFAULT_CREATE_ADDRESS,
+  DEFAULT_CREATE_CONFIG,
+  DONATE_SDK_URL,
+  AccountType,
+  SafeAccount,
+  EType,
+  AccountProgressType
+} from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -32,17 +41,32 @@ import Optimism from '../public/icons/networks/optimism.svg';
 // import Pgn from '../public/icons/networks/pgn.svg';
 import Polygon from '../public/icons/networks/polygon.svg';
 
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+
 export interface ICustomWidget {
   type: number;
   color: string;
   name: string;
   accountType: AccountType;
+  progressType: AccountProgressType;
   address?: string;
   safeAccounts?: SafeAccount[];
   avatar: string;
   description: string;
   twitter: string;
   telegram: string;
+  fundsGoal?: number;
+  startTime?: number;
+  endTime?: number;
+  reason?: string;
 }
 
 export default function CustomWidget() {
@@ -53,6 +77,31 @@ export default function CustomWidget() {
   const [donationsLink, setDonationsLink] = useState<string>('');
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
+
+  const [selectedStartDate, setSelectedStartDate] = useState<number>();
+  const [selectedEndDate, setSelectedEndDate] = useState<number>();
+  const [expanded, setExpanded] = useState<string | false>(false);
+  //const [showSetProgress, setShowSetProgress] = useState(false);
+
+  //设置是否有进度
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+
+      setExpanded(isExpanded ? panel : false);
+      //1默认表示没有进度条
+      let progressType = 1;
+      if (isExpanded) {
+        progressType = 0;
+      } else {
+        progressType = 1
+      }
+      //设置是否带进度条
+      setConfig((pre) => ({
+        ...pre,
+        progressType: progressType,
+      }));
+    };
+
 
   const {
     control,
@@ -88,6 +137,7 @@ export default function CustomWidget() {
     { id: 42161, network: 'Arbitrum', icon: Arbitrum },
     { id: 137, network: 'Polygon', icon: Polygon },
     { id: 59144, network: 'Linea', icon: Linea },
+    { id: 420, network: 'Optimism Goerli', icon: Optimism },
     // { id: 424, network: 'PGN', icon: Pgn },
   ];
 
@@ -225,7 +275,7 @@ export default function CustomWidget() {
           gap: 4,
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column' }} flex={1}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '50%' }} flex={1}>
           {/* Style in your website */}
           <Card title="Style in your website">
             <Controller
@@ -535,6 +585,11 @@ export default function CustomWidget() {
                           ...pre,
                           accountType: account,
                         }));
+                        /*   if (account==1){
+                               setShowSetProgress(true)
+                           }else {
+                               setShowSetProgress(false);
+                           }*/
                         onChange(e);
                       }}
                       name="radio-buttons-group"
@@ -569,6 +624,7 @@ export default function CustomWidget() {
                           </Box>
                         }
                       />
+
                     </RadioGroup>
                   </FormInput>
                 );
@@ -708,7 +764,160 @@ export default function CustomWidget() {
                   ))}
               </Box>
             )}
+
+
+            {/*{config.accountType === 0 ? (
+
+
+              /* ) : (
+                  <></>
+              )}
+              */}
+            <Box>
+              <Accordion expanded={expanded === 'panel1'} onChange={
+
+                handleChange('panel1')
+
+              }>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
+                >
+                  <Typography sx={{ width: '100%', flexShrink: 0 }}>
+                    Do you need to set a donation progress?
+                  </Typography>
+                  {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
+                </AccordionSummary>
+                <AccordionDetails>
+                  {/*期望得到的goal*/}
+                  <Box>
+                    <Controller
+                      name={'fundsGoal'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field: { onChange, value } }) => {
+                        return (
+                          <FormInput title="Expected funds goal ( USDT-based)" /*error={errors.name?.type}*/>
+                            <InputBase
+                              sx={{
+                                mt: 0,
+                                backgroundColor: 'var(--gray-300, #E2E8F0)',
+                                height: '40px',
+                                paddingX: '10px',
+                                borderRadius: '4px',
+                              }}
+                              type="number"
+                              value={value}
+                              onChange={(e: any) => {
+                                let goal = e.target.value;
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  fundsGoal: goal,
+                                }));
+                                onChange(e);
+                              }}
+                            />
+                          </FormInput>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'startTime'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ }) => {
+                        return (
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker label="Select Start Date" value={selectedStartDate}
+                              onChange={(newValue) => {
+                                let startTime = dayjs(newValue).valueOf();
+                                console.log(startTime);
+
+                                setSelectedStartDate(startTime);
+
+
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  startTime: startTime,
+
+                                }));
+
+                              }}
+                            />
+
+                          </LocalizationProvider>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'endTime'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ }) => {
+                        return (
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker sx={{ marginLeft: '40px' }} label="Select End Date" value={selectedEndDate}
+
+                              onChange={(newValue) => {
+                                let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
+
+                                if (endTime < selectedStartDate!) {
+                                  alert("End Date Shold Bigger Than Start Date")
+                                  setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
+                                } else {
+                                  setSelectedEndDate(endTime);
+                                  setConfig((pre) => ({
+                                    ...pre,
+                                    endTime: endTime,
+                                  }));
+                                }
+                              }}
+                            />
+                          </LocalizationProvider>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'reason'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field: { } }) => {
+                        return (
+                          <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
+                            <TextField
+                              id="standard-multiline-static"
+                              //label="Multiline"
+                              multiline
+                              rows={4}
+                              //defaultValue="Default Valuea"
+                              variant="standard"
+                              onChange={(e: any) => {
+                                let fundsReason = e.target.value;
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  reason: fundsReason,
+                                }));
+                                //onChange(e);
+                              }}
+                            />
+
+                          </FormInput>
+                        );
+                      }}
+                    />
+                  </Box>
+
+                </AccordionDetails>
+              </Accordion>
+
+
+            </Box>
+
+
+
           </Card>
+
 
           <div
             style={{

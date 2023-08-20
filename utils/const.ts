@@ -1,4 +1,4 @@
-export const DONATE_SDK_LATEST_VERSION = '1.0.21';
+export const DONATE_SDK_LATEST_VERSION = '1.0.25';
 
 export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE_SDK_LATEST_VERSION}/dist/webpack/bundle.js`;
 
@@ -10,6 +10,10 @@ export enum AccountType {
   'EOA',
   'safeAccount',
 }
+export enum AccountProgressType {
+  'WithProgress',
+  'WithoutProgress',
+}
 export interface SafeAccount {
   networkId: number;
   address: `0x${string}` | undefined;
@@ -19,12 +23,17 @@ export const DEFAULT_CREATE_CONFIG = {
   color: DEFAULT_CREATE_COLOR,
   name: DEFAULT_CREATE_NAME,
   accountType: AccountType.EOA,
+  progressType: AccountProgressType.WithoutProgress,
   address: DEFAULT_CREATE_ADDRESS,
   safeAccounts: [{ networkId: 5, address: undefined }],
   avatar: '',
   description: '',
   twitter: '',
   telegram: '',
+  fundsGoal: 1,
+  startTime: 0,
+  endTime: 0,
+  reason: '',
 };
 
 export enum EType {

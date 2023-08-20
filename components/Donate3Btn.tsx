@@ -1,3 +1,5 @@
+'use client'; // This is a client component 👈🏽
+
 import { Button, styled } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 

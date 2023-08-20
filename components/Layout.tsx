@@ -1,9 +1,8 @@
 import Head from 'next/head';
 import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@mui/material';
-import { ConnectBtn } from '@/components/ConnectBtn';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import LXDAOFooter from './LXDAOFooter';
+import SDKContainer from './SDKContainer';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
@@ -42,9 +41,8 @@ function Header() {
             Donate3
           </Typography>
         </Box>
-        <Box sx={{ width: '200px', textAlign: 'right' }}>
-          <ConnectBtn />
-        </Box>
+
+        <SDKContainer />
       </Box>
     </MyContainer>
   );
@@ -140,10 +138,9 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         />
       </Head>
       <Box
-
         sx={{
           background: bgColor,
-          zIndex: 1
+          zIndex: 1,
           //  ...LineText, // 包含styled-component样式的对象
         }}
       >
