@@ -17,6 +17,7 @@ export function DonateOverview({data}: { data: { avatarSrc: string, name: string
                 borderRadius: '3%',
                 border: '0.5px solid',
                 borderColor: '#E2E8F0',
+                backgroundColor:'#FFFFFF',
                 marginLeft: {md: '41px'},
                 transition: 'box-shadow 0.3s', // 添加过渡效果
                 mt: {xs: '20px', lg: '0px'},
