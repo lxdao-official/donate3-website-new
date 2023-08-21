@@ -585,19 +585,18 @@ export default function CustomWidget() {
                         setConfig((pre) => ({
                           ...pre,
                           accountType: account,
+
                         }));
-                        /*   if (account==1){
-                               setShowSetProgress(true)
-                           }else {
-                               setShowSetProgress(false);
-                           }*/
                         onChange(e);
+                        //console.log(value)
                       }}
                       name="radio-buttons-group"
                     >
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         value={0}
+                        sx={{ border: value == 1 ?   '1px solid  #E2E8F0':'1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
+
+                        //sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         control={<Radio color="default" />}
                         label={
                           <Box height={30}>
@@ -611,7 +610,7 @@ export default function CustomWidget() {
                         }
                       />
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', paddingBottom: 5.25 }}
+                          sx={{ border: value == 0 ?   '1px solid  #E2E8F0':'1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         value={1}
                         control={<Radio color="default" />}
                         label={

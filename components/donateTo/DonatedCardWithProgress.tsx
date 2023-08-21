@@ -83,9 +83,8 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             /*测试环境,提交需注意*/
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
         });
-
+        //console.log(sum);
         sum = await data?.data?.data;
-
         if (params) {
             setTotalMoney(sum);
             let goal: number = info?.fundsGoal!;
