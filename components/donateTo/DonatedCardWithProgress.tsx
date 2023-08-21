@@ -81,7 +81,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
             },
             /*测试环境,提交需注意*/
-            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
+            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
         });
         //console.log(sum);
         sum = await data?.data?.data;
@@ -137,7 +137,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         //params.address = '0xe395B9bA2F93236489ac953146485C435D1A267B';
         API.get('/donates/ranking', {
             params,
-            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
+            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
             headers: {'Content-Type': 'application/json'},
         }).then((res) => {
             setRanking(res?.data?.data || []);
