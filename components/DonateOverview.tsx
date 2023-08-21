@@ -35,6 +35,7 @@ export function DonateOverview({data}: { data: { avatarSrc: string, name: string
                         borderRadius: '50%',
                         width: '80px',
                         height: '80px',
+
                         border: '0.5px solid #E2E8F0'
                     }}
                 />
@@ -75,7 +76,7 @@ export function DonateOverview({data}: { data: { avatarSrc: string, name: string
                 color: '#64748B',
                 textAlign: {xs: 'left', lg: 'left'},
                 minWidth: {xs: '321px', sm: '321px'},
-                minHeight: {xs: '144px', sm: '144px', lg: '144px'},
+                minHeight: {xs: '100px', sm: '100px', lg: '144px'},
                 mt: {xs: '5px', md: '32px', sm: '37px'},
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
