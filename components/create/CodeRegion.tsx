@@ -39,7 +39,7 @@ const CodeRegion = ({ code, link }: ICodeRegionProps) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
-        padding: '41px 32px 32px 32px',
+        padding: '23px 21px 32px 21px',
         borderRadius: '4px',
         background: '#FFF',
       }}

@@ -585,38 +585,37 @@ export default function CustomWidget() {
                         setConfig((pre) => ({
                           ...pre,
                           accountType: account,
+
                         }));
-                        /*   if (account==1){
-                               setShowSetProgress(true)
-                           }else {
-                               setShowSetProgress(false);
-                           }*/
                         onChange(e);
+                        //console.log(value)
                       }}
                       name="radio-buttons-group"
                     >
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         value={0}
+                        sx={{ border: value == 1 ?   '1px solid  #E2E8F0':'1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
+
+                        //sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         control={<Radio color="default" />}
                         label={
                           <Box height={30}>
-                            <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                            <Typography variant="body1" sx={{mt:{sm:'-30px',xs:'-30px',md:'0px'}}} lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
                               EOA
                             </Typography>
-                            <Typography variant="body2" lineHeight="26px" color="#64748B">
+                            <Typography variant="body2" sx={{lineHeight:"26px"}} color="#64748B">
                               Receive donation from any chain with same address.
                             </Typography>
                           </Box>
                         }
                       />
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', paddingBottom: 5.25 }}
+                          sx={{ border: value == 0 ?   '1px solid  #E2E8F0':'1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         value={1}
                         control={<Radio color="default" />}
                         label={
                           <Box height={30}>
-                            <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                            <Typography variant="body1" sx={{mt:{xs:'-30px',md:'0px'}}} lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
                               Safe Account
                             </Typography>
                             <Typography variant="body2" lineHeight="26px" color="#64748B">
@@ -729,7 +728,7 @@ export default function CustomWidget() {
                         >
                           {networks.map((item: { id: number; network: string; icon: any }) => (
                             <MenuItem value={item.id} key={item.id}>
-                              <SvgIcon sx={{ mr: 1.25 }} component={item.icon} />
+                              <SvgIcon sx={{borderRadius: '50%', mr: 1.25 }} component={item.icon} />
                               {item.network}
                             </MenuItem>
                           ))}
@@ -746,7 +745,7 @@ export default function CustomWidget() {
                             borderRadius: '4px',
                           }}
                           endAdornment={
-                            <InputAdornment sx={{ cursor: 'pointer' }} position="start">
+                            <InputAdornment sx={{ height:'30px',mt:'5px',marginRight:'-10px',cursor: 'pointer' }} position="start">
                               <SvgIcon sx={{ cursor: 'pointer' }} onClick={() => handleDelete(index)} component={Delete} inheritViewBox />
                             </InputAdornment>
                           }

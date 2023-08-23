@@ -39,4 +39,4 @@ next-env.d.ts~
 
 .env
 /yarn.lock
-./tsconfig.json
+
