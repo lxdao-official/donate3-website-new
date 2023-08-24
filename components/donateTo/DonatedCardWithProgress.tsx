@@ -202,17 +202,15 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
         return count <= MAX_COUNT ? 0 : count - MAX_COUNT;
     }, [ranking]);
     return (
-
-
         <Box
             sx={{
                 position: 'relative',
                 backgroundColor: '#F8FAFC',
                 borderRadius: '8px',
+
                 mt:{xs:'30px'}
             }}
         >
-
             <Box
                 sx={{
 
@@ -226,7 +224,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                 }}
             >
                 {/*进度条*/}
-                <Box sx={{backgroundColor: '#F8FAFC', borderRadius: '8px',}}>
+                <Box sx={{backgroundColor: '#F8FAFC', borderRadius: '8px',border:'2px solid white'}}>
 
                     <Box sx={{margin: '28px 40px 0px 40px', paddingBottom: '12px'}}>
                         <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
@@ -254,7 +252,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                                 fontWeight: 600,
                                                 color: '#64748B'
                                             }}>
-                                    Funds Raised
+                                    Funds raised
                                 </Typography>
                                 <Typography variant="h3"sx={{
                                     fontSize: '28px',
@@ -272,7 +270,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                                                 fontWeight: 600,
                                                 color: '#64748B'
                                             }}>
-                                    Funds Goal
+                                    Funds goal
                                 </Typography>
                                 <Typography variant="h3"sx={{
                                     fontSize: '28px',
@@ -293,7 +291,7 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
                             textAlign: 'left',
                             fontSize: '14px',
                             lineHeight: '26px',
-                            fontWeight: 400,
+                            fontWeight: 500,
                             color: '#64748B'
                         }}>Start time: {startTime}</Typography>
                     </Box>
