@@ -13,6 +13,7 @@ import {ICustomWidget} from '@/components/CustomWidget';
 import loadingAnimation from '../public/loading/donate3Loading.json';
 import API from "@/common/API";
 import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
+import dayjs from "dayjs";
 
 
 const DonateTo: NextPage = () => {
@@ -84,7 +85,7 @@ const DonateTo: NextPage = () => {
                     alignItems: 'center',
                     padding: '45px 200px',
                     zIndex: 0,
-                    mt:{xs:'0%',md:'-5%'},
+                    mt:{xs:'0%',md:'0%'},
                 }}
             >
                 <Box sx={{
@@ -92,6 +93,7 @@ const DonateTo: NextPage = () => {
                     display:'inline-block',
                     width: '100%',
                     top:0,
+                    //right:'10%',
                     //mt:{xs:'-15%',md:'-7%'},
                     zIndex: 0,
                     pointerEvents:'none'

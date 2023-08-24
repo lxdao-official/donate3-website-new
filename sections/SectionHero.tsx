@@ -120,6 +120,7 @@ export function SectionHero() {
   const router = useRouter();
   return (
     <Box
+
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', lg: 'column' },
@@ -127,7 +128,9 @@ export function SectionHero() {
         alignItems: 'center',
         minHeight: { xs: '100vh', md: 'calc(100vh )' },
         mt: { xs: '30px', lg: '94px' },
+          //zIndex:-1,
       }}
+
     >
       <CircleBg />
       <CircleBgg />
@@ -140,9 +143,10 @@ export function SectionHero() {
           color: '#000000',
           textAlign: { xs: 'center', lg: 'center' },
           maxWidth: { xs: '100%', sm: '1240px' },
+            zIndex:2,
         }}
       >
-        Easy <MultiLine>donation</MultiLine>, More connection.
+        Easy <MultiLine >donation</MultiLine>, More connection.
       </Typography>
 
       <Typography

@@ -190,10 +190,13 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
     const memoLeastTenList = useMemo(() => {
         let finalRankings = ranking;
+        //ranking.length = 15;
         const length = ranking?.length || 0;
+
         if (length > MAX_COUNT) {
             finalRankings = ranking?.slice(0, MAX_COUNT);
         }
+        //finalRankings =11;
         return finalRankings!.map(({address}) => address);
     }, [ranking]);
 

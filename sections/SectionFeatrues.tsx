@@ -9,17 +9,18 @@ export function SectionFeacture() {
     return (
 
         <Box
-
+            bgcolor='#0F172A'
             sx={{
-                marginLeft: { xs: '-15px', lg: '-27.5px' },
-                marginRight: { xs: '-15px', lg: '-27.5px' },
+                //marginLeft: { xs: '-15px', lg: '-27.5px' },
+                //marginRight: { xs: '-15px', lg: '-27.5px' },
                 display: 'flex',
                 flexDirection: { xs: 'column', lg: 'column' },
                 justifyContent: { xs: 'center', lg: 'center' },
                 alignItems: 'center',
                 minHeight: { xs: 'calc(100vh)', md: 'calc(100vh)' },
-                background: '#0F172A',
+                //background: '#0F172A',
             }}
+
         >
 
 
