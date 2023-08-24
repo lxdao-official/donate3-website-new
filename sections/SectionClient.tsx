@@ -76,6 +76,7 @@ export function SectionClient() {
     return (
 
         <Box
+            //bgcolor='#fffff'
             sx={{
                 display: 'flex',
                 flexDirection: { xs: 'column', lg: 'column' },
@@ -118,6 +119,7 @@ export function SectionClient() {
                 <Box sx={{ display: 'flex', alignItems: 'center', maxWidth: '100%', maxHeight: '100%' }}>
                     <Box ml={2}>
                         <Typography variant="h3" sx={{
+                            zIndex:2,
                             fontWeight: 700,
                             fontSize: { xs: '20px', sm: '20px', md: '28px' },
                             lineHeight: { xs: '37px', md: '37px' },
@@ -126,7 +128,8 @@ export function SectionClient() {
                             textAlign: { xs: 'center  ', lg: 'left' },
                             mt: { xs: '30px', lg: '0' },
                             mb: { xs: '30px', lg: '23px' },
-                        }}>Get funded as <MultiLine>public goods</MultiLine></Typography>
+
+                        }}>Get funded as <MultiLine >public goods</MultiLine></Typography>
                         <Typography variant="subtitle1"
                             sx={{
                                 fontWeight: 400,
@@ -156,6 +159,7 @@ export function SectionClient() {
                     textAlign: { xs: 'center', lg: 'center' },
                     //maxWidth: {xs: '100%', sm: '400px',lg:'600px'},
                     mt: { xs: '30px', lg: '119px' },
+                    zIndex:2,
                 }}
             >
                 Get supported as <MultiLine>creators</MultiLine>
