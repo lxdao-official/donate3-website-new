@@ -84,20 +84,18 @@ const DonateTo: NextPage = () => {
                     alignItems: 'center',
                     padding: '45px 200px',
                     zIndex: 0,
-                    mt:{md:'-5%'},
+                    mt:{xs:'0%',md:'-5%'},
                 }}
             >
                 <Box sx={{
                     position: "absolute",
                     display:'inline-block',
-                    //bottom: "-30%",
                     width: '100%',
-                    mt: "-7%",
+                    top:0,
+                    //mt:{xs:'-15%',md:'-7%'},
                     zIndex: 0,
                     pointerEvents:'none'
-                    //userSelect: 'none',
                 }} component={'img'} src='/images/donateToBackground.png'/>
-                {/* xs: '30px', sm: '54px', md: '72px'*/}
                 <Box
                     sx={{
                         display: 'flex',
