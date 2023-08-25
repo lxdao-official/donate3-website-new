@@ -64,9 +64,9 @@ const DonateTo: NextPage = () => {
     return (
 
         <Layout
-
+            bgColor='#f9fafc'
             style={{
-                backgroundColor: '#f9fafc',
+                //backgroundColor: '#f9fafc',
                 //backgroundColor: '#ffffff',
                 zIndex:1,
                 maxWidth:'1512px'
