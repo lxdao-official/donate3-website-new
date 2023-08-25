@@ -134,12 +134,12 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
 
 
     const queryDonatesRanking = (params: IRankingParams) => {
-        //params.address = '0xe395B9bA2F93236489ac953146485C435D1A267B';
         API.get('/donates/ranking', {
             params,
             baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
             headers: {'Content-Type': 'application/json'},
         }).then((res) => {
+            console.log(res?.data?.data);
             setRanking(res?.data?.data || []);
         });
     };

@@ -33,7 +33,7 @@ export default function SettingLayout({ children }: { children: React.ReactNode 
   const router = useRouter();
 
   return (
-    <Layout bgColor="#F8FAFC">
+    <Layout bgColor="#F8FAFC" sx={{maxWidth:'1512px'}}>
       <Box
         sx={{
           display: 'flex',
