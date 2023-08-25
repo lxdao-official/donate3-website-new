@@ -64,10 +64,12 @@ const DonateTo: NextPage = () => {
     return (
 
         <Layout
+
             style={{
                 backgroundColor: '#f9fafc',
                 //backgroundColor: '#ffffff',
                 zIndex:1,
+                maxWidth:'1512px'
             }}
 
         >

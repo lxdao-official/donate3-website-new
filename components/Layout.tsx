@@ -6,7 +6,7 @@ import SDKContainer from './SDKContainer';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <Container maxWidth={false} sx={{ maxWidth: '1512px' }} style={style}>
+    <Container maxWidth={false}  style={style}>
       {children}
     </Container>
   );

@@ -116,10 +116,10 @@ export function SectionClient() {
                 />
 
                 <Box sx={{ width: "65px" }} />
-                <Box sx={{ display: 'flex', alignItems: 'center', maxWidth: '100%', maxHeight: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', maxWidth: '100%', maxHeight: '100%' ,zIndex:2,}}>
                     <Box ml={2}>
                         <Typography variant="h3" sx={{
-                            zIndex:2,
+
                             fontWeight: 700,
                             fontSize: { xs: '20px', sm: '20px', md: '28px' },
                             lineHeight: { xs: '37px', md: '37px' },
