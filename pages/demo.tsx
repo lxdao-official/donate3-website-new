@@ -21,7 +21,7 @@ const Demo: NextPage = () => {
   }, []);
 
   return (
-    <Layout sx={{maxWidth:'1512px'}} >
+    <Layout style={{maxWidth:'1512px'}} >
       <div
         style={{
           padding: '20px 0',
