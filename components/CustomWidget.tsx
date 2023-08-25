@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
+import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem, TextareaAutosize } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import TextField from '@mui/material/TextField';
 import { ChromePicker } from 'react-color';
@@ -14,15 +14,7 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import {
-  DEFAULT_CREATE_ADDRESS,
-  DEFAULT_CREATE_CONFIG,
-  DONATE_SDK_URL,
-  AccountType,
-  SafeAccount,
-  EType,
-  AccountProgressType
-} from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -49,7 +41,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 
 export interface ICustomWidget {
   type: number;
@@ -84,24 +75,21 @@ export default function CustomWidget() {
   //const [showSetProgress, setShowSetProgress] = useState(false);
 
   //设置是否有进度
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-
-      setExpanded(isExpanded ? panel : false);
-      //1默认表示没有进度条
-      let progressType = 1;
-      if (isExpanded) {
-        progressType = 0;
-      } else {
-        progressType = 1
-      }
-      //设置是否带进度条
-      setConfig((pre) => ({
-        ...pre,
-        progressType: progressType,
-      }));
-    };
-
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+    //1默认表示没有进度条
+    let progressType = 1;
+    if (isExpanded) {
+      progressType = 0;
+    } else {
+      progressType = 1;
+    }
+    //设置是否带进度条
+    setConfig((pre) => ({
+      ...pre,
+      progressType: progressType,
+    }));
+  };
 
   const {
     control,
@@ -277,7 +265,66 @@ export default function CustomWidget() {
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '50%' }} flex={1}>
           {/* Style in your website */}
-          <Card title="Style in your website">
+          <Card title="Previous Configuration">
+            <Controller
+              name={'previousLink'}
+              control={control}
+              rules={{ required: false }}
+              render={({ field: { onChange, value } }) => (
+                <FormInput title="Previous link" error={errors.color?.type}>
+                  <TextareaAutosize
+                    minRows={3}
+                    placeholder="Enter your previous link and click the 'modify' button, for example: https://www.donate3.xyz/donateTo?cid=XXX."
+                    style={{
+                      backgroundColor: 'var(--gray-300, #E2E8F0)',
+                      height: '140px',
+                      padding: '10px',
+                      borderRadius: '4px',
+                    }}
+                    // value={value}
+                    // onChange={(e: any) => {
+                    //   setError('color', {});
+                    //   if (!e.target.value) {
+                    //     setError('color', { type: 'invalid color' });
+                    //   }
+                    //   setConfig((pre) => ({
+                    //     ...pre,
+                    //     color: e.target.value,
+                    //   }));
+                    //   onChange(e);
+                    // }}
+                  />
+                </FormInput>
+              )}
+            />
+            <div
+              style={{
+                marginBottom: '18px',
+              }}
+            >
+              <Donate3Btn loadingButton loading={loading} onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
+                Modify the previous configuration
+              </Donate3Btn>
+              <div
+                style={{
+                  fontSize: '14px',
+                  lineHeight: '26px',
+                  color: 'rgba(100, 116, 139, 1)',
+                  paddingTop: '16px',
+                }}
+              >
+                Your original configuration will appear in the table below.
+              </div>
+            </div>
+          </Card>
+
+          {/* Style in your website */}
+          <Card
+            title="Style in your website"
+            style={{
+              paddingTop: '24px',
+            }}
+          >
             <Controller
               name={'type'}
               control={control}
@@ -624,7 +671,6 @@ export default function CustomWidget() {
                           </Box>
                         }
                       />
-
                     </RadioGroup>
                   </FormInput>
                 );
@@ -765,7 +811,6 @@ export default function CustomWidget() {
               </Box>
             )}
 
-
             {/*{config.accountType === 0 ? (
 
 
@@ -774,19 +819,9 @@ export default function CustomWidget() {
               )}
               */}
             <Box>
-              <Accordion expanded={expanded === 'panel1'} onChange={
-
-                handleChange('panel1')
-
-              }>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography sx={{ width: '100%', flexShrink: 0 }}>
-                    Do you need to set a donation progress?
-                  </Typography>
+              <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+                  <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you need to set a donation progress?</Typography>
                   {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
                 </AccordionSummary>
                 <AccordionDetails>
@@ -826,26 +861,24 @@ export default function CustomWidget() {
                       name={'startTime'}
                       control={control}
                       rules={{ required: true }}
-                      render={({ }) => {
+                      render={({}) => {
                         return (
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker label="Select Start Date" value={selectedStartDate}
+                            <DatePicker
+                              label="Select Start Date"
+                              value={selectedStartDate}
                               onChange={(newValue) => {
                                 let startTime = dayjs(newValue).valueOf();
                                 console.log(startTime);
 
                                 setSelectedStartDate(startTime);
 
-
                                 setConfig((pre) => ({
                                   ...pre,
                                   startTime: startTime,
-
                                 }));
-
                               }}
                             />
-
                           </LocalizationProvider>
                         );
                       }}
@@ -854,16 +887,18 @@ export default function CustomWidget() {
                       name={'endTime'}
                       control={control}
                       rules={{ required: true }}
-                      render={({ }) => {
+                      render={({}) => {
                         return (
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker sx={{ marginLeft: '40px' }} label="Select End Date" value={selectedEndDate}
-
+                            <DatePicker
+                              sx={{ marginLeft: '40px' }}
+                              label="Select End Date"
+                              value={selectedEndDate}
                               onChange={(newValue) => {
                                 let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
 
                                 if (endTime < selectedStartDate!) {
-                                  alert("End Date Shold Bigger Than Start Date")
+                                  alert('End Date Shold Bigger Than Start Date');
                                   setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
                                 } else {
                                   setSelectedEndDate(endTime);
@@ -882,7 +917,7 @@ export default function CustomWidget() {
                       name={'reason'}
                       control={control}
                       rules={{ required: true }}
-                      render={({ field: { } }) => {
+                      render={({ field: {} }) => {
                         return (
                           <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
                             <TextField
@@ -901,23 +936,15 @@ export default function CustomWidget() {
                                 //onChange(e);
                               }}
                             />
-
                           </FormInput>
                         );
                       }}
                     />
                   </Box>
-
                 </AccordionDetails>
               </Accordion>
-
-
             </Box>
-
-
-
           </Card>
-
 
           <div
             style={{
