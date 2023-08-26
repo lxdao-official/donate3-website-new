@@ -898,7 +898,13 @@ export default function CustomWidget() {
                                             render={({field: {onChange, value}}) => {
                                                 return (
                                                     <FormInput
-                                                        title="Expected funds goal ( USDT-based)" /*error={errors.name?.type}*/>
+                                                        title="Expected funds goal ( USDT-based)"
+                                                        error={errors.fundsGoal?.type}
+                                                        style={{
+                                                            marginBottom: '16px',
+                                                        }}
+
+                                                    >
                                                         <InputBase
                                                             sx={{
                                                                 mt: 0,
@@ -910,10 +916,15 @@ export default function CustomWidget() {
                                                             type="number"
                                                             value={value}
                                                             onChange={(e: any) => {
-                                                                let goal = e.target.value;
+                                                                let fundsGoal = e.target.value;
+                                                                setError('fundsGoal', {});
+                                                                if(fundsGoal<0){
+                                                                    setError('fundsGoal', {type: 'invalid Number less than 0'});
+                                                                    return;
+                                                                }
                                                                 setConfig((pre) => ({
                                                                     ...pre,
-                                                                    fundsGoal: goal,
+                                                                    fundsGoal: fundsGoal,
                                                                 }));
                                                                 onChange(e);
                                                             }}
@@ -992,10 +1003,11 @@ export default function CustomWidget() {
                                                     );
                                                 }}
                                             /></Box>
+
                                         </Box>
 
                                     </Box>
-
+                                    <Donate3Btn  variant="contained" sx={{ justifyContent:'center' }} onClick={ handleChange('panel1')}> Cancle Set Progress-Account</Donate3Btn>
                                 </AccordionDetails>
                             </Accordion>
 
