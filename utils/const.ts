@@ -30,7 +30,7 @@ export const DEFAULT_CREATE_CONFIG = {
   description: '',
   twitter: '',
   telegram: '',
-  fundsGoal: 1,
+  fundsGoal: 0,
   startTime: 0,
   endTime: 0,
   reason: '',

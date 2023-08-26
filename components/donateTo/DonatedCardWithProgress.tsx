@@ -89,13 +89,17 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
             setTotalMoney(sum);
             let goal: number = info?.fundsGoal!;
             setGoalMoney(goal);
-            //const progress = (sum / goal * 100);
-            const progress = (sum / goal * 100);
-            if (progress < 100) {
-                setProgressValue(progress);
-            } else {
+            if(goal>0){
+                const progress = (sum / goal * 100);
+                if (progress < 100) {
+                    setProgressValue(progress);
+                } else {
+                    setProgressValue(100);
+                }
+            }else{
                 setProgressValue(100);
             }
+
         }
         const reasonFromInfo =info?.reason
         setReason(reasonFromInfo);
