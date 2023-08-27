@@ -34,6 +34,7 @@ export const DEFAULT_CREATE_CONFIG = {
   startTime: 0,
   endTime: 0,
   reason: '',
+  previousCid: '',
 };
 
 export enum EType {
@@ -44,3 +45,5 @@ export enum EType {
 export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+export const DEFAULT_PREVIOUS_LINK = 'https://www.donate3.xyz/donateTo?cid=';
