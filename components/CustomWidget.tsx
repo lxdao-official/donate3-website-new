@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem, TextareaAutosize } from '@mui/material';
+import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem, TextareaAutosize, Backdrop } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import TextField from '@mui/material/TextField';
 import { ChromePicker } from 'react-color';
@@ -14,7 +14,7 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -41,6 +41,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useLottie } from 'lottie-react';
+import loadingAnimation from '../public/loading/donate3Loading.json';
+import { getFasterIpfsLink } from '@/utils/ipfsTools';
+import { Img3 } from '@lxdao/img3';
 
 export interface ICustomWidget {
   type: number;
@@ -58,6 +62,7 @@ export interface ICustomWidget {
   startTime?: number;
   endTime?: number;
   reason?: string;
+  previousCid?: string;
 }
 
 export default function CustomWidget() {
@@ -72,7 +77,16 @@ export default function CustomWidget() {
   const [selectedStartDate, setSelectedStartDate] = useState<number>();
   const [selectedEndDate, setSelectedEndDate] = useState<number>();
   const [expanded, setExpanded] = useState<string | false>(false);
-  //const [showSetProgress, setShowSetProgress] = useState(false);
+  const [commonLoading, setCommonLoading] = useState<boolean>(false);
+
+  const options = {
+    animationData: loadingAnimation,
+    loop: true,
+  };
+  const { View } = useLottie(options, {
+    width: '80px',
+    height: '80px',
+  });
 
   //设置是否有进度
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -248,8 +262,56 @@ export default function CustomWidget() {
     }
   };
 
+  const setFormValue = (i: Partial<ICustomWidget>) => {
+    // EType
+    for (let key in i) {
+      // @ts-ignore
+      let value = i[key];
+      if (key == 'type') {
+        value = EType[value];
+      }
+      if (key == 'startTime') {
+        setSelectedStartDate(dayjs(value) as unknown as number);
+      }
+      if (key == 'endTime') {
+        setSelectedEndDate(dayjs(value) as unknown as number);
+      }
+      // @ts-ignore
+      setValue(key, value);
+    }
+  };
+
+  const setConfigAndForm = (i: Partial<ICustomWidget>) => {
+    setConfig((pre) => ({ ...pre, ...i }));
+    setFormValue(i);
+  };
+
+  // If specified, use the gateway
+  const getInfoFromIpfs = async (cid: string) => {
+    try {
+      setCommonLoading(true);
+      const info = await getFasterIpfsLink({
+        ipfs: `https://nftstorage.link/ipfs/${cid}`,
+        timeout: 4000,
+      });
+      setConfigAndForm(info);
+      info && setCommonLoading(false);
+    } catch (error) {
+      console.error('error', 'getFasterIpfsLink-error');
+    }
+  };
+
+  const handleClickModifyBtn = () => {
+    getInfoFromIpfs(config?.previousCid!);
+  };
+
   return (
     <>
+      {/* loading */}
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={commonLoading}>
+        {View}
+      </Backdrop>
+
       {/* title */}
       <CreateTitle />
 
@@ -264,35 +326,35 @@ export default function CustomWidget() {
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '50%' }} flex={1}>
-          {/* Style in your website */}
+          {/* Previous Configuration */}
           <Card title="Previous Configuration">
             <Controller
-              name={'previousLink'}
+              name={'previousCid'}
               control={control}
               rules={{ required: false }}
               render={({ field: { onChange, value } }) => (
-                <FormInput title="Previous link" error={errors.color?.type}>
+                <FormInput title="Previous link" error={errors.previousCid?.type}>
                   <TextareaAutosize
                     minRows={3}
-                    placeholder="Enter your previous link and click the 'modify' button, for example: https://www.donate3.xyz/donateTo?cid=XXX."
+                    placeholder={`Enter your previous link and click the 'modify' button, for example: ${DEFAULT_PREVIOUS_LINK}XXX.`}
                     style={{
                       backgroundColor: 'var(--gray-300, #E2E8F0)',
                       height: '140px',
                       padding: '10px',
                       borderRadius: '4px',
                     }}
-                    // value={value}
-                    // onChange={(e: any) => {
-                    //   setError('color', {});
-                    //   if (!e.target.value) {
-                    //     setError('color', { type: 'invalid color' });
-                    //   }
-                    //   setConfig((pre) => ({
-                    //     ...pre,
-                    //     color: e.target.value,
-                    //   }));
-                    //   onChange(e);
-                    // }}
+                    value={value}
+                    onChange={(e: any) => {
+                      setError('previousCid', {});
+                      if (!e.target.value.startsWith(DEFAULT_PREVIOUS_LINK)) {
+                        setError('previousCid', { type: 'invalid previousLink' });
+                      }
+                      setConfig((pre) => ({
+                        ...pre,
+                        previousCid: e.target.value.replace(DEFAULT_PREVIOUS_LINK, ''),
+                      }));
+                      onChange(e);
+                    }}
                   />
                 </FormInput>
               )}
@@ -302,7 +364,7 @@ export default function CustomWidget() {
                 marginBottom: '18px',
               }}
             >
-              <Donate3Btn loadingButton loading={loading} onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
+              <Donate3Btn loadingButton onClick={handleClickModifyBtn} variant="contained" disabled={!config?.previousCid}>
                 Modify the previous configuration
               </Donate3Btn>
               <div
@@ -462,6 +524,7 @@ export default function CustomWidget() {
                       }}
                       onComplete={(file) => {
                         setFile(file);
+                        setConfig((pre) => ({ ...pre, previousCid: '' }));
                       }}
                       onCropCancel={(file) => {
                         setFile(null);
@@ -470,13 +533,16 @@ export default function CustomWidget() {
                         setFile(file);
                       }}
                     >
-                      <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                      {config?.previousCid ? (
+                        <Img3 style={{ height: '98px', width: '98px' }} src={config?.avatar!} alt="previousCid" />
+                      ) : (
+                        <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                      )}
                     </Uploader3>
                   </FormInput>
                 );
               }}
             />
-
             {/* Name */}
             <Controller
               name={'name'}
@@ -511,7 +577,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             {/* About me */}
             <Controller
               name={'description'}
@@ -520,12 +585,11 @@ export default function CustomWidget() {
               render={({ field: { onChange, value } }) => {
                 return (
                   <FormInput title="About me" error={errors.description?.type}>
-                    <DescEditor onChange={handleDescEditorChange} />
+                    <DescEditor onChange={handleDescEditorChange} previousValue={config?.description} />
                   </FormInput>
                 );
               }}
             />
-
             {/* Social media */}
             <Controller
               name={'twitter'}
@@ -573,7 +637,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             <Controller
               name={'telegram'}
               control={control}
@@ -614,7 +677,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             <Controller
               name={'accountType'}
               control={control}
@@ -676,7 +738,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             {config.accountType === 0 ? (
               <Controller
                 name={'address'}
@@ -810,14 +871,6 @@ export default function CustomWidget() {
                   ))}
               </Box>
             )}
-
-            {/*{config.accountType === 0 ? (
-
-
-              /* ) : (
-                  <></>
-              )}
-              */}
             <Box>
               <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
@@ -927,6 +980,7 @@ export default function CustomWidget() {
                               rows={4}
                               //defaultValue="Default Valuea"
                               variant="standard"
+                              value={config?.reason}
                               onChange={(e: any) => {
                                 let fundsReason = e.target.value;
                                 setConfig((pre) => ({
