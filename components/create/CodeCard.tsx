@@ -78,18 +78,21 @@ const CodeCard = ({ title, content, btnText, btnImg, type }: ICodeCardProps) => 
               </div>
             </Donate3Btn>
           </Tooltip>
+
           {type === CODE_TYPE[1] ? (
-            <Donate3Btn style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', right: '10px' }} onClick={handleClickGoPageBtn}>
+            <Box style={{ width: '70px', height: '46px', color: '#0F172A', position: 'absolute', bottom: '10px', right: '0', lineHeight: '46px', cursor: 'pointer' }} onClick={handleClickGoPageBtn}>
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
+                  fontSize: '14px',
+                  fontWeight: 600,
                 }}
               >
-                <Box component={'img'} src={btnImg} mr="15px"></Box>
-                Go page
+                View
+                <Box component={'img'} src="/icons/rightIcon.svg"></Box>
               </div>
-            </Donate3Btn>
+            </Box>
           ) : (
             <></>
           )}

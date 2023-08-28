@@ -54,7 +54,7 @@ export default function SettingLayout({ children }: { children: React.ReactNode 
         >
           {[
             { title: 'Dashboard', icon: '/icons/dashboard.svg', path: '/dashboard' },
-            { title: 'History', icon: '/icons/dashboard.svg', path: '/donateHistory' },
+            { title: 'History', icon: '/icons/history.svg', path: '/donateHistory' },
             { title: 'Widget', icon: '/icons/gear.svg', path: '/create' },
           ].map((val, index) => {
             return (
