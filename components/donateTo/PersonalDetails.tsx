@@ -1,18 +1,20 @@
 import React, { useMemo } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Image from 'next/image';
 
 import { ICustomWidget } from '../CustomWidget';
 import { DEFAULT_CREATE_CONFIG } from '@/utils/const';
-import IPFSAvatar, { IIPFSAvatarProps, TIPFSSrc } from '../IPFSAvatar/IPFSAvatar';
+import IPFSAvatar, { TIPFSSrc } from '../IPFSAvatar/IPFSAvatar';
+
+import SafeAccounts from '@/components/donateTo/SafeAccounts';
 
 interface IPersonalDetailsProps {
-  info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram' | 'address'>;
+  info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram' | 'address' | 'safeAccounts' | 'accountType'>;
   onDonate: () => void;
 }
 
 const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDetailsProps) => {
-  const { name, twitter = '', telegram = '' } = info;
+  const { name, twitter = '', telegram = '', accountType, address, safeAccounts } = info;
 
   const memoMedias = useMemo(() => {
     const medias = [];
@@ -58,6 +60,14 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDe
           {name || ''}
         </Box>
       </Box>
+
+      {!!(accountType === 0 && address) && (
+        <Typography my={2} component={Box} variant="h6" fontWeight={400}>
+          {address}
+        </Typography>
+      )}
+
+      {!!(accountType !== 1) && <SafeAccounts accounts={safeAccounts} />}
 
       <Box
         sx={{

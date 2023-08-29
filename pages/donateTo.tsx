@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import { Backdrop, Box, InputBase, Typography } from '@mui/material';
+import { Backdrop, Box } from '@mui/material';
 import { Layout } from '@/components/Layout';
 import { useRouter } from 'next/router';
 import { useLottie } from 'lottie-react';
@@ -11,18 +11,16 @@ import PersonalIntroduction from '@/components/donateTo/PersonalIntroduction';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import { ICustomWidget } from '@/components/CustomWidget';
 import loadingAnimation from '../public/loading/donate3Loading.json';
-import API from "@/common/API";
-import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
+import API from '@/common/API';
+import DonatedCardWithProgress from '@/components/donateTo/DonatedCardWithProgress';
 
-import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
-
+// import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
 
 const DonateTo: NextPage = () => {
   const router = useRouter();
   const cid = router.query?.cid as string;
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
   const [loading, setLoading] = useState<boolean>(true);
-
 
   const options = {
     animationData: loadingAnimation,
@@ -53,9 +51,6 @@ const DonateTo: NextPage = () => {
     }
   };
 
-
-
-
   useEffect(() => {
     cid && getInfoFromIpfs(cid);
   }, [cid]);
@@ -65,12 +60,7 @@ const DonateTo: NextPage = () => {
   };
 
   return (
-    <Layout
-      style={{
-        //backgroundColor: '#f9fafc',
-         backgroundColor: '#ffffff',
-      }}
-    >
+    <Layout bgColor="#fff">
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         {View}
       </Backdrop>
@@ -83,18 +73,20 @@ const DonateTo: NextPage = () => {
           padding: '45px 200px',
         }}
       >
-          {/* xs: '30px', sm: '54px', md: '72px'*/}
         <Box
           sx={{
             display: 'flex',
-              flexDirection: {xs:'column',sm:'column',md : 'row',},
-            justifyContent: {xs:'',md:'space-between',},
+            flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+            justifyContent: { xs: '', md: 'space-between' },
             alignItems: 'center',
             width: '100%',
           }}
         >
           <PersonalDetails
             info={{
+              accountType: info?.accountType || 0,
+              address: info?.address,
+              safeAccounts: info?.safeAccounts,
               name: info?.name!,
               avatar: info?.avatar!,
               twitter: info?.twitter!,
@@ -112,7 +104,7 @@ const DonateTo: NextPage = () => {
                 fundsGoal: info?.fundsGoal!,
                 startTime: info?.startTime!,
                 endTime: info?.endTime!,
-                reason: info?.reason!
+                reason: info?.reason!,
               }}
             />
           ) : (
@@ -124,7 +116,6 @@ const DonateTo: NextPage = () => {
               }}
             />
           )}
-
         </Box>
 
         <PersonalIntroduction
@@ -132,10 +123,7 @@ const DonateTo: NextPage = () => {
             description: info?.description!,
           }}
         />
-
-
       </Box>
-
     </Layout>
   );
 };
