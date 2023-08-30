@@ -4,6 +4,7 @@ export default function MultiLine({ children }: { children: React.ReactNode }) {
         {children}
         <Box sx={{
             position: "absolute",
+            //display:'inline-block',
             bottom: "-30%",
             width: '100%',
             zIndex: -1,

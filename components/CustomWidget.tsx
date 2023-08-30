@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
-import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem } from '@mui/material';
+import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem, TextareaAutosize, Backdrop } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import TextField from '@mui/material/TextField';
 import { ChromePicker } from 'react-color';
@@ -14,7 +14,7 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -41,6 +41,10 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useLottie } from 'lottie-react';
+import loadingAnimation from '../public/loading/donate3Loading.json';
+import { getFasterIpfsLink } from '@/utils/ipfsTools';
+import { Img3 } from '@lxdao/img3';
 
 export interface ICustomWidget {
   type: number;
@@ -58,6 +62,7 @@ export interface ICustomWidget {
   startTime?: number;
   endTime?: number;
   reason?: string;
+  previousCid?: string;
 }
 
 export default function CustomWidget() {
@@ -72,7 +77,16 @@ export default function CustomWidget() {
   const [selectedStartDate, setSelectedStartDate] = useState<number>();
   const [selectedEndDate, setSelectedEndDate] = useState<number>();
   const [expanded, setExpanded] = useState<string | false>(false);
-  //const [showSetProgress, setShowSetProgress] = useState(false);
+  const [commonLoading, setCommonLoading] = useState<boolean>(false);
+
+  const options = {
+    animationData: loadingAnimation,
+    loop: true,
+  };
+  const { View } = useLottie(options, {
+    width: '80px',
+    height: '80px',
+  });
 
   //设置是否有进度
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -82,6 +96,7 @@ export default function CustomWidget() {
     if (isExpanded) {
       progressType = 0;
     } else {
+      alert('you have cancled set raised account with raised progress');
       progressType = 1;
     }
     //设置是否带进度条
@@ -248,8 +263,56 @@ export default function CustomWidget() {
     }
   };
 
+  const setFormValue = (i: Partial<ICustomWidget>) => {
+    // EType
+    for (let key in i) {
+      // @ts-ignore
+      let value = i[key];
+      if (key == 'type') {
+        value = EType[value];
+      }
+      if (key == 'startTime') {
+        setSelectedStartDate(dayjs(value) as unknown as number);
+      }
+      if (key == 'endTime') {
+        setSelectedEndDate(dayjs(value) as unknown as number);
+      }
+      // @ts-ignore
+      setValue(key, value);
+    }
+  };
+
+  const setConfigAndForm = (i: Partial<ICustomWidget>) => {
+    setConfig((pre) => ({ ...pre, ...i }));
+    setFormValue(i);
+  };
+
+  // If specified, use the gateway
+  const getInfoFromIpfs = async (cid: string) => {
+    try {
+      setCommonLoading(true);
+      const info = await getFasterIpfsLink({
+        ipfs: `https://nftstorage.link/ipfs/${cid}`,
+        timeout: 4000,
+      });
+      setConfigAndForm(info);
+      info && setCommonLoading(false);
+    } catch (error) {
+      console.error('error', 'getFasterIpfsLink-error');
+    }
+  };
+
+  const handleClickModifyBtn = () => {
+    getInfoFromIpfs(config?.previousCid!);
+  };
+
   return (
     <>
+      {/* loading */}
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={commonLoading}>
+        {View}
+      </Backdrop>
+
       {/* title */}
       <CreateTitle />
 
@@ -264,8 +327,67 @@ export default function CustomWidget() {
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '50%' }} flex={1}>
+          {/* Previous Configuration */}
+          <Card title="Previous Configuration">
+            <Controller
+              name={'previousCid'}
+              control={control}
+              rules={{ required: false }}
+              render={({ field: { onChange, value } }) => (
+                <FormInput title="Previous link" error={errors.previousCid?.type}>
+                  <TextareaAutosize
+                    minRows={3}
+                    placeholder={`Enter your previous link and click the 'modify' button, for example: ${DEFAULT_PREVIOUS_LINK}XXX.`}
+                    style={{
+                      backgroundColor: 'var(--gray-300, #E2E8F0)',
+                      height: '140px',
+                      padding: '10px',
+                      borderRadius: '4px',
+                    }}
+                    value={value}
+                    onChange={(e: any) => {
+                      setError('previousCid', {});
+                      if (!e.target.value.startsWith(DEFAULT_PREVIOUS_LINK)) {
+                        setError('previousCid', { type: 'invalid previousLink' });
+                      }
+                      setConfig((pre) => ({
+                        ...pre,
+                        previousCid: e.target.value.replace(DEFAULT_PREVIOUS_LINK, ''),
+                      }));
+                      onChange(e);
+                    }}
+                  />
+                </FormInput>
+              )}
+            />
+            <div
+              style={{
+                marginBottom: '18px',
+              }}
+            >
+              <Donate3Btn loadingButton onClick={handleClickModifyBtn} variant="contained" disabled={!config?.previousCid}>
+                Modify the previous configuration
+              </Donate3Btn>
+              <div
+                style={{
+                  fontSize: '14px',
+                  lineHeight: '26px',
+                  color: 'rgba(100, 116, 139, 1)',
+                  paddingTop: '16px',
+                }}
+              >
+                Your original configuration will appear in the table below.
+              </div>
+            </div>
+          </Card>
+
           {/* Style in your website */}
-          <Card title="Style in your website">
+          <Card
+            title="Style in your website"
+            style={{
+              paddingTop: '24px',
+            }}
+          >
             <Controller
               name={'type'}
               control={control}
@@ -315,7 +437,17 @@ export default function CustomWidget() {
                   <InputBase
                     startAdornment={
                       <>
-                        <Box sx={{ width: '24px', height: '24px', cursor: 'pointer', borderRadius: '3px', backgroundColor: value, marginRight: '10px' }} onClick={handleOpen} />
+                        <Box
+                          sx={{
+                            width: '24px',
+                            height: '24px',
+                            cursor: 'pointer',
+                            borderRadius: '3px',
+                            backgroundColor: value,
+                            marginRight: '10px',
+                          }}
+                          onClick={handleOpen}
+                        />
 
                         {displayColorPicker ? (
                           <div
@@ -372,7 +504,6 @@ export default function CustomWidget() {
               )}
             />
           </Card>
-
           {/* Profile settings */}
           <Card
             hasBorder={false}
@@ -403,6 +534,7 @@ export default function CustomWidget() {
                       }}
                       onComplete={(file) => {
                         setFile(file);
+                        setConfig((pre) => ({ ...pre, previousCid: '' }));
                       }}
                       onCropCancel={(file) => {
                         setFile(null);
@@ -411,13 +543,16 @@ export default function CustomWidget() {
                         setFile(file);
                       }}
                     >
-                      <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                      {config?.previousCid ? (
+                        <Img3 style={{ height: '98px', width: '98px' }} src={config?.avatar!} alt="previousCid" />
+                      ) : (
+                        <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
+                      )}
                     </Uploader3>
                   </FormInput>
                 );
               }}
             />
-
             {/* Name */}
             <Controller
               name={'name'}
@@ -452,7 +587,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             {/* About me */}
             <Controller
               name={'description'}
@@ -461,12 +595,11 @@ export default function CustomWidget() {
               render={({ field: { onChange, value } }) => {
                 return (
                   <FormInput title="About me" error={errors.description?.type}>
-                    <DescEditor onChange={handleDescEditorChange} />
+                    <DescEditor onChange={handleDescEditorChange} previousValue={config?.description} />
                   </FormInput>
                 );
               }}
             />
-
             {/* Social media */}
             <Controller
               name={'twitter'}
@@ -514,7 +647,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             <Controller
               name={'telegram'}
               control={control}
@@ -555,7 +687,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             <Controller
               name={'accountType'}
               control={control}
@@ -573,37 +704,52 @@ export default function CustomWidget() {
                           ...pre,
                           accountType: account,
                         }));
-                        /*   if (account==1){
-                               setShowSetProgress(true)
-                           }else {
-                               setShowSetProgress(false);
-                           }*/
                         onChange(e);
+                        //console.log(value)
                       }}
                       name="radio-buttons-group"
                     >
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         value={0}
+                        sx={{
+                          border: value == 1 ? '1px solid  #E2E8F0' : '1px solid #0F172A',
+                          borderRadius: '4px',
+                          background: ' #FFF',
+                          marginLeft: 0,
+                          marginRight: 0,
+                          padding: '16px 10px',
+                          marginBottom: '16px',
+                          paddingBottom: 5.25,
+                        }}
+                        //sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         control={<Radio color="default" />}
                         label={
                           <Box height={30}>
-                            <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                            <Typography variant="body1" sx={{ mt: { sm: '-30px', xs: '-30px', md: '0px' } }} lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
                               EOA
                             </Typography>
-                            <Typography variant="body2" lineHeight="26px" color="#64748B">
+                            <Typography variant="body2" sx={{ lineHeight: '26px' }} color="#64748B">
                               Receive donation from any chain with same address.
                             </Typography>
                           </Box>
                         }
                       />
                       <FormControlLabel
-                        sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', paddingBottom: 5.25 }}
+                        sx={{
+                          border: value == 0 ? '1px solid  #E2E8F0' : '1px solid #0F172A',
+                          borderRadius: '4px',
+                          background: ' #FFF',
+                          marginLeft: 0,
+                          marginRight: 0,
+                          padding: '16px 10px',
+                          marginBottom: '16px',
+                          paddingBottom: 5.25,
+                        }}
                         value={1}
                         control={<Radio color="default" />}
                         label={
                           <Box height={30}>
-                            <Typography variant="body1" lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                            <Typography variant="body1" sx={{ mt: { xs: '-30px', md: '0px' } }} lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
                               Safe Account
                             </Typography>
                             <Typography variant="body2" lineHeight="26px" color="#64748B">
@@ -617,7 +763,6 @@ export default function CustomWidget() {
                 );
               }}
             />
-
             {config.accountType === 0 ? (
               <Controller
                 name={'address'}
@@ -715,7 +860,7 @@ export default function CustomWidget() {
                         >
                           {networks.map((item: { id: number; network: string; icon: any }) => (
                             <MenuItem value={item.id} key={item.id}>
-                              <SvgIcon sx={{ mr: 1.25 }} component={item.icon} />
+                              <SvgIcon sx={{ borderRadius: '50%', mr: 1.25 }} component={item.icon} />
                               {item.network}
                             </MenuItem>
                           ))}
@@ -732,7 +877,15 @@ export default function CustomWidget() {
                             borderRadius: '4px',
                           }}
                           endAdornment={
-                            <InputAdornment sx={{ cursor: 'pointer' }} position="start">
+                            <InputAdornment
+                              sx={{
+                                height: '30px',
+                                mt: '5px',
+                                marginRight: '-10px',
+                                cursor: 'pointer',
+                              }}
+                              position="start"
+                            >
                               <SvgIcon sx={{ cursor: 'pointer' }} onClick={() => handleDelete(index)} component={Delete} inheritViewBox />
                             </InputAdornment>
                           }
@@ -762,19 +915,72 @@ export default function CustomWidget() {
             <Box>
               <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
-                  <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you need to set a donation progress?</Typography>
+                  <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you want to set a funds-raised progress?</Typography>
                   {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
                 </AccordionSummary>
                 <AccordionDetails>
-                  {/*期望得到的goal*/}
-                  <Box>
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: '20px',
+                      lineHeight: '28px',
+                      width: '100%',
+                      flexShrink: 0,
+                    }}
+                  >
+                    Donation amount settings{' '}
+                  </Typography>
+
+                  <Box sx={{ mt: '31px' }}>
+                    <Controller
+                      name={'reason'}
+                      control={control}
+                      rules={{ required: false }}
+                      render={({ field: {} }) => {
+                        return (
+                          <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
+                            <TextField
+                              id="Challenges"
+                              multiline
+                              rows={4}
+                              //variant="filled"
+                              value={config?.reason}
+                              label="Type your donation reason and introduction"
+                              InputProps={
+                                {
+                                  //disableUnderline:true,
+                                  //sx={{border'0px'}}
+                                }
+                              }
+                              sx={{
+                                backgroundColor: '#E2E8F0',
+                              }}
+                              onChange={(e: any) => {
+                                let fundsReason = e.target.value;
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  reason: fundsReason,
+                                }));
+                              }}
+                            />
+                          </FormInput>
+                        );
+                      }}
+                    />
                     <Controller
                       name={'fundsGoal'}
                       control={control}
                       rules={{ required: true }}
                       render={({ field: { onChange, value } }) => {
                         return (
-                          <FormInput title="Expected funds goal ( USDT-based)" /*error={errors.name?.type}*/>
+                          <FormInput
+                            title="Expected funds goal ( USDT-based)"
+                            error={errors.fundsGoal?.type}
+                            style={{
+                              marginBottom: '16px',
+                            }}
+                          >
                             <InputBase
                               sx={{
                                 mt: 0,
@@ -786,10 +992,15 @@ export default function CustomWidget() {
                               type="number"
                               value={value}
                               onChange={(e: any) => {
-                                let goal = e.target.value;
+                                let fundsGoal = e.target.value;
+                                setError('fundsGoal', {});
+                                if (fundsGoal < 0) {
+                                  setError('fundsGoal', { type: 'invalid Number less than 0' });
+                                  return;
+                                }
                                 setConfig((pre) => ({
                                   ...pre,
-                                  fundsGoal: goal,
+                                  fundsGoal: fundsGoal,
                                 }));
                                 onChange(e);
                               }}
@@ -798,90 +1009,76 @@ export default function CustomWidget() {
                         );
                       }}
                     />
-                    <Controller
-                      name={'startTime'}
-                      control={control}
-                      rules={{ required: true }}
-                      render={({}) => {
-                        return (
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              label="Select Start Date"
-                              value={selectedStartDate}
-                              onChange={(newValue) => {
-                                let startTime = dayjs(newValue).valueOf();
-                                console.log(startTime);
+                    <Box sx={{ display: 'flex' }}>
+                      <Box>
+                        <Controller
+                          name={'startTime'}
+                          control={control}
+                          rules={{ required: true }}
+                          render={({}) => {
+                            return (
+                              <FormInput title="Start time" /*error={errors.name?.type}*/>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DatePicker
+                                    label="Select"
+                                    value={selectedStartDate}
+                                    sx={{ backgroundColor: '#E2E8F0' }}
+                                    onChange={(newValue) => {
+                                      let startTime = dayjs(newValue).valueOf();
+                                      console.log(startTime);
+                                      setSelectedStartDate(startTime);
+                                      setConfig((pre) => ({
+                                        ...pre,
+                                        startTime: startTime,
+                                      }));
+                                    }}
+                                  />
+                                </LocalizationProvider>
+                              </FormInput>
+                            );
+                          }}
+                        />
+                      </Box>
+                      <Box sx={{ marginLeft: { md: '40px' } }}>
+                        <Controller
+                          name={'endTime'}
+                          control={control}
+                          rules={{ required: true }}
+                          render={({}) => {
+                            return (
+                              <FormInput title="End time" /*error={errors.name?.type}*/>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DatePicker
+                                    label="Select"
+                                    value={selectedEndDate}
+                                    sx={{ backgroundColor: '#E2E8F0' }}
+                                    onChange={(newValue) => {
+                                      let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
 
-                                setSelectedStartDate(startTime);
-
-                                setConfig((pre) => ({
-                                  ...pre,
-                                  startTime: startTime,
-                                }));
-                              }}
-                            />
-                          </LocalizationProvider>
-                        );
-                      }}
-                    />
-                    <Controller
-                      name={'endTime'}
-                      control={control}
-                      rules={{ required: true }}
-                      render={({}) => {
-                        return (
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              sx={{ marginLeft: '40px' }}
-                              label="Select End Date"
-                              value={selectedEndDate}
-                              onChange={(newValue) => {
-                                let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
-
-                                if (endTime < selectedStartDate!) {
-                                  alert('End Date Should Bigger Than Start Date');
-                                  setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
-                                } else {
-                                  setSelectedEndDate(endTime);
-                                  setConfig((pre) => ({
-                                    ...pre,
-                                    endTime: endTime,
-                                  }));
-                                }
-                              }}
-                            />
-                          </LocalizationProvider>
-                        );
-                      }}
-                    />
-                    <Controller
-                      name={'reason'}
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field: {} }) => {
-                        return (
-                          <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
-                            <TextField
-                              id="standard-multiline-static"
-                              //label="Multiline"
-                              multiline
-                              rows={4}
-                              //defaultValue="Default Value"
-                              variant="standard"
-                              onChange={(e: any) => {
-                                let fundsReason = e.target.value;
-                                setConfig((pre) => ({
-                                  ...pre,
-                                  reason: fundsReason,
-                                }));
-                                //onChange(e);
-                              }}
-                            />
-                          </FormInput>
-                        );
-                      }}
-                    />
+                                      if (endTime < selectedStartDate!) {
+                                        alert('End Date Shold Bigger Than Start Date');
+                                        setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
+                                      } else {
+                                        setSelectedEndDate(endTime);
+                                        setConfig((pre) => ({
+                                          ...pre,
+                                          endTime: endTime,
+                                        }));
+                                      }
+                                    }}
+                                  />
+                                </LocalizationProvider>
+                              </FormInput>
+                            );
+                          }}
+                        />
+                      </Box>
+                    </Box>
                   </Box>
+                  <Donate3Btn variant="contained" sx={{ justifyContent: 'center' }} onClick={handleChange('panel1')}>
+                    {' '}
+                    Cancle Set Progress-Account
+                  </Donate3Btn>
                 </AccordionDetails>
               </Accordion>
             </Box>

@@ -6,7 +6,7 @@ import SDKContainer from './SDKContainer';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <Container maxWidth={false} sx={{ maxWidth: '1512px' }} style={style}>
+    <Container maxWidth={false}  style={style}>
       {children}
     </Container>
   );
@@ -141,7 +141,7 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         sx={{
           background: bgColor,
           zIndex: 1,
-          //  ...LineText, // 包含styled-component样式的对象
+
         }}
       >
         <Header />

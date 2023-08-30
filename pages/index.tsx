@@ -8,7 +8,7 @@ import {SectionPartner} from "../sections/SectionPartner";
 
 export default function Home() {
     return (
-        <Layout>
+        <Layout  bgColor='#ffffff' style={{maxWidth:'100%'}}>
             <SectionHero/>
             <SectionClient/>
             <SectionFeacture/>
