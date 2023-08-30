@@ -29,14 +29,27 @@ const SafeAccounts = ({ accounts, handleCopy }: { accounts: SafeAccount[] | unde
     '420': Optimism,
     // {  '424': Pgn },
   };
+  const networks = [mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea];
 
-  const getUrl = ({ networkId, address }: SafeAccount) => {
-    const networks = [mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea];
+  const getHref = ({ networkId, address }: SafeAccount) => {
     const url = networks.find(({ id }) => id === networkId)?.blockExplorers?.default.url;
     return `${url}/address/${address}`;
   };
 
-  // Return a list of accounts with a SVG icon and address
+  const getTestNet = (networkId: number) => {
+    const chain = networks.find(({ id }) => id === networkId);
+    if (chain && (chain as any).testnet) {
+      return (
+        <Typography display={'inline-block'} height={24} lineHeight={'24px'} component={'span'} px={1} ml={1} borderRadius={'10px'} variant="body2" bgcolor={'var(--gray-300, #E2E8F0)'}>
+          {chain.name}
+        </Typography>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  // Return a list of accounts
   return (
     <Box width={'100%'} mt={6.25} mb={5} p={4} border={1} borderColor={'var(--divider, rgba(15, 23, 42, 0.16))'} borderRadius={2}>
       <Typography variant="h4" fontSize={28} lineHeight={'36px'} fontWeight={600} mb={1.5}>
@@ -48,11 +61,12 @@ const SafeAccounts = ({ accounts, handleCopy }: { accounts: SafeAccount[] | unde
           <Box sx={{ float: 'left', lineHeight: '28px', '&:nth-of-type(2n)': { marginLeft: 4 } }} my={1.125} display={'flex'} width={'47%'} key={item.networkId}>
             <SvgIcon sx={{ mt: 0.125, mr: 1, cursor: 'pointer' }} component={icons[item.networkId]} onClick={() => item.address && handleCopy(item.address)} />
             <Typography flex={1} display={'inline-block'} variant="body1" lineHeight={'28px'}>
-              <span style={{ cursor: 'pointer' }} onClick={() => item.address && handleCopy(item.address)}>
+              <Typography component={'span'} sx={{ cursor: 'pointer' }} onClick={() => item.address && handleCopy(item.address)}>
                 {item.address?.substring(0, 6)}...{item.address?.substring(38)}
-              </span>
+              </Typography>
+              {getTestNet(item.networkId)}
             </Typography>
-            <Link underline="none" color={'var(--gray-1000, #0F172A)'} href={getUrl(item)} target="_blank">
+            <Link underline="none" color={'var(--gray-1000, #0F172A)'} href={getHref(item)} target="_blank">
               View
               <KeyboardArrowRightIcon sx={{ fontSize: 18, color: '#0F172A' }} />
             </Link>
