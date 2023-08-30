@@ -14,6 +14,8 @@ import loadingAnimation from '../public/loading/donate3Loading.json';
 import API from '@/common/API';
 import DonatedCardWithProgress from '@/components/donateTo/DonatedCardWithProgress';
 
+import SafeAccounts from '@/components/donateTo/SafeAccounts';
+
 // import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
 
 const DonateTo: NextPage = () => {
@@ -59,6 +61,19 @@ const DonateTo: NextPage = () => {
     window.location.href = `${window.location.origin}/demo?cid=${cid}`;
   };
 
+  const handleCopy = (text: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(
+        () => {
+          console.log('copy success!');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+  };
+
   return (
     <Layout bgColor="#fff">
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
@@ -86,12 +101,12 @@ const DonateTo: NextPage = () => {
             info={{
               accountType: info?.accountType || 0,
               address: info?.address,
-              safeAccounts: info?.safeAccounts,
               name: info?.name!,
               avatar: info?.avatar!,
               twitter: info?.twitter!,
               telegram: info?.telegram!,
             }}
+            handleCopy={handleCopy}
             onDonate={handleDonateBtn}
           />
 
@@ -117,6 +132,8 @@ const DonateTo: NextPage = () => {
             />
           )}
         </Box>
+
+        {!!(info?.accountType !== 1) && <SafeAccounts accounts={info?.safeAccounts} handleCopy={handleCopy} />}
 
         <PersonalIntroduction
           info={{
