@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import LXDAOFooter from './LXDAOFooter';
-import SDKContainer from './SDKContainer';
+import ConnectBtn from './ConnectBtn';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
@@ -42,7 +42,9 @@ function Header() {
           </Typography>
         </Box>
 
-        <SDKContainer />
+        <Box sx={{ width: '200px', textAlign: 'right' }}>
+          <ConnectBtn />
+        </Box>
       </Box>
     </MyContainer>
   );
