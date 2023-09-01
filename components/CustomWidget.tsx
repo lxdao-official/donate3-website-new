@@ -347,12 +347,12 @@ export default function CustomWidget() {
                     value={value}
                     onChange={(e: any) => {
                       setError('previousCid', {});
-                      if (!e.target.value.startsWith(DEFAULT_PREVIOUS_LINK)) {
+                      if (!e.target.value.startsWith('http')) {
                         setError('previousCid', { type: 'invalid previousLink' });
                       }
                       setConfig((pre) => ({
                         ...pre,
-                        previousCid: e.target.value.replace(DEFAULT_PREVIOUS_LINK, ''),
+                        previousCid: new URLSearchParams(e.target.value.split('?')[1]).get('cid') || '',
                       }));
                       onChange(e);
                     }}
