@@ -155,7 +155,7 @@ export default function CustomWidget() {
   };
 
   const genDonationsLink = (cid: string) => {
-    setDonationsLink(`${PRODUCTION_URL}/donateTo?cid=${cid}`);
+    setDonationsLink(`${window.location.origin}/donateTo?cid=${cid}`);
   };
 
   const genPreviewSrcDoc = (l: string) => {
@@ -619,19 +619,14 @@ export default function CustomWidget() {
                         </InputAdornment>
                       }
                       onChange={(e: any) => {
-                        let twitter = e.target.value;
                         setError('twitter', {});
-                        // if (!twitter.startsWith('https') || !twitter.startsWith('http')) {
-                        //   setError('twitter', { type: 'invalid twitter, must starts with https or http' });
-                        //   return;
-                        // }
                         setConfig((pre) => ({
                           ...pre,
-                          twitter: e.target.value,
+                          twitter: `https://twitter.com/${e.target.value}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your twitter account, like: https://twitter.com/XXX"
+                      placeholder="Enter your twitter account, like: donate3official"
                     />
                   </FormInput>
                 );
@@ -659,19 +654,14 @@ export default function CustomWidget() {
                       }
                       value={value}
                       onChange={(e: any) => {
-                        let telegram = e.target.value;
                         setError('telegram', {});
-                        // if (!telegram.startsWith('https') || !telegram.startsWith('http')) {
-                        //   setError('telegram', { type: 'invalid telegram, must starts with https or http' });
-                        //   return;
-                        // }
                         setConfig((pre) => ({
                           ...pre,
-                          telegram: e.target.value,
+                          telegram: `https://t.me/${e.target.value}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your telegram account, like: https://t.me/XXX"
+                      placeholder="Enter your telegram account, like: donate3official"
                     />
                   </FormInput>
                 );
