@@ -129,6 +129,7 @@ export function SectionHero() {
         minHeight: { xs: '100vh', md: 'calc(100vh )' },
         mt: { xs: '30px', lg: '94px' },
           //zIndex:-1,
+         
       }}
 
     >
@@ -215,8 +216,8 @@ export function SectionHero() {
           src="/images/heroShow.png"
           sx={{
             zIndex: 0,
-            maxWidth: '100%',
-            maxHeight: '100%',
+            maxWidth: '1512px',
+            //maxHeight: '100%',
           }}
         />
       </Box>
