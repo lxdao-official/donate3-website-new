@@ -46,4 +46,6 @@ export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25d
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-export const DEFAULT_PREVIOUS_LINK = 'https://www.donate3.xyz/donateTo?cid=';
+export const PRODUCTION_URL = 'https://www.donate3.xyz';
+
+export const DEFAULT_PREVIOUS_LINK = `${PRODUCTION_URL}/donateTo?cid=`;
