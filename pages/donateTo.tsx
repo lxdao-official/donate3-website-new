@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import { Backdrop, Box, InputBase, Typography } from '@mui/material';
+import { Backdrop, Box } from '@mui/material';
 import { Layout } from '@/components/Layout';
 import { useRouter } from 'next/router';
 import { useLottie } from 'lottie-react';
@@ -11,18 +11,19 @@ import PersonalIntroduction from '@/components/donateTo/PersonalIntroduction';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import { ICustomWidget } from '@/components/CustomWidget';
 import loadingAnimation from '../public/loading/donate3Loading.json';
-import API from "@/common/API";
-import DonatedCardWithProgress from "@/components/donateTo/DonatedCardWithProgress";
+// import API from '@/common/API';
+import DonatedCardWithProgress from '@/components/donateTo/DonatedCardWithProgress';
 
-import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
+import SafeAccounts from '@/components/donateTo/SafeAccounts';
+// import dayjs from 'dayjs';
 
+// import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
 
 const DonateTo: NextPage = () => {
   const router = useRouter();
   const cid = router.query?.cid as string;
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
   const [loading, setLoading] = useState<boolean>(true);
-
 
   const options = {
     animationData: loadingAnimation,
@@ -53,9 +54,6 @@ const DonateTo: NextPage = () => {
     }
   };
 
-
-
-
   useEffect(() => {
     cid && getInfoFromIpfs(cid);
   }, [cid]);
@@ -64,13 +62,21 @@ const DonateTo: NextPage = () => {
     window.location.href = `${window.location.origin}/demo?cid=${cid}`;
   };
 
+  const handleCopy = (text: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(
+        () => {
+          console.log('copy success!');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+  };
+
   return (
-    <Layout
-      style={{
-        //backgroundColor: '#f9fafc',
-         backgroundColor: '#ffffff',
-      }}
-    >
+    <Layout bgColor="#f9fafc" style={{ maxWidth: '1512px', zIndex: 1 }}>
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         {View}
       </Backdrop>
@@ -81,25 +87,44 @@ const DonateTo: NextPage = () => {
           flexDirection: 'column',
           alignItems: 'center',
           padding: '45px 200px',
+          zIndex: 0,
+          mt: { xs: '0%', md: '0%' },
         }}
       >
-          {/* xs: '30px', sm: '54px', md: '72px'*/}
+        <Box
+          sx={{
+            position: 'absolute',
+            display: 'inline-block',
+            width: '100%',
+            top: 0,
+            //right:'10%',
+            //mt:{xs:'-15%',md:'-7%'},
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+          component={'img'}
+          src="/images/donateToBackground.png"
+        />
+
         <Box
           sx={{
             display: 'flex',
-              flexDirection: {xs:'column',sm:'column',md : 'row',},
-            justifyContent: {xs:'',md:'space-between',},
+            flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+            justifyContent: { xs: '', md: 'space-between' },
             alignItems: 'center',
             width: '100%',
           }}
         >
           <PersonalDetails
             info={{
+              accountType: info?.accountType || 0,
+              address: info?.address,
               name: info?.name!,
               avatar: info?.avatar!,
               twitter: info?.twitter!,
               telegram: info?.telegram!,
             }}
+            handleCopy={handleCopy}
             onDonate={handleDonateBtn}
           />
 
@@ -112,7 +137,7 @@ const DonateTo: NextPage = () => {
                 fundsGoal: info?.fundsGoal!,
                 startTime: info?.startTime!,
                 endTime: info?.endTime!,
-                reason: info?.reason!
+                reason: info?.reason!,
               }}
             />
           ) : (
@@ -124,18 +149,16 @@ const DonateTo: NextPage = () => {
               }}
             />
           )}
-
         </Box>
+
+        {!!(info?.accountType !== 1) && <SafeAccounts accounts={info?.safeAccounts} handleCopy={handleCopy} />}
 
         <PersonalIntroduction
           info={{
             description: info?.description!,
           }}
         />
-
-
       </Box>
-
     </Layout>
   );
 };

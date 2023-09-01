@@ -9,10 +9,20 @@ export interface ICodeCardProps {
   content: string;
   btnText: string;
   btnImg: string;
+  type: keyof typeof CODE_TYPE;
 }
 
-const CodeCard = ({ title, content, btnText, btnImg }: ICodeCardProps) => {
+export enum CODE_TYPE {
+  code,
+  link,
+}
+
+const CodeCard = ({ title, content, btnText, btnImg, type }: ICodeCardProps) => {
   const [copied, setCopied] = useState(false);
+
+  const handleClickGoPageBtn = () => {
+    content && (window.location.href = content);
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
@@ -42,7 +52,7 @@ const CodeCard = ({ title, content, btnText, btnImg }: ICodeCardProps) => {
 
           <Tooltip title={copied && 'copied!'}>
             <Donate3Btn
-              style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', left: '10px', }}
+              style={{ width: '136px', height: '40px', color: 'var(--gray-1000, #0F172A)', position: 'absolute', bottom: '10px', left: '10px' }}
               onClick={() => {
                 navigator.clipboard.writeText(content).then(
                   function () {
@@ -68,6 +78,24 @@ const CodeCard = ({ title, content, btnText, btnImg }: ICodeCardProps) => {
               </div>
             </Donate3Btn>
           </Tooltip>
+
+          {type === CODE_TYPE[1] ? (
+            <Box style={{ width: '70px', height: '46px', color: '#0F172A', position: 'absolute', bottom: '10px', right: '0', lineHeight: '46px', cursor: 'pointer' }} onClick={handleClickGoPageBtn}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                }}
+              >
+                View
+                <Box component={'img'} src="/icons/rightIcon.svg"></Box>
+              </div>
+            </Box>
+          ) : (
+            <></>
+          )}
         </Box>
       </FormInput>
     </Box>

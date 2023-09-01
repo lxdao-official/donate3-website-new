@@ -1,4 +1,4 @@
-export const DONATE_SDK_LATEST_VERSION = '1.0.25';
+export const DONATE_SDK_LATEST_VERSION = '1.0.28';
 
 export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE_SDK_LATEST_VERSION}/dist/webpack/bundle.js`;
 
@@ -30,10 +30,11 @@ export const DEFAULT_CREATE_CONFIG = {
   description: '',
   twitter: '',
   telegram: '',
-  fundsGoal: 1,
+  fundsGoal: 0,
   startTime: 0,
   endTime: 0,
   reason: '',
+  previousCid: '',
 };
 
 export enum EType {
@@ -44,3 +45,7 @@ export enum EType {
 export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+export const PRODUCTION_URL = 'https://www.donate3.xyz';
+
+export const DEFAULT_PREVIOUS_LINK = `${PRODUCTION_URL}/donateTo?cid=`;

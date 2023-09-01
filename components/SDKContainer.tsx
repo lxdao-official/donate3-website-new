@@ -259,6 +259,7 @@ export default function SDKContainer() {
     <Box
       style={{
         display: 'flex',
+        zIndex:1//for background,delete it whaterver you want
       }}
     >
       {address ? (

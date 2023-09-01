@@ -1,18 +1,21 @@
 import React, { useMemo } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography, SvgIcon } from '@mui/material';
 import Image from 'next/image';
 
 import { ICustomWidget } from '../CustomWidget';
 import { DEFAULT_CREATE_CONFIG } from '@/utils/const';
-import IPFSAvatar, { IIPFSAvatarProps, TIPFSSrc } from '../IPFSAvatar/IPFSAvatar';
+import IPFSAvatar, { TIPFSSrc } from '../IPFSAvatar/IPFSAvatar';
+
+import CopyIcon from '@/public/icons/copy3.svg';
 
 interface IPersonalDetailsProps {
-  info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram' | 'address'>;
+  info: Pick<ICustomWidget, 'avatar' | 'name' | 'twitter' | 'telegram' | 'address' | 'accountType'>;
   onDonate: () => void;
+  handleCopy: (text: string) => void;
 }
 
-const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDetailsProps) => {
-  const { name, twitter = '', telegram = '' } = info;
+const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate, handleCopy }: IPersonalDetailsProps) => {
+  const { name, twitter = '', telegram = '', accountType, address } = info;
 
   const memoMedias = useMemo(() => {
     const medias = [];
@@ -46,16 +49,15 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate }: IPersonalDe
         }}
       >
         <IPFSAvatar ipfsSrc={info?.avatar as TIPFSSrc} address={info?.address as `0x${string}`} />
-        <Box
-          sx={{
-            fontSize: '20px',
-            fontWeight: '600',
-            lineHeight: '28px',
-            marginLeft: '16px',
-            color: 'rgba(15, 23, 42, 1)',
-          }}
-        >
-          {name || ''}
+        <Box ml={2}>
+          <Typography variant="h6" color="rgba(15, 23, 42, 1)" fontWeight={600} lineHeight={'28px'}>
+            {name || ''}
+          </Typography>
+          {!!(accountType === 0 && address) && (
+            <Typography onClick={() => handleCopy(address)} component={Box} mt={1} variant="body1" fontWeight={400} color={'var(--gray-600, #64748B)'} sx={{ cursor: 'pointer' }}>
+              {address.substring(0, 6)}...{address.substring(38)} <SvgIcon sx={{ ml: 0.5 }} component={CopyIcon} />
+            </Typography>
+          )}
         </Box>
       </Box>
 

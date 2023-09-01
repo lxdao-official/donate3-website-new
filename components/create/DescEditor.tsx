@@ -9,9 +9,10 @@ const SunEditor = dynamic(() => import('suneditor-react'), {
 
 interface IDescEditorProps {
   onChange: (content: string) => void;
+  previousValue?: string;
 }
 
-const DescEditor = ({ onChange }: IDescEditorProps) => {
+const DescEditor = ({ onChange, previousValue }: IDescEditorProps) => {
   const editor = useRef<SunEditorCore>();
 
   //Get Content Inside Editor
@@ -26,7 +27,7 @@ const DescEditor = ({ onChange }: IDescEditorProps) => {
 
   return (
     <>
-      <SunEditor getSunEditorInstance={getSunEditorInstance} onChange={handleChange} placeholder="Enter information to let people know about you" />
+      <SunEditor getSunEditorInstance={getSunEditorInstance} onChange={handleChange} placeholder="Enter information to let people know about you" height="200px" setContents={previousValue || ''} />
     </>
   );
 };

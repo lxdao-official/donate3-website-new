@@ -2,11 +2,11 @@ import Head from 'next/head';
 import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import LXDAOFooter from './LXDAOFooter';
-import SDKContainer from './SDKContainer';
+import ConnectBtn from './ConnectBtn';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <Container maxWidth={false} sx={{ maxWidth: '1512px' }} style={style}>
+    <Container maxWidth={false}  style={style}>
       {children}
     </Container>
   );
@@ -42,7 +42,9 @@ function Header() {
           </Typography>
         </Box>
 
-        <SDKContainer />
+        <Box sx={{ width: '200px', textAlign: 'right' }}>
+          <ConnectBtn />
+        </Box>
       </Box>
     </MyContainer>
   );
@@ -141,7 +143,7 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         sx={{
           background: bgColor,
           zIndex: 1,
-          //  ...LineText, // 包含styled-component样式的对象
+
         }}
       >
         <Header />

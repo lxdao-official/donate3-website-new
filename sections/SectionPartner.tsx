@@ -7,13 +7,14 @@ export function SectionPartner() {
     return (
 
         <Box
+            bgcolor='#F8FAFC'
             sx={{
                 display: 'flex',
                 alignItems: 'center',
                 background: '#F8FAFC',
                 minHeight: {xs: 'calc(60vh)', md: 'calc(60vh)'},
-                marginLeft: '-16px',
-                marginRight: '-16px',
+               // marginLeft: '-16px',
+               // marginRight: '-16px',
                 flexDirection: {xs: 'column', lg: 'column'},
                 justifyContent: {xs: 'center', lg: 'center'},
 
