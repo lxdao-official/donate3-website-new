@@ -14,7 +14,7 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK, PRODUCTION_URL } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -156,7 +156,7 @@ export default function CustomWidget() {
   };
 
   const genDonationsLink = (cid: string) => {
-    setDonationsLink(`https://donate3.xyz/donateTo?cid=${cid}`);
+    setDonationsLink(`${PRODUCTION_URL}/donateTo?cid=${cid}`);
   };
 
   const genPreviewSrcDoc = (l: string) => {
@@ -631,17 +631,17 @@ export default function CustomWidget() {
                       onChange={(e: any) => {
                         let twitter = e.target.value;
                         setError('twitter', {});
-                        if (!twitter.startsWith('@')) {
-                          setError('twitter', { type: 'invalid twitter, must starts with @, like @donate3' });
-                          return;
-                        }
+                        // if (!twitter.startsWith('https') || !twitter.startsWith('http')) {
+                        //   setError('twitter', { type: 'invalid twitter, must starts with https or http' });
+                        //   return;
+                        // }
                         setConfig((pre) => ({
                           ...pre,
-                          twitter: `https://twitter.com/${e.target.value.slice(1)}`,
+                          twitter: e.target.value,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your twitter account：@xxxx"
+                      placeholder="Enter your twitter account, like: https://twitter.com/XXX"
                     />
                   </FormInput>
                 );
@@ -671,17 +671,17 @@ export default function CustomWidget() {
                       onChange={(e: any) => {
                         let telegram = e.target.value;
                         setError('telegram', {});
-                        if (!telegram.startsWith('@')) {
-                          setError('telegram', { type: 'invalid telegram, must starts with @, like @donate3' });
-                          return;
-                        }
+                        // if (!telegram.startsWith('https') || !telegram.startsWith('http')) {
+                        //   setError('telegram', { type: 'invalid telegram, must starts with https or http' });
+                        //   return;
+                        // }
                         setConfig((pre) => ({
                           ...pre,
-                          telegram: `https://t.me/${e.target.value.slice(1)}`,
+                          telegram: e.target.value,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your telegram account：@xxxx"
+                      placeholder="Enter your telegram account, like: https://t.me/XXX"
                     />
                   </FormInput>
                 );
