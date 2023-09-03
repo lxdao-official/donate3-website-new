@@ -305,7 +305,9 @@ export default function Dashboard() {
       ],
     };
     setOpen(true);
-    API.post(`/donates`, args)
+    API.post(`/donates`, args, {
+      baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
+    })
       .then((result) => {
         const { data } = result;
         if (data.code === 200 && data.message === 'success' && data?.data?.content?.length) {
