@@ -1,44 +1,37 @@
-'use client';
-
-import type { NextPage } from 'next';
-import * as React from 'react';
+import React, { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea } from 'wagmi/chains';
 import Donate3Btn from './Donate3Btn';
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
 import { useLottie } from 'lottie-react';
 
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import {
-  Box,
-  Grid,
-  Paper,
-  Stack,
-  //  TableFooter, TablePagination,
-  Tooltip,
-  Link,
-  Typography,
-  styled,
-  Backdrop,
-  CircularProgress,
-} from '@mui/material';
-import IconButton from '@mui/material/IconButton';
+import { Box, Grid, Paper, Stack, Tooltip, Link, Typography, styled, Backdrop, SvgIcon, TextField, OutlinedInput, FormControl, Select, MenuItem, SelectChangeEvent, Button, Pagination, InputLabel } from '@mui/material';
+import { ButtonProps } from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useTheme } from '@mui/material/styles';
 import loadingAnimation from '../public/loading/donate3Loading.json';
 
+import Arbitrum from '@/public/icons/networks/arbitrum.svg';
+import Ethereum from '@/public/icons/networks/ethereum.svg';
+import Goerli from '@/public/icons/networks/goerli.svg';
+import Linea from '@/public/icons/networks/linea.svg';
+import Optimism from '@/public/icons/networks/optimism.svg';
+// import Pgn from '@/public/icons/networks/pgn.svg';
+import Polygon from '@/public/icons/networks/polygon.svg';
+
+import SouthIcon from '@mui/icons-material/South';
+import NorthIcon from '@mui/icons-material/North';
+
+import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import API from '../common/API';
 // import { json } from 'stream/consumers';
 
-const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_EHTERSCAN_API_KEY;
+// const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_EHTERSCAN_API_KEY;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -54,67 +47,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-// function TablePaginationActions(props: any) {
-//   const theme = useTheme();
-//   const [pagei, setPagei] = useState(1);
-//   const { count, page, rowsPerPage, onPageChange } = props;
-
-//   const handlePageInput = (event: any) => {
-//     setPagei(event.target.value - 1);
-//   };
-
-//   const handlePageInputConfirm = (event: any) => {
-//     if (event.key == 'Enter') {
-//       let max = Math.ceil(count / rowsPerPage);
-//       if (parseInt(event.target.value) > max) {
-//         onPageChange(event, max - 1);
-//         return;
-//       }
-//       setPagei(max - 1);
-//       onPageChange(event, pagei);
-//       return;
-//     }
-//   };
-
-//   const handleFirstPageButtonClick = (event: any) => {
-//     onPageChange(event, 0);
-//   };
-
-//   const handleBackButtonClick = (event: any) => {
-//     onPageChange(event, page - 1);
-//   };
-
-//   const handleNextButtonClick = (event: any) => {
-//     onPageChange(event, page + 1);
-//   };
-
-//   const handleLastPageButtonClick = (event: any) => {
-//     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-//   };
-
-//   useEffect(() => {
-//     setPagei(page);
-//   }, [page]);
-
-//   return (
-//     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-//       <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label="first page">
-//         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-//       </IconButton>
-//       <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-//         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-//       </IconButton>
-//       <input style={{ width: '2rem', textAlign: 'center' }} value={pagei + 1} onChange={handlePageInput} onKeyDown={handlePageInputConfirm}></input>
-//       <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="next page">
-//         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-//       </IconButton>
-
-//       <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="last page">
-//         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-//       </IconButton>
-//     </Box>
-//   );
-// }
+type Address = `0x${string}`;
 
 interface Coin {
   name: string;
@@ -152,10 +85,6 @@ interface DonateItem {
   uid: string;
 }
 
-interface TotalList {
-  [key: string]: number;
-}
-
 function formatTimestamp(timestamp: string) {
   const date = new Date(Number(timestamp));
   const year = date.getFullYear();
@@ -172,13 +101,48 @@ const w2e = (w: number) => {
   return (w / 1000_000_000_000_000_000).toFixed(4);
 };
 
+const networks = [mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea];
+
+const icons: { [key: string]: ElementType } = {
+  '1': Ethereum,
+  '5': Goerli,
+  '10': Optimism,
+  '42161': Arbitrum,
+  '137': Polygon,
+  '59144': Linea,
+  '420': Optimism,
+  // {  '424': Pgn },
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const SearchButton = styled(Button)<ButtonProps>(() => ({
+  color: '#fff',
+  backgroundColor: '#0F172A',
+  '&:hover': {
+    backgroundColor: '#0F172A',
+  },
+}));
+
 export default function Dashboard() {
   const { address } = useAccount();
-  const [addressStr, setAddressStr] = useState<string>('');
-  useEffect(() => {
-    setAddressStr(address as string);
-  }, [address]);
-
+  const [timeSort, setTimeSort] = useState(true);
+  const [moneySort, setMoneySort] = useState(true);
+  const [donator, setDonator] = useState('');
+  const [receiveOrCid, setReceiveOrCid] = useState('');
+  const [message, setMessage] = useState('');
+  const [selectChainIds, setSelectChainIds] = useState<string[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const perPageCount = 20;
   const options = {
     animationData: loadingAnimation,
     loop: true,
@@ -300,98 +264,66 @@ export default function Dashboard() {
   };
 
   const [open, setOpen] = useState(false);
-  const [sort, setSort] = useState(false);
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState<TotalList>({
-    '80001': 0.0,
-    '137': 0.0,
-    '5': 0.0,
-    '1': 0.0,
-    '10': 0.0,
-    '42161': 0.0,
-    '59144': 0.0,
-    '420': 0.0,
-  });
-  const [perPage, setPerPage] = useState(25);
-  // const [price, setPrice] = useState(0.0);
-  // const [pagination, setPagination] = useState<number>(25);
   const [rows, setRows] = useState<DonateItem[]>([]);
-  // let rows: any[] = [];
+  const [changePageArgs, setChangePageArgs] = useState<{ [key: string]: string | number | number[] | string[] }>({ size: 20 });
 
-  const emptyRows = page >= 0 ? Math.max(0, (1 + page) * perPage - rows.length) : 0;
-  const handleChangePage = (event: any, newPage: any) => {
-    setPage(newPage);
-  };
-
-  const handleChangePerPage = (event: any) => {
-    setPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  //get params from url
-
-  useEffect(() => {
-    const readData = async () => {
-      // const data1 = await API.get(`/api/v1/donate/queryDonateDetailsByParam?pageNo=${page}&pageSize=${perPage}&toAddress=${'0xe395B9bA2F93236489ac953146485C435D1A267B'}`);
-      const data = await API.get(`/donates`, {
-        params: {
-          // address: '0xe395B9bA2F93236489ac953146485C435D1A267B',
-          address,
+  const getPageData = (obj: { page: number; from?: string; tos?: Address[]; message?: string; chainIds?: number[]; tokens?: string[]; uid?: string; money?: string; timestamp?: string }) => {
+    // const args = {
+    //   from: '0x1fD144f8D069504Af50676913f81431Ea2419103',
+    //   to: '0xe395B9bA2F93236489ac953146485C435D1A267B',
+    //   message: 'string',
+    //   chainIds: [59144],
+    //   tokens: ['LINEA'],
+    //   uid: 'string',
+    //   page: 0,
+    //   size: 20,
+    //   orderBy: [
+    //     {
+    //       money: 'desc',
+    //     },
+    //     {
+    //       timestamp: 'desc',
+    //     },
+    //   ],
+    // };
+    const args = {
+      from: obj?.from || undefined,
+      tos: obj?.tos || undefined,
+      message: obj?.message || undefined,
+      chainIds: obj?.chainIds || undefined,
+      tokens: obj?.tokens || undefined,
+      uid: obj?.uid || undefined,
+      page: obj.page,
+      size: 20,
+      orderBy: [
+        {
+          money: moneySort ? 'desc' : 'asc',
         },
-        baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
-      });
-      const res: DonateItem[] = data?.data?.data;
-      return res;
+        {
+          timestamp: timeSort ? 'desc' : 'asc',
+        },
+      ],
     };
-
-    (async () => {
-      if (!address) {
-        return;
-      }
-      setOpen(true);
-      const tmp = await readData();
-      setOpen(false);
-      setRows(tmp);
-      // setPagination(tmp?.length);
-    })();
-  }, [address, perPage, page]);
+    setOpen(true);
+    API.post(`/donates`, args)
+      .then((result) => {
+        const { data } = result;
+        if (data.code === 200 && data.message === 'success' && data?.data?.content?.length) {
+          const total = data?.data?.total;
+          setPageCount(Math.ceil(total / perPageCount));
+          setRows(data?.data?.content);
+        }
+        console.log(data);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setOpen(false));
+  };
 
   useEffect(() => {
-    (async () => {
-      const initialTotalList: TotalList = {
-        '80001': 0.0,
-        '137': 0.0,
-        '5': 0.0,
-        '1': 0.0,
-        '10': 0.0,
-        '42161': 0.0,
-        '59144': 0.0,
-        '420': 0.0,
-      };
-      const totalc = rows.reduce((pre, cur) => {
-        if (!Object.keys(initialTotalList).includes(cur.chainId.toString())) {
-          return pre;
-        }
-        pre[cur.chainId] = (pre[cur.chainId] || 0) + Number(cur.money);
-        return pre;
-      }, initialTotalList);
-      setTotal(totalc);
-    })();
-  }, [rows]);
+    getPageData({ page: 0 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const res = await fetch(`https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API_KEY}`, {
-  //         method: 'GET',
-  //       });
-  //       const data = await res.json();
-  //       setPrice(data.result.ethusd);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   })();
-  // });
   const downloadFile = () => {
     let data = [
       {
@@ -401,8 +333,10 @@ export default function Dashboard() {
           { label: 'chain', value: (row: any) => coinType[row.chainId]?.name },
           { label: 'symbol', value: (row: any) => coinType[row.chainId]?.coin[0].name },
           { label: 'createTime', value: (row: any) => formatTimestamp(row.timestamp) },
+
           { label: 'message', value: 'message' },
           { label: 'tx', value: 'transactionHash' },
+          { label: 'EAS UID', value: 'uid' },
           { label: 'from', value: 'from' }, // Top level data
         ],
         content: rows,
@@ -426,41 +360,146 @@ export default function Dashboard() {
     xlsx(data as IJsonSheet[], settings);
   };
 
+  const handleChangeInput = (event: any, type: string) => {
+    const value = event?.target.value;
+    if (type === 'donator') {
+      setDonator(value);
+    } else if (type === 'receiveOrCid') {
+      setReceiveOrCid(value);
+    } else if (type === 'message') {
+      setMessage(value);
+    }
+  };
+
+  const handleChangeSelectChainId = (event: SelectChangeEvent<typeof selectChainIds>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectChainIds(typeof value === 'string' ? value.split(',') : value);
+  };
+
+  const handleSort = (type: string) => {
+    if (type === 'time') {
+      setTimeSort((preState) => !preState);
+    } else if (type === 'money') {
+      setMoneySort((preState) => !preState);
+    }
+    getPageData({ page: 0 });
+  };
+
+  const handleChangePage = (event: any, newPage: number) => {
+    getPageData({ ...changePageArgs, page: newPage - 1 });
+  };
+
+  const handleSearch = async () => {
+    if (donator || receiveOrCid || message || selectChainIds.length) {
+      if (donator) {
+        setChangePageArgs((preArgs) => ({ ...preArgs, from: donator }));
+      }
+
+      if (receiveOrCid) {
+        if (receiveOrCid.startsWith('0x')) {
+          setChangePageArgs((preArgs) => ({ ...preArgs, tos: [receiveOrCid] }));
+        } else {
+          // get address from cid
+          try {
+            const info = await getFasterIpfsLink({
+              ipfs: `https://nftstorage.link/ipfs/${receiveOrCid}`,
+              timeout: 4000,
+            });
+            // cid bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou
+            const { address, safeAccounts } = info;
+            const toAddressArr: Address[] = [];
+            if (address) {
+              toAddressArr.push(address as Address);
+            }
+            if (safeAccounts?.length) {
+              safeAccounts.forEach((item) => {
+                item.address && toAddressArr.push(item.address);
+              });
+            }
+            setChangePageArgs((preArgs) => ({ ...preArgs, tos: toAddressArr }));
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      }
+
+      if (message) {
+        setChangePageArgs((preArgs) => ({ ...preArgs, message: message }));
+      }
+
+      if (selectChainIds.length) {
+        setChangePageArgs((preArgs) => ({ ...preArgs, chainIds: selectChainIds }));
+      }
+
+      setTimeout(() => {
+        getPageData({ page: 0, from: changePageArgs.from as string, tos: changePageArgs.to as Address[], uid: changePageArgs.uid as string, chainIds: changePageArgs.chainIds as number[] });
+      }, 0);
+    } else {
+      return;
+    }
+    console.log('search');
+  };
+
+  const handleReset = () => {
+    setDonator('');
+    setReceiveOrCid('');
+    setMessage('');
+    setSelectChainIds([]);
+    setChangePageArgs({ page: 0 });
+    getPageData({ page: 0 });
+    console.log('reset');
+  };
+
   return (
     <Grid item xs={8} mb="40px">
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
         {View}
       </Backdrop>
-      <Stack mt="30px">
+
+      <Stack>
         <Typography variant="h4" color="#44443F">
-          Cumulative Donation
+          Dashboard
         </Typography>
-        <Stack direction={'row'}>
-          <Typography
-            variant="body2"
-            color="#858686"
-            sx={{
-              wordBreak: 'break-all',
-              display: 'flex',
-            }}
-          >
-            {addressStr}
-            <Box sx={{ display: 'inline-block', ml: '10px' }} component="img" src="/icons/copy2.svg" />
-          </Typography>
-        </Stack>
-        <Box sx={{ '&::after': { content: '""', display: 'table', clear: 'both' } }}>
-          {Object.keys(total).map((key, index) => {
-            return (
-              <Stack sx={{ float: 'left', width: '33.33%' }} key={index} direction="row" mt="10px" alignItems="center">
-                <Box component="img" src={coinType[key]?.icon} height="24px" mr="6px" />
-                <Typography fontSize="28px" fontWeight="600" lineHeight="34px">
-                  {w2e(total[key])}
-                </Typography>
-              </Stack>
-            );
-          })}
-        </Box>
       </Stack>
+
+      <Box display={'flex'} gap={3} mb={3} mt={4.75}>
+        <Box flex={1}>
+          <TextField size="small" fullWidth label="Donator address" value={donator} onChange={(e) => handleChangeInput(e, 'donator')} />
+        </Box>
+        <Box flex={1}>
+          <TextField size="small" fullWidth label="Receiver address or CID" value={receiveOrCid} onChange={(e) => handleChangeInput(e, 'receiveOrCid')} />
+        </Box>
+      </Box>
+
+      <Box display={'flex'} gap={3}>
+        <Box flex={1}>
+          <TextField size="small" fullWidth label="Message" value={message} onChange={(e) => handleChangeInput(e, 'message')} />
+        </Box>
+
+        <FormControl sx={{ flex: 1 }}>
+          <InputLabel id="chian-label">Chain</InputLabel>
+          <Select labelId="chian-label" fullWidth multiple size="small" value={selectChainIds} onChange={handleChangeSelectChainId} input={<OutlinedInput label="Name" />} MenuProps={MenuProps}>
+            {networks.map(({ name, id }) => (
+              <MenuItem key={id} value={id}>
+                <SvgIcon sx={{ mt: 0.125, mr: 1 }} component={icons[id]} />
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+
+      <Box mt={3}>
+        <SearchButton size="large" variant="contained" onClick={handleSearch}>
+          Search
+        </SearchButton>
+        <Button size="large" sx={{ color: '#0F172A', ml: 2 }} variant="text" onClick={handleReset}>
+          Reset
+        </Button>
+      </Box>
+
       <Stack mt="60px">
         <Stack justifyContent="space-between" alignItems="center" direction="row" mb="26px">
           <Typography color="#3E4343" fontWeight="600">
@@ -480,30 +519,23 @@ export default function Dashboard() {
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead sx={{ backgroundColor: '#f1f0f5', height: '38px' }}>
               <TableRow>
-                <StyledTableCell align="center">WHO</StyledTableCell>
-                <StyledTableCell align="center">Time</StyledTableCell>
+                <StyledTableCell align="center">Donator</StyledTableCell>
+                <StyledTableCell align="center">Receiver</StyledTableCell>
+                <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('time')}>
+                  Time {timeSort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
+                </StyledTableCell>
+                <StyledTableCell align="center">Chain</StyledTableCell>
                 <StyledTableCell align="center">Token</StyledTableCell>
-                <StyledTableCell align="center">Blockchain</StyledTableCell>
-                <StyledTableCell align="center">EAS UID</StyledTableCell>
+                <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('money')}>
+                  Amount {moneySort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
+                </StyledTableCell>
                 <StyledTableCell align="center">Message</StyledTableCell>
+                <StyledTableCell align="center">EAS UID</StyledTableCell>
                 <StyledTableCell align="center">Hash</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {(perPage > 0
-                ? rows
-                  .filter((row) => {
-                    const chainIds = Object.keys(coinType);
-                    if (chainIds.includes(row?.chainId.toString())) {
-                      return row;
-                    }
-                  })
-                  .sort((a, b) => {
-                    return (sort ? 1 : -1) * (Number(a.timestamp) - Number(b.timestamp));
-                  })
-                  .slice(page * perPage, page * perPage + perPage)
-                : rows
-              ).map((row: DonateItem, index) => (
+              {rows.map((row: DonateItem, index) => (
                 <TableRow
                   key={index}
                   sx={{
@@ -525,23 +557,50 @@ export default function Dashboard() {
 
                   <StyledTableCell align="center" component="th" scope="row">
                     <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
+                      <Tooltip title={row?.to} placement="bottom">
+                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + row?.to} target="_blank">
+                          <Typography>{row?.to.slice(0, 6) + '...' + row?.to.slice(-5, -1)}</Typography>
+                        </Link>
+                      </Tooltip>
+                    </Stack>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="center" component="th" scope="row">
+                    <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
                       <Typography>{formatTimestamp(row?.timestamp)}</Typography>
                     </Stack>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
-                    <Stack direction={'column'} alignItems="center">
-                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                        {`${w2e(Number(row?.money))} ${coinType[row?.chainId.toString()]?.coin[0]?.name}\n`}
-                      </Typography>
-                    </Stack>
-                  </StyledTableCell>
                   <StyledTableCell align="center">
                     <Stack direction="row" gap={1.5} justifyContent="center">
                       <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.icon} />
                       <Typography>{coinType[row?.chainId.toString()]?.name}</Typography>
                     </Stack>
                   </StyledTableCell>
+
+                  <StyledTableCell align="center">
+                    <Stack direction="row" gap={1.5} justifyContent="center">
+                      <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.coin[0]?.icon} />
+                      <Typography>{`${coinType[row?.chainId.toString()]?.coin[0]?.name}\n`}</Typography>
+                    </Stack>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="center">
+                    <Stack direction={'column'} alignItems="center">
+                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                        {`${w2e(Number(row?.money))}`}
+                      </Typography>
+                    </Stack>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="center">
+                    <Stack direction={'column'} alignItems="center">
+                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                        {row?.message}
+                      </Typography>
+                    </Stack>
+                  </StyledTableCell>
+
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
@@ -551,13 +610,7 @@ export default function Dashboard() {
                       </Typography>
                     </Stack>
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Stack direction={'column'} alignItems="center">
-                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                        {row?.message}
-                      </Typography>
-                    </Stack>
-                  </StyledTableCell>
+
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
@@ -575,28 +628,12 @@ export default function Dashboard() {
                 </TableRow>
               )} */}
             </TableBody>
-
-            {/* <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                  count={pagination}
-                  rowsPerPage={perPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      'aria-label': 'rows per page',
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangePerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter> */}
           </Table>
         </TableContainer>
+
+        <Box bgcolor={'#fff'} pt={3} display={'flex'} justifyContent={'flex-end'}>
+          <Pagination count={pageCount} onChange={handleChangePage} showFirstButton showLastButton shape="rounded" />
+        </Box>
       </Stack>
     </Grid>
   );

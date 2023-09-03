@@ -17,9 +17,9 @@ function MyTab({ title, icon, active, onClick }: { title: string; icon: string; 
         py: 2,
         cursor: 'pointer',
         fontBold: 600,
-        color:"rgba(15, 23, 42, 1)",
+        color: 'rgba(15, 23, 42, 1)',
         fontSize: '16px',
-        bgcolor: active ? "rgba(204, 255, 0, 1)" : 'transparent',
+        bgcolor: active ? 'rgba(204, 255, 0, 1)' : 'transparent',
       }}
     >
       <Box component={'img'} src={icon} />
@@ -33,7 +33,7 @@ export default function SettingLayout({ children }: { children: React.ReactNode 
   const router = useRouter();
 
   return (
-    <Layout bgColor="#F8FAFC" style={{maxWidth:'1512px'}}>
+    <Layout bgColor="#F8FAFC" style={{ maxWidth: '1512px' }}>
       <Box
         sx={{
           display: 'flex',
@@ -54,7 +54,7 @@ export default function SettingLayout({ children }: { children: React.ReactNode 
         >
           {[
             { title: 'Dashboard', icon: '/icons/dashboard.svg', path: '/dashboard' },
-            { title: 'History', icon: '/icons/history.svg', path: '/donateHistory' },
+            // { title: 'History', icon: '/icons/history.svg', path: '/donateHistory' },
             { title: 'Widget', icon: '/icons/gear.svg', path: '/create' },
           ].map((val, index) => {
             return (

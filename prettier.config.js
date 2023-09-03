@@ -7,4 +7,5 @@ module.exports = {
   importOrder: ['^@next/(.*)$', '^@mui/(.*)$', '^components/(.*)$', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
+  bracketSpacing: true,
 };
