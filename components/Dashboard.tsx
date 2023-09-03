@@ -306,7 +306,7 @@ export default function Dashboard() {
     };
     setOpen(true);
     API.post(`/donates`, args, {
-      baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW,
+      baseURL: process.env.NEXT_PUBLIC_BACKEND_API_NEW || 'https://donate3.0xhardman.xyz/',
     })
       .then((result) => {
         const { data } = result;
