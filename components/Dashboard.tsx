@@ -139,7 +139,6 @@ export default function Dashboard() {
   const { address } = useAccount();
   const [timeSort, setTimeSort] = useState(true);
   const [moneySort, setMoneySort] = useState(true);
-  const [valueSort, setValueSort] = useState(true);
   const [donator, setDonator] = useState('');
   const [receiveOrCid, setReceiveOrCid] = useState('');
   const [message, setMessage] = useState('');
@@ -305,9 +304,6 @@ export default function Dashboard() {
         {
           timestamp: timeSort ? 'desc' : 'asc',
         },
-        {
-          value: valueSort ? 'desc' : 'asc',
-        },
       ],
     };
     setOpen(true);
@@ -391,8 +387,6 @@ export default function Dashboard() {
       setTimeSort((preState) => !preState);
     } else if (type === 'money') {
       setMoneySort((preState) => !preState);
-    } else if (type === 'value') {
-      setValueSort((preState) => !preState);
     }
     getPageData({ page: 0 });
   };
@@ -547,9 +541,7 @@ export default function Dashboard() {
                 <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('money')}>
                   Amount {moneySort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('value')}>
-                  Value {valueSort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
-                </StyledTableCell>
+                <StyledTableCell align="center">Value</StyledTableCell>
                 <StyledTableCell align="center">Message</StyledTableCell>
                 <StyledTableCell align="center">EAS UID</StyledTableCell>
                 <StyledTableCell align="center">Hash</StyledTableCell>
