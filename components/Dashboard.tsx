@@ -2,7 +2,7 @@ import React, { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea } from 'wagmi/chains';
-import Donate3Btn from './Donate3Btn';
+// import Donate3Btn from './Donate3Btn';
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
 import { useLottie } from 'lottie-react';
 
@@ -26,6 +26,7 @@ import Polygon from '@/public/icons/networks/polygon.svg';
 
 import SouthIcon from '@mui/icons-material/South';
 import NorthIcon from '@mui/icons-material/North';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import API from '../common/API';
@@ -82,6 +83,7 @@ interface DonateItem {
   timestamp: string;
   to: string;
   transactionHash: string;
+  value: string;
   uid: string;
 }
 
@@ -137,6 +139,7 @@ export default function Dashboard() {
   const { address } = useAccount();
   const [timeSort, setTimeSort] = useState(true);
   const [moneySort, setMoneySort] = useState(true);
+  const [valueSort, setValueSort] = useState(true);
   const [donator, setDonator] = useState('');
   const [receiveOrCid, setReceiveOrCid] = useState('');
   const [message, setMessage] = useState('');
@@ -182,7 +185,7 @@ export default function Dashboard() {
       icon: '/icons/support/ethereum.svg',
       coin: {
         0: {
-          name: 'MATIC',
+          name: 'ETH',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://goerli.etherscan.io/',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
@@ -207,7 +210,7 @@ export default function Dashboard() {
       coin: {
         0: {
           name: 'ETH',
-          icon: '/icons/support/ethereum.svg',
+          icon: '/icons/support/optimism.svg',
           explorer: 'https://optimistic.etherscan.io/tx/',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
@@ -242,7 +245,7 @@ export default function Dashboard() {
       icon: '/icons/support/ethereum.svg',
       coin: {
         0: {
-          name: 'MATIC',
+          name: 'ETH',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://goerli.etherscan.io/',
           eas: 'https://sepolia.easscan.org/',
@@ -254,8 +257,8 @@ export default function Dashboard() {
       icon: '/icons/support/optimism.svg',
       coin: {
         0: {
-          name: 'Optimistic Goerli',
-          icon: '/icons/support/ethereum.svg',
+          name: 'ETH',
+          icon: '/icons/support/optimism.svg',
           explorer: 'https://goerli-optimism.etherscan.io//',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
         },
@@ -265,7 +268,7 @@ export default function Dashboard() {
 
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState<DonateItem[]>([]);
-  const [changePageArgs, setChangePageArgs] = useState<{ [key: string]: string | number | number[] | string[] }>({ size: 20 });
+  const [changePageArgs, setChangePageArgs] = useState<{ page?: number; size?: number; donator?: Address; tos?: Address[]; message?: string; chainIds?: number[] }>({ size: 20 });
 
   const getPageData = (obj: { page: number; from?: string; tos?: Address[]; message?: string; chainIds?: number[]; tokens?: string[]; uid?: string; money?: string; timestamp?: string }) => {
     // const args = {
@@ -302,6 +305,9 @@ export default function Dashboard() {
         {
           timestamp: timeSort ? 'desc' : 'asc',
         },
+        {
+          value: valueSort ? 'desc' : 'asc',
+        },
       ],
     };
     setOpen(true);
@@ -310,7 +316,7 @@ export default function Dashboard() {
     })
       .then((result) => {
         const { data } = result;
-        if (data.code === 200 && data.message === 'success' && data?.data?.content?.length) {
+        if (data.code === 200 && data.message === 'success') {
           const total = data?.data?.total;
           setPageCount(Math.ceil(total / perPageCount));
           setRows(data?.data?.content);
@@ -385,12 +391,15 @@ export default function Dashboard() {
       setTimeSort((preState) => !preState);
     } else if (type === 'money') {
       setMoneySort((preState) => !preState);
+    } else if (type === 'value') {
+      setValueSort((preState) => !preState);
     }
     getPageData({ page: 0 });
   };
 
   const handleChangePage = (event: any, newPage: number) => {
-    getPageData({ ...changePageArgs, page: newPage - 1 });
+    const { donator, tos, message, chainIds } = changePageArgs;
+    getPageData({ from: (donator as Address) || undefined, tos: (tos as Address[])?.length ? tos : undefined, message: message || undefined, chainIds: selectChainIds.length ? selectChainIds.map((item) => Number(item)) : undefined, page: newPage - 1 });
   };
 
   const handleSearch = async () => {
@@ -398,10 +407,11 @@ export default function Dashboard() {
       if (donator) {
         setChangePageArgs((preArgs) => ({ ...preArgs, from: donator }));
       }
-
+      let tos: Address[] = [];
       if (receiveOrCid) {
         if (receiveOrCid.startsWith('0x')) {
-          setChangePageArgs((preArgs) => ({ ...preArgs, tos: [receiveOrCid] }));
+          tos.push(receiveOrCid as Address);
+          setChangePageArgs((preArgs) => ({ ...preArgs, tos: [receiveOrCid as Address] }));
         } else {
           // get address from cid
           try {
@@ -420,6 +430,7 @@ export default function Dashboard() {
                 item.address && toAddressArr.push(item.address);
               });
             }
+            tos = toAddressArr;
             setChangePageArgs((preArgs) => ({ ...preArgs, tos: toAddressArr }));
           } catch (e) {
             console.log(e);
@@ -432,11 +443,11 @@ export default function Dashboard() {
       }
 
       if (selectChainIds.length) {
-        setChangePageArgs((preArgs) => ({ ...preArgs, chainIds: selectChainIds }));
+        setChangePageArgs((preArgs) => ({ ...preArgs, chainIds: selectChainIds.map((item) => Number(item)) }));
       }
 
       setTimeout(() => {
-        getPageData({ page: 0, from: changePageArgs.from as string, tos: changePageArgs.to as Address[], uid: changePageArgs.uid as string, chainIds: changePageArgs.chainIds as number[] });
+        getPageData({ page: 0, from: donator || undefined, tos: tos.length ? tos : undefined, message: message || undefined, chainIds: selectChainIds.length ? selectChainIds.map((item) => Number(item)) : undefined });
       }, 0);
     } else {
       return;
@@ -466,7 +477,7 @@ export default function Dashboard() {
         </Typography>
       </Stack>
 
-      <Box display={'flex'} gap={3} mb={3} mt={4.75}>
+      <Box display={'flex'} width={'100%'} gap={3} mb={3} mt={4.75}>
         <Box flex={1}>
           <TextField size="small" fullWidth label="Donator address" value={donator} onChange={(e) => handleChangeInput(e, 'donator')} />
         </Box>
@@ -481,11 +492,13 @@ export default function Dashboard() {
         </Box>
 
         <FormControl sx={{ flex: 1 }}>
-          <InputLabel id="chian-label">Chain</InputLabel>
-          <Select labelId="chian-label" fullWidth multiple size="small" value={selectChainIds} onChange={handleChangeSelectChainId} input={<OutlinedInput label="Name" />} MenuProps={MenuProps}>
+          <InputLabel id="chian-label" sx={{ mt: -1 }}>
+            Chain
+          </InputLabel>
+          <Select labelId="chian-label" fullWidth multiple size="small" value={selectChainIds} onChange={handleChangeSelectChainId} input={<OutlinedInput label="Name" sx={{ height: '40px', overflow: 'hidden' }} />} MenuProps={MenuProps}>
             {networks.map(({ name, id }) => (
               <MenuItem key={id} value={id}>
-                <SvgIcon sx={{ mt: 0.125, mr: 1 }} component={icons[id]} />
+                <SvgIcon sx={{ mr: 1 }} component={icons[id]} />
                 {name}
               </MenuItem>
             ))}
@@ -507,17 +520,20 @@ export default function Dashboard() {
           <Typography color="#3E4343" fontWeight="600">
             Details
           </Typography>
-          <Donate3Btn
+
+          <Button
             sx={{
               width: '100px',
+              color: '#0F172A',
             }}
             onClick={downloadFile}
           >
+            <SaveAltIcon sx={{ fontSize: 16, mr: 1 }} />
             Export
-          </Donate3Btn>
+          </Button>
         </Stack>
 
-        <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
+        <TableContainer component={Paper} sx={{ boxShadow: 'none', maxWidth: '100%', overflow: 'hidden' }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead sx={{ backgroundColor: '#f1f0f5', height: '38px' }}>
               <TableRow>
@@ -530,6 +546,9 @@ export default function Dashboard() {
                 <StyledTableCell align="center">Token</StyledTableCell>
                 <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('money')}>
                   Amount {moneySort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('value')}>
+                  Value {valueSort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
                 </StyledTableCell>
                 <StyledTableCell align="center">Message</StyledTableCell>
                 <StyledTableCell align="center">EAS UID</StyledTableCell>
@@ -548,10 +567,9 @@ export default function Dashboard() {
                 >
                   <StyledTableCell align="center" component="th" scope="row">
                     <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
-                      {/* <Box width={40} component="img" src={row?.avatar} /> */}
                       <Tooltip title={row?.from} placement="bottom">
-                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + row?.from} target="_blank">
-                          <Typography>{row?.from.slice(0, 6) + '...' + row?.from.slice(-5, -1)}</Typography>
+                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + 'address/' + row?.from} target="_blank">
+                          <Typography>{row?.from.slice(0, 5) + '...' + row?.from.slice(-5, -1)}</Typography>
                         </Link>
                       </Tooltip>
                     </Stack>
@@ -560,8 +578,8 @@ export default function Dashboard() {
                   <StyledTableCell align="center" component="th" scope="row">
                     <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
                       <Tooltip title={row?.to} placement="bottom">
-                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + row?.to} target="_blank">
-                          <Typography>{row?.to.slice(0, 6) + '...' + row?.to.slice(-5, -1)}</Typography>
+                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + 'address/' + row?.to} target="_blank">
+                          <Typography>{row?.to.slice(0, 5) + '...' + row?.to.slice(-5, -1)}</Typography>
                         </Link>
                       </Tooltip>
                     </Stack>
@@ -598,6 +616,14 @@ export default function Dashboard() {
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                        {`${w2e(Number(row?.value))}`}
+                      </Typography>
+                    </Stack>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="center" sx={{ width: '140px' }}>
+                    <Stack direction={'column'} alignItems="center">
+                      <Typography whiteSpace="pre-wrap" align="right" lineHeight={'14px'}>
                         {row?.message}
                       </Typography>
                     </Stack>
@@ -616,7 +642,7 @@ export default function Dashboard() {
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                        <Link underline="none" href={coinType[row?.chainId.toString()]?.coin[0].explorer + row?.transactionHash} target="_blank">
+                        <Link underline="none" href={coinType[row?.chainId.toString()]?.coin[0].explorer + 'tx/' + row?.transactionHash} target="_blank">
                           {row?.transactionHash?.slice(0, 5) + '...' + row?.transactionHash?.slice(-5, -1)}
                         </Link>
                       </Typography>
