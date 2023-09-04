@@ -608,7 +608,7 @@ export default function Dashboard() {
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                        {`${w2e(Number(row?.value))}`}
+                        {row?.value || ''}
                       </Typography>
                     </Stack>
                   </StyledTableCell>
