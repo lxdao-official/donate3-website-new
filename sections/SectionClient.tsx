@@ -27,16 +27,12 @@ export function SectionClient() {
       name: 'LXDAO',
       website: 'lxdao.io',
       description: 'LXDAO is an R&D-focused DAO in Web3',
-      donationCount: 68,
-      avatarSrcArray: ['/test/bruce.png', '/test/daodao.png', '/test/muxin.png', '/test/ache.png', '/test/1998.png', '/test/themonkey.png'],
     },
     {
       avatarSrc: '/test/marry3-logo-rect.png',
       name: 'marry3',
       website: 'marry3.love',
       description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
-      donationCount: 150,
-      avatarSrcArray: ['/test/daodao.png', '/test/yoo.png', '/test/nextdao.png', '/test/kenlabs.png', '/test/dotbit.png', '/test/mail3.png'],
     },
     // Add one more data entry as needed
     {
@@ -44,8 +40,6 @@ export function SectionClient() {
       name: 'mail3',
       website: 'mail3.me',
       description: 'Web3 natives deserve a better mail',
-      donationCount: 75,
-      avatarSrcArray: ['/test/mixin.png', '/test/dotbit.png', '/test/bruce.png', '/test/GangsDAO.png', '/test/MetaverseSpace.png', '/test/MetaBank.png'],
     },
   ];
 
