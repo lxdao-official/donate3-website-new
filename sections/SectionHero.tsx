@@ -128,7 +128,7 @@ export function SectionHero() {
         alignItems: 'center',
         minHeight: { xs: '100vh', md: 'calc(100vh )' },
         mt: { xs: '30px', lg: '94px' },
-          //zIndex:-1,
+        //zIndex:-1,
       }}
 
     >
@@ -143,7 +143,7 @@ export function SectionHero() {
           color: '#000000',
           textAlign: { xs: 'center', lg: 'center' },
           maxWidth: { xs: '100%', sm: '1240px' },
-            zIndex:2,
+          zIndex: 2,
         }}
       >
         Easy <MultiLine >donation</MultiLine>, More connection.
@@ -215,7 +215,7 @@ export function SectionHero() {
           src="/images/heroShow.png"
           sx={{
             zIndex: 0,
-            maxWidth: '100%',
+            maxWidth: '1500px',
             maxHeight: '100%',
           }}
         />
