@@ -14,7 +14,7 @@ import { NFTStorage, Blob } from 'nft.storage';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK, PRODUCTION_URL } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -156,7 +156,7 @@ export default function CustomWidget() {
   };
 
   const genDonationsLink = (cid: string) => {
-    setDonationsLink(`https://donate3.xyz/donateTo?cid=${cid}`);
+    setDonationsLink(`${window.location.origin}/donateTo?cid=${cid}`);
   };
 
   const genPreviewSrcDoc = (l: string) => {
@@ -347,12 +347,12 @@ export default function CustomWidget() {
                     value={value}
                     onChange={(e: any) => {
                       setError('previousCid', {});
-                      if (!e.target.value.startsWith(DEFAULT_PREVIOUS_LINK)) {
+                      if (!e.target.value.startsWith('http')) {
                         setError('previousCid', { type: 'invalid previousLink' });
                       }
                       setConfig((pre) => ({
                         ...pre,
-                        previousCid: e.target.value.replace(DEFAULT_PREVIOUS_LINK, ''),
+                        previousCid: new URLSearchParams(e.target.value.split('?')[1]).get('cid') || '',
                       }));
                       onChange(e);
                     }}
@@ -629,19 +629,14 @@ export default function CustomWidget() {
                         </InputAdornment>
                       }
                       onChange={(e: any) => {
-                        let twitter = e.target.value;
                         setError('twitter', {});
-                        if (!twitter.startsWith('@')) {
-                          setError('twitter', { type: 'invalid twitter, must starts with @, like @donate3' });
-                          return;
-                        }
                         setConfig((pre) => ({
                           ...pre,
-                          twitter: `https://twitter.com/${e.target.value.slice(1)}`,
+                          twitter: `https://twitter.com/${e.target.value}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your twitter account：@xxxx"
+                      placeholder="Enter your twitter account, like: donate3official"
                     />
                   </FormInput>
                 );
@@ -669,19 +664,14 @@ export default function CustomWidget() {
                       }
                       value={value}
                       onChange={(e: any) => {
-                        let telegram = e.target.value;
                         setError('telegram', {});
-                        if (!telegram.startsWith('@')) {
-                          setError('telegram', { type: 'invalid telegram, must starts with @, like @donate3' });
-                          return;
-                        }
                         setConfig((pre) => ({
                           ...pre,
-                          telegram: `https://t.me/${e.target.value.slice(1)}`,
+                          telegram: `https://t.me/${e.target.value}`,
                         }));
                         onChange(e);
                       }}
-                      placeholder="Enter your telegram account：@xxxx"
+                      placeholder="Enter your telegram account, like: donate3official"
                     />
                   </FormInput>
                 );
