@@ -134,10 +134,24 @@ const SearchButton = styled(Button)<ButtonProps>(() => ({
   },
 }));
 
+const formatSortIcon = (sort: number) => {
+  if (sort) {
+    if (sort === 1) {
+      return <SouthIcon sx={{ fontSize: 12 }} />;
+    } else if (sort === 2) {
+      return <NorthIcon sx={{ fontSize: 12 }} />;
+    }
+  } else {
+    return null;
+  }
+};
+
 export default function Dashboard() {
-  const { address } = useAccount();
-  const [timeSort, setTimeSort] = useState(true);
-  const [moneySort, setMoneySort] = useState(true);
+  // const { address } = useAccount();
+  // 0 not sort 1 desc 2 asc
+  // if time sort, money is 0. the same rule for money.
+  const [timeSort, setTimeSort] = useState(1);
+  const [moneySort, setMoneySort] = useState(0);
   const [donator, setDonator] = useState('');
   const [receiveOrCid, setReceiveOrCid] = useState('');
   const [message, setMessage] = useState('');
@@ -268,7 +282,7 @@ export default function Dashboard() {
   const [rows, setRows] = useState<DonateItem[]>([]);
   const [changePageArgs, setChangePageArgs] = useState<{ page?: number; size?: number; donator?: Address; tos?: Address[]; message?: string; chainIds?: number[] }>({ size: 20 });
 
-  const getPageData = (obj: { page: number; from?: string; tos?: Address[]; message?: string; chainIds?: number[]; tokens?: string[]; uid?: string; money?: string; timestamp?: string }) => {
+  const getPageData = (obj: { page: number; from?: string; tos?: Address[]; message?: string; chainIds?: number[]; tokens?: string[]; uid?: string; time?: number; money?: number }) => {
     // const args = {
     //   from: '0x1fD144f8D069504Af50676913f81431Ea2419103',
     //   to: '0xe395B9bA2F93236489ac953146485C435D1A267B',
@@ -287,6 +301,24 @@ export default function Dashboard() {
     //     },
     //   ],
     // };
+
+    const SORT_MAP = [undefined, 'desc', 'asc'];
+    let orderBy = [];
+    let tmpMoney;
+    if (typeof obj.money === 'number') {
+      tmpMoney = obj.money;
+    } else {
+      tmpMoney = moneySort;
+    }
+    SORT_MAP[tmpMoney] && orderBy.push({ money: SORT_MAP[tmpMoney] });
+    let tmpTime;
+    if (typeof obj.time === 'number') {
+      tmpTime = obj.time;
+    } else {
+      tmpTime = timeSort;
+    }
+    SORT_MAP[tmpTime] && orderBy.push({ timestamp: SORT_MAP[tmpTime] });
+
     const args = {
       from: obj?.from || undefined,
       tos: obj?.tos || undefined,
@@ -296,14 +328,7 @@ export default function Dashboard() {
       uid: obj?.uid || undefined,
       page: obj.page,
       size: 20,
-      orderBy: [
-        {
-          money: moneySort ? 'desc' : 'asc',
-        },
-        {
-          timestamp: timeSort ? 'desc' : 'asc',
-        },
-      ],
+      orderBy: [...orderBy],
     };
     setOpen(true);
     API.post(`/donates`, args, {
@@ -382,17 +407,35 @@ export default function Dashboard() {
   };
 
   const handleSort = (type: string) => {
+    let time = 0,
+      money = 0;
     if (type === 'time') {
-      setTimeSort((preState) => !preState);
+      if (timeSort === 1) {
+        time = 2;
+      } else if (timeSort === 2) {
+        time = 0;
+      } else if (timeSort === 0) {
+        time = 1;
+      }
+      setTimeSort(time);
+      moneySort !== 0 && setMoneySort(0);
     } else if (type === 'money') {
-      setMoneySort((preState) => !preState);
+      if (moneySort === 0) {
+        money = 1;
+      } else if (moneySort === 1) {
+        money = 2;
+      } else if (moneySort === 2) {
+        money = 0;
+      }
+      setMoneySort(money);
+      timeSort !== 0 && setTimeSort(0);
     }
-    getPageData({ page: 0 });
+    getPageData({ page: 0, time, money });
   };
 
   const handleChangePage = (event: any, newPage: number) => {
     const { donator, tos, message, chainIds } = changePageArgs;
-    getPageData({ from: (donator as Address) || undefined, tos: (tos as Address[])?.length ? tos : undefined, message: message || undefined, chainIds: selectChainIds.length ? selectChainIds.map((item) => Number(item)) : undefined, page: newPage - 1 });
+    getPageData({ from: (donator as Address) || undefined, tos: (tos as Address[])?.length ? tos : undefined, message: message || undefined, chainIds: chainIds && chainIds.length ? chainIds.map((item) => Number(item)) : undefined, page: newPage - 1 });
   };
 
   const handleSearch = async () => {
@@ -533,12 +576,12 @@ export default function Dashboard() {
                 <StyledTableCell align="center">Donator</StyledTableCell>
                 <StyledTableCell align="center">Receiver</StyledTableCell>
                 <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('time')}>
-                  Time {timeSort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
+                  Time {formatSortIcon(timeSort)}
                 </StyledTableCell>
                 <StyledTableCell align="center">Chain</StyledTableCell>
                 <StyledTableCell align="center">Token</StyledTableCell>
                 <StyledTableCell align="center" sx={{ cursor: 'pointer' }} onClick={() => handleSort('money')}>
-                  Amount {moneySort ? <SouthIcon sx={{ fontSize: 12 }} /> : <NorthIcon sx={{ fontSize: 12 }} />}
+                  Amount {formatSortIcon(moneySort)}
                 </StyledTableCell>
                 <StyledTableCell align="center">Message</StyledTableCell>
                 <StyledTableCell align="center">EAS UID</StyledTableCell>
