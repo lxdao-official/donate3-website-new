@@ -1,7 +1,8 @@
 import React, { ElementType } from 'react';
 import { Box, Typography, SvgIcon, Link } from '@mui/material';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea } from 'wagmi/chains';
+import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon } from 'wagmi/chains';
+import { Linea as linea } from '@/utils/linea';
 
 import { SafeAccount } from '@/utils/const';
 import Arbitrum from '@/public/icons/networks/arbitrum.svg';
