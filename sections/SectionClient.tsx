@@ -36,13 +36,13 @@ export function SectionClient() {
     },
     // Add one more data entry as needed
     {
-      avatarSrc: '/test/mail3.png',
+      avatarSrc: '/test/mail3.svg',
       name: 'mail3',
       website: 'mail3.me',
       description: 'Web3 natives deserve a better mail',
     },
     {
-      avatarSrc: '/test/GasLockR.jpg',
+      avatarSrc: '/test/GasLockR.svg',
       name: 'GasLockR',
       website: 'gaslockr.xyz',
       description: 'The first trustless GasFi protocol designed for EVM-based chains',
