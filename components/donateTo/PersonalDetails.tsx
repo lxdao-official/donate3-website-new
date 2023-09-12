@@ -30,8 +30,8 @@ const PersonalDetails = ({ info = DEFAULT_CREATE_CONFIG, onDonate, handleCopy }:
       link: twitter,
     };
 
-    telegram && medias.push(twitterInfo);
-    twitter && medias.push(telegramInfo);
+    twitter && medias.push(twitterInfo);
+    telegram && medias.push(telegramInfo);
     return medias;
   }, [twitter, telegram]);
 
