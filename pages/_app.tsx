@@ -66,13 +66,13 @@ export default function App({ Component, pageProps }: AppProps) {
               canonical="https://www.donate3.xyz/"
               openGraph={{
                 url: 'https://www.donate3.xyz/',
-                title: 'Donate3',
-                description: 'Make donate in web3 so easy',
                 siteName: 'Donate3',
                 images: [
                   {
                     url: ' https://www.donate3.xyz/logo.svg',
                     alt: 'Donate3 logo',
+                    width: 46,
+                    height: 46,
                   },
                 ],
               }}
