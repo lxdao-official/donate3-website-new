@@ -78,7 +78,14 @@ const DonateTo: NextPage = () => {
 
   return (
     <>
-      <NextSeo title={`Donate to ${info?.name}`} />
+      <NextSeo
+        openGraph={{
+          url: 'https://www.donate3.xyz/donateTo?cid=',
+          title: `Donate to ${info?.name}`,
+          description: 'can Donate to everyone',
+        }}
+        title="Donate to page"
+      />
       <Layout bgColor="#f9fafc" style={{ maxWidth: '1512px', zIndex: 1 }}>
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
           {View}
