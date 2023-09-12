@@ -78,7 +78,7 @@ const DonateTo: NextPage = () => {
 
   return (
     <>
-      <NextSeo description={info?.description || 'Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5 minutes.'} />
+      <NextSeo description={info?.name || ''} />
       <Layout bgColor="#f9fafc" style={{ maxWidth: '1512px', zIndex: 1 }}>
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
           {View}
