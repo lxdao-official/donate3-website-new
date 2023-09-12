@@ -41,6 +41,12 @@ export function SectionClient() {
       website: 'mail3.me',
       description: 'Web3 natives deserve a better mail',
     },
+    {
+      avatarSrc: '/test/GasLockR.jpg',
+      name: 'GasLockR',
+      website: 'https://www.gaslockr.xyz/',
+      description: 'The first trustless GasFi protocol designed for EVM-based chains',
+    },
   ];
 
   return (
