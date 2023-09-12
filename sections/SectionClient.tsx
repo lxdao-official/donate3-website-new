@@ -44,7 +44,7 @@ export function SectionClient() {
     {
       avatarSrc: '/test/GasLockR.jpg',
       name: 'GasLockR',
-      website: 'https://www.gaslockr.xyz/',
+      website: 'gaslockr.xyz',
       description: 'The first trustless GasFi protocol designed for EVM-based chains',
     },
   ];
