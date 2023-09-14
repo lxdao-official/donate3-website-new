@@ -6,7 +6,23 @@ export function SectionPartner() {
   const partnerInfo = [
     {
       icon: '/icons/ldxdaologowhole.svg',
-      url: 'LXDAO',
+      url: 'lxdao.io',
+    },
+    {
+      icon: '/icons/consensys.svg',
+      url: 'consensys.io',
+    },
+    {
+      icon: '/icons/infula.svg',
+      url: 'infura.io',
+    },
+    {
+      icon: '/icons/linea.svg',
+      url: 'linea.build',
+    },
+    {
+      icon: '/icons/EAS.svg',
+      url: 'easscan.org',
     },
   ];
 
@@ -18,8 +34,6 @@ export function SectionPartner() {
         alignItems: 'center',
         background: '#F8FAFC',
         minHeight: { xs: 'calc(60vh)', md: 'calc(60vh)' },
-        // marginLeft: '-16px',
-        // marginRight: '-16px',
         flexDirection: { xs: 'column', lg: 'column' },
         justifyContent: { xs: 'center', lg: 'center' },
       }}
@@ -49,29 +63,6 @@ export function SectionPartner() {
           justifyContent: { xs: 'center', lg: 'center' },
         }}
       >
-        {/* <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            width: '180px',
-            height: '70px',
-            border: '1px solid',
-            borderColor: '#E2E8F0',
-            borderRadius: '3%',
-            //marginLeft: '24px',
-            mt: '5px',
-          }}
-        >
-          <Box
-            component="img"
-            src="/icons/ldxdaologowhole.svg"
-            sx={{
-              marginLeft: '36px',
-              marginTop: '19px',
-              marginBottom: '19px',
-            }}
-          ></Box>
-        </Box> */}
         {partnerInfo?.map((item) => {
           return <PartnerCard info={item} key={item?.url} />;
         })}
