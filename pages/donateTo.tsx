@@ -4,6 +4,7 @@ import { Backdrop, Box } from '@mui/material';
 import { Layout } from '@/components/Layout';
 import { useRouter } from 'next/router';
 import { useLottie } from 'lottie-react';
+import { NextSeo } from 'next-seo';
 
 import DonatedCard from '@/components/donateTo/DonatedCard';
 import PersonalDetails from '@/components/donateTo/PersonalDetails';
@@ -76,90 +77,99 @@ const DonateTo: NextPage = () => {
   };
 
   return (
-    <Layout bgColor="#f9fafc" style={{ maxWidth: '1512px', zIndex: 1 }}>
-      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-        {View}
-      </Backdrop>
-
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '45px 200px',
-          zIndex: 0,
-          mt: { xs: '0%', md: '0%' },
+    <>
+      <NextSeo
+        openGraph={{
+          url: 'https://www.donate3.xyz/donateTo?cid=',
+          title: `Donate3 -  Donate to`,
+          description: 'can donate to everyone',
         }}
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            display: 'inline-block',
-            width: '100%',
-            top: 0,
-            //right:'10%',
-            //mt:{xs:'-15%',md:'-7%'},
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-          component={'img'}
-          src="/images/donateToBackground.png"
-        />
+      />
+      <Layout bgColor="#f9fafc" style={{ maxWidth: '1512px', zIndex: 1 }}>
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+          {View}
+        </Backdrop>
 
         <Box
           sx={{
             display: 'flex',
-            flexDirection: { xs: 'column', sm: 'column', md: 'row' },
-            justifyContent: { xs: '', md: 'space-between' },
+            flexDirection: 'column',
             alignItems: 'center',
-            width: '100%',
+            padding: '45px 200px',
+            zIndex: 0,
+            mt: { xs: '0%', md: '0%' },
           }}
         >
-          <PersonalDetails
-            info={{
-              accountType: info?.accountType || 0,
-              address: info?.address,
-              name: info?.name!,
-              avatar: info?.avatar!,
-              twitter: info?.twitter!,
-              telegram: info?.telegram!,
+          <Box
+            sx={{
+              position: 'absolute',
+              display: 'inline-block',
+              width: '100%',
+              top: 0,
+              //right:'10%',
+              //mt:{xs:'-15%',md:'-7%'},
+              zIndex: 0,
+              pointerEvents: 'none',
             }}
-            handleCopy={handleCopy}
-            onDonate={handleDonateBtn}
+            component={'img'}
+            src="/images/donateToBackground.png"
           />
 
-          {showProgress === 0 ? (
-            <DonatedCardWithProgress
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+              justifyContent: { xs: '', md: 'space-between' },
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
+            <PersonalDetails
               info={{
-                address: info?.address!,
-                safeAccounts: info?.safeAccounts!,
-                accountType: info?.accountType!,
-                fundsGoal: info?.fundsGoal!,
-                startTime: info?.startTime!,
-                endTime: info?.endTime!,
-                reason: info?.reason!,
+                accountType: info?.accountType || 0,
+                address: info?.address,
+                name: info?.name!,
+                avatar: info?.avatar!,
+                twitter: info?.twitter!,
+                telegram: info?.telegram!,
               }}
+              handleCopy={handleCopy}
+              onDonate={handleDonateBtn}
             />
-          ) : (
-            <DonatedCard
-              info={{
-                address: info?.address!,
-                safeAccounts: info?.safeAccounts!,
-                accountType: info?.accountType!,
-              }}
-            />
-          )}
+
+            {showProgress === 0 ? (
+              <DonatedCardWithProgress
+                info={{
+                  address: info?.address!,
+                  safeAccounts: info?.safeAccounts!,
+                  accountType: info?.accountType!,
+                  fundsGoal: info?.fundsGoal!,
+                  startTime: info?.startTime!,
+                  endTime: info?.endTime!,
+                  reason: info?.reason!,
+                }}
+              />
+            ) : (
+              <DonatedCard
+                info={{
+                  address: info?.address!,
+                  safeAccounts: info?.safeAccounts!,
+                  accountType: info?.accountType!,
+                }}
+              />
+            )}
+          </Box>
+
+          {!!(info?.accountType !== 1) && <SafeAccounts accounts={info?.safeAccounts} handleCopy={handleCopy} />}
+
+          <PersonalIntroduction
+            info={{
+              description: info?.description!,
+            }}
+          />
         </Box>
-
-        {!!(info?.accountType !== 1) && <SafeAccounts accounts={info?.safeAccounts} handleCopy={handleCopy} />}
-
-        <PersonalIntroduction
-          info={{
-            description: info?.description!,
-          }}
-        />
-      </Box>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 

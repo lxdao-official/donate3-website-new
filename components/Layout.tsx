@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import { Box, Container, CssBaseline, Divider, Typography, Link, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
+
 import LXDAOFooter from './LXDAOFooter';
 import ConnectBtn from './ConnectBtn';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <Container maxWidth={false}  style={style}>
+    <Container maxWidth={false} style={style}>
       {children}
     </Container>
   );
@@ -25,7 +26,6 @@ function Header() {
           display="flex"
         >
           <Box component="img" src="/logo.svg" />
-          {/* <Image src="/logo.svg" alt='' width={50} height={50} /> */}
           <Typography
             variant="h5"
             paddingLeft="14px"
@@ -108,22 +108,6 @@ export function Layout({ style, children, title = 'Donate3 - Make donate in web3
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="icon" href="/icons/favicon.png" />
-        <title>{title}</title>
-        <meta
-          name="description"
-          content="LXDAO is an R&amp;D-focused DAO in Web3.
-Our mission: Bringing together buidlers to buidl and maintain LX projects for Web3, in a sustainable manner."
-        />
-        <meta property="og:locale" content="en_US" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="/images/logo.svg" />
-        <meta property="og:title" content={title} />
-        <meta
-          property="og:description"
-          content="Donate3 is a simple and convenient multi-chain multi-currency donation method that aggregates donor and recipient information. It is a highly scalable public welfare project and is committed to issuing the donation standard agreement in Web3, becoming the infrastructure to help the construction of web3 public goods."
-        />
-        <meta property="og:url" content="https://lxdao.io/" />
-
         {/* Global Site Tag (gtag.js) - Google Analytics */}
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`} />
         <script
@@ -143,7 +127,6 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         sx={{
           background: bgColor,
           zIndex: 1,
-
         }}
       >
         <Header />
@@ -151,7 +134,6 @@ Our mission: Bringing together buidlers to buidl and maintain LX projects for We
         <MyContainer style={style}>{children}</MyContainer>
         <Divider />
         <LXDAOFooter />
-        {/* <Footer /> */}
       </Box>
     </>
   );

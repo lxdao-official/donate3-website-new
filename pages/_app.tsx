@@ -1,8 +1,8 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DefaultSeo } from 'next-seo';
 
-import CssBaseline from '@mui/material/CssBaseline';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, sepolia, WagmiConfig } from 'wagmi';
@@ -12,7 +12,6 @@ import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { DONATE_SDK_URL } from '@/utils/const';
 import { Linea } from '@/utils/linea';
-import { MetaMaskContextProvider } from '@/utils/hooks/useMataMask';
 
 const { chains, publicClient } = configureChains(
   [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia, optimismGoerli],
@@ -57,16 +56,37 @@ const theme = createTheme({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    // <MetaMaskContextProvider>
-    <ThemeProvider theme={theme}>
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
-          {/*<CssBaseline />*/}
-          <Component {...pageProps} />
-          <Script src={DONATE_SDK_URL} />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </ThemeProvider>
-    // </MetaMaskContextProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <WagmiConfig config={wagmiConfig}>
+          <RainbowKitProvider chains={chains}>
+            <DefaultSeo
+              title="Donate3 - Make donate in web3 so easy"
+              description="Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5 minutes."
+              canonical="https://www.donate3.xyz/"
+              openGraph={{
+                url: 'https://www.donate3.xyz/',
+                siteName: 'Donate3',
+                images: [
+                  {
+                    url: ' https://www.donate3.xyz/logo.svg',
+                    alt: 'Donate3 logo',
+                    width: 46,
+                    height: 46,
+                  },
+                ],
+              }}
+              twitter={{
+                handle: '@donate3official',
+                site: '@Donate3',
+                cardType: 'summary_large_image',
+              }}
+            />
+            <Component {...pageProps} />
+            <Script src={DONATE_SDK_URL} />
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </ThemeProvider>
+    </>
   );
 }

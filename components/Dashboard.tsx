@@ -1,10 +1,11 @@
 import React, { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea } from 'wagmi/chains';
+import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon } from 'wagmi/chains';
 // import Donate3Btn from './Donate3Btn';
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
 import { useLottie } from 'lottie-react';
+import { Linea as linea } from '@/utils/linea';
 
 import { Box, Grid, Paper, Stack, Tooltip, Link, Typography, styled, Backdrop, SvgIcon, TextField, OutlinedInput, FormControl, Select, MenuItem, SelectChangeEvent, Button, Pagination, InputLabel } from '@mui/material';
 import { ButtonProps } from '@mui/material/Button';

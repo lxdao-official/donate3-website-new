@@ -5,7 +5,7 @@ export function DonateOverview({ data }: { data: { avatarSrc: string; name: stri
   const { avatarSrc, name, website, description } = data;
 
   const handleClickOverviewCard = () => {
-    website && (window.location.href = `https://${website}`);
+    website && window.open(`https://${website}`, '_blank');
   };
 
   return (
