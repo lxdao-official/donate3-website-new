@@ -22,30 +22,45 @@ export function SectionClient() {
   }, []);
 
   const donateData = [
-    {
-      avatarSrc: '/test/lxdao-logo.svg',
-      name: 'LXDAO',
-      website: 'lxdao.io',
-      description: 'LXDAO is an R&D-focused DAO in Web3',
-    },
-    {
-      avatarSrc: '/test/marry3-logo-rect.png',
-      name: 'marry3',
-      website: 'marry3.love',
-      description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
-    },
+    // {
+    //   avatarSrc: '/test/lxdao-logo.svg',
+    //   name: 'LXDAO',
+    //   website: 'lxdao.io',
+    //   description: 'LXDAO is an R&D-focused DAO in Web3',
+    // },
+    // {
+    //   avatarSrc: '/test/marry3-logo-rect.png',
+    //   name: 'marry3',
+    //   website: 'marry3.love',
+    //   description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
+    // },
     // Add one more data entry as needed
-    {
-      avatarSrc: '/test/mail3.svg',
-      name: 'mail3',
-      website: 'mail3.me',
-      description: 'Web3 natives deserve a better mail',
-    },
+    // {
+    //   avatarSrc: '/test/mail3.svg',
+    //   name: 'mail3',
+    //   website: 'mail3.me',
+    //   description: 'Web3 natives deserve a better mail',
+    // },
     {
       avatarSrc: '/test/GasLockR.svg',
       name: 'GasLockR',
+      url: 'gaslockr.xyz',
       website: 'gaslockr.xyz',
       description: 'The first trustless GasFi protocol designed for EVM-based chains',
+    },
+    {
+      avatarSrc: '/test/Coleisawesome1.jpg',
+      name: 'Coleisawesome1',
+      website: 'ColehasSwag123',
+      url: 'twitter.com/ColehasSwag123',
+      description: 'Promoter Of Promising Projects',
+    },
+    {
+      avatarSrc: '/test/popo.png',
+      name: 'POPOBadgeCN',
+      url: 'twitter.com/POPOBadgeCN',
+      website: 'POPOBadgeCN',
+      description: 'Focus on 🇨🇳 Yuanverse digital marketing 🌱 , discover the latest offline activities in POPO Bubble, participate and receive exclusive digital badges. Create your own metaverse digital identity 🏃🏻',
     },
   ];
 

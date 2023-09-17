@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-export function DonateOverview({ data }: { data: { avatarSrc: string; name: string; website: string; description: string } }) {
-  const { avatarSrc, name, website, description } = data;
+export function DonateOverview({ data }: { data: { avatarSrc: string; name: string; website: string; description: string; url: string } }) {
+  const { avatarSrc, name, website, description, url } = data;
 
   const handleClickOverviewCard = () => {
-    website && window.open(`https://${website}`, '_blank');
+    website && window.open(`https://${url}`, '_blank');
   };
 
   return (
