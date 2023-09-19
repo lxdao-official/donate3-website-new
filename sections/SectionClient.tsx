@@ -160,6 +160,9 @@ export function SectionClient() {
           overflowX: {
             lg: 'scroll',
           },
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
         }}
       >
         {donateData.map((data, index) => (
