@@ -282,9 +282,21 @@ export default function CustomWidget() {
     }
   };
 
+  const genSocialMedia = (i: Partial<ICustomWidget>) => {
+    let temp = { ...i };
+    if (temp?.twitter) {
+      temp.twitter = temp.twitter.replace('https://twitter.com/', '');
+    }
+    if (temp?.telegram) {
+      temp.telegram = temp.telegram.replace('https://t.me/', '');
+    }
+    return { ...temp };
+  };
+
   const setConfigAndForm = (i: Partial<ICustomWidget>) => {
-    setConfig((pre) => ({ ...pre, ...i }));
-    setFormValue(i);
+    let newVal = genSocialMedia(i);
+    setConfig((pre) => ({ ...pre, ...newVal }));
+    setFormValue(newVal);
   };
 
   // If specified, use the gateway
