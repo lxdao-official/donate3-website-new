@@ -144,7 +144,7 @@ export function SectionClient() {
           mt: { xs: '30px', lg: '86' },
         }}
       >
-        Example
+        Showcase
       </Typography>
 
       <Box
