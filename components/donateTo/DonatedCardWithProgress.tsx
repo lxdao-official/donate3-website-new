@@ -73,79 +73,68 @@ const DonatedCard = ({info}: IDonatedCardProps) => {
     });
     /*拿到目前资金以及设置进度*/
     const queryDonatesSetRaised = async (params: IRankingItem) => {
-        let sum: number;
+      let sum: number;
 
-        const data = await API.get('/donates/total-donation-sum', {
-            params: {
-                address: params.address!,
-
-            },
-            /*测试环境,提交需注意*/
-            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
-        });
-        //console.log(sum);
-        sum = await data?.data?.data;
-        if (params) {
-            setTotalMoney(sum);
-            let goal: number = info?.fundsGoal!;
-            setGoalMoney(goal);
-            if(goal>0){
-                const progress = (sum / goal * 100);
-                if (progress < 100) {
-                    setProgressValue(progress);
-                } else {
-                    setProgressValue(100);
-                }
-            }else{
-                setProgressValue(100);
-            }
-
+      const data = await API.get('/donates/total-donation-sum', {
+        params: {
+          address: params.address!,
+        },
+        /*测试环境,提交需注意*/
+        baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
+      });
+      sum = await data?.data?.data;
+      if (params) {
+        setTotalMoney(sum);
+        let goal: number = info?.fundsGoal!;
+        setGoalMoney(goal);
+        if (goal > 0) {
+          const progress = (sum / goal) * 100;
+          if (progress < 100) {
+            setProgressValue(progress);
+          } else {
+            setProgressValue(100);
+          }
+        } else {
+          setProgressValue(100);
         }
-        const reasonFromInfo =info?.reason
-        setReason(reasonFromInfo);
-
+      }
+      const reasonFromInfo = info?.reason;
+      setReason(reasonFromInfo);
     };
     const remainDateInit = () => {
-        const endTime = info?.endTime;
-        if (endTime) {
-            const remainingMilliseconds = endTime - dayjs().valueOf();
-            if (remainingMilliseconds > 0) {
-                const remainingDays = Math.ceil(remainingMilliseconds / (1000 * 60 * 60 * 24));
-                const remainingYears = Math.floor(remainingDays / 365);
-                const remainingMonths = Math.floor((remainingDays % 365) / 30);
-                const remainingDay = remainingDays % 30;
-                if (remainingYears > 0) {
-
-                    setRemainingTime(`${remainingYears}Y ${remainingMonths}M ${remainingDay}D remaining`);
-                } else {
-                    if (remainingMonths > 0) {
-                        setRemainingTime(` ${remainingMonths}M ${remainingDay}D remaining`);
-
-                    } else {
-                        setRemainingTime(`${remainingDay}D remaining`);
-                    }
-
-                }
-
+      const endTime = info?.endTime;
+      if (endTime) {
+        const remainingMilliseconds = endTime - dayjs().valueOf();
+        if (remainingMilliseconds > 0) {
+          const remainingDays = Math.ceil(remainingMilliseconds / (1000 * 60 * 60 * 24));
+          const remainingYears = Math.floor(remainingDays / 365);
+          const remainingMonths = Math.floor((remainingDays % 365) / 30);
+          const remainingDay = remainingDays % 30;
+          if (remainingYears > 0) {
+            setRemainingTime(`${remainingYears}Y ${remainingMonths}M ${remainingDay}D remaining`);
+          } else {
+            if (remainingMonths > 0) {
+              setRemainingTime(` ${remainingMonths}M ${remainingDay}D remaining`);
             } else {
-                setRemainingTime(" ")
+              setRemainingTime(`${remainingDay}D remaining`);
             }
-
+          }
+        } else {
+          setRemainingTime(' ');
         }
+      }
 
-        return null;
+      return null;
     };
 
-
     const queryDonatesRanking = (params: IRankingParams) => {
-        API.get('/donates/ranking', {
-            params,
-            baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
-            headers: {'Content-Type': 'application/json'},
-        }).then((res) => {
-            console.log(res?.data?.data);
-            setRanking(res?.data?.data || []);
-        });
+      API.get('/donates/ranking', {
+        params,
+        baseURL: process.env.NEXT_PUBLIC_BACKEND_API_REMOTE,
+        headers: { 'Content-Type': 'application/json' },
+      }).then((res) => {
+        setRanking(res?.data?.data || []);
+      });
     };
 
     const genDonatesRankingParamsCB = useCallback((): IRankingParams | null => {

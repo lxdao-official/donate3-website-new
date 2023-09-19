@@ -421,7 +421,7 @@ export default function Dashboard() {
         const data = await res.json();
         setPrice(data.result.ethusd);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     })();
   });
@@ -522,19 +522,18 @@ export default function Dashboard() {
             <TableBody>
               {(perPage > 0
                 ? rows
-                  .filter((row) => {
-                    const chainIds = Object.keys(coinType);
-                    if (chainIds.includes(row?.chainType)) {
-                      return row;
-                    }
-                  })
-                  // .sort((a, b) => {
-                  //   return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
-                  // })
-                  .slice(page * perPage, page * perPage + perPage)
+                    .filter((row) => {
+                      const chainIds = Object.keys(coinType);
+                      if (chainIds.includes(row?.chainType)) {
+                        return row;
+                      }
+                    })
+                    // .sort((a, b) => {
+                    //   return (sort ? 1 : -1) * (convertToTimestamp(a.createTime) - convertToTimestamp(b.createTime));
+                    // })
+                    .slice(page * perPage, page * perPage + perPage)
                 : rows
               ).map((row: DonateDetail, index) => {
-                // console.log(row, 'row');
                 return (
                   <TableRow
                     key={index}

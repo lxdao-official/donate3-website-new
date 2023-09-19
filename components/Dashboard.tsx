@@ -342,9 +342,8 @@ export default function Dashboard() {
           setPageCount(Math.ceil(total / perPageCount));
           setRows(data?.data?.content);
         }
-        console.log(data);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.error(err))
       .finally(() => setOpen(false));
   };
 
@@ -470,7 +469,7 @@ export default function Dashboard() {
             tos = toAddressArr;
             setChangePageArgs((preArgs) => ({ ...preArgs, tos: toAddressArr }));
           } catch (e) {
-            console.log(e);
+            console.error(e);
           }
         }
       }
@@ -489,7 +488,6 @@ export default function Dashboard() {
     } else {
       return;
     }
-    console.log('search');
   };
 
   const handleReset = () => {
@@ -499,7 +497,6 @@ export default function Dashboard() {
     setSelectChainIds([]);
     setChangePageArgs({ page: 0 });
     getPageData({ page: 0 });
-    console.log('reset');
   };
 
   return (

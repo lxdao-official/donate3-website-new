@@ -49,7 +49,6 @@ const DonateTo: NextPage = () => {
       if (info && 'progressType' in info) {
         setShowProgress(info.progressType as number);
       }
-      //console.log(info?.progressType);
     } catch (error) {
       console.error('error', 'getFasterIpfsLink-error');
     }
@@ -67,10 +66,10 @@ const DonateTo: NextPage = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(
         () => {
-          console.log('copy success!');
+          console.error('copy success!');
         },
         (err) => {
-          console.log(err);
+          console.error(err);
         }
       );
     }

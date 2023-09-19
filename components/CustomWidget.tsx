@@ -196,7 +196,7 @@ export default function CustomWidget() {
       console.info(cid, '🐻🐻cid🐻🐻');
       genInfoByCid(cid);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -707,7 +707,6 @@ export default function CustomWidget() {
                           accountType: account,
                         }));
                         onChange(e);
-                        //console.log(value)
                       }}
                       name="radio-buttons-group"
                     >
@@ -1027,7 +1026,6 @@ export default function CustomWidget() {
                                     sx={{ backgroundColor: '#E2E8F0' }}
                                     onChange={(newValue) => {
                                       let startTime = dayjs(newValue).valueOf();
-                                      console.log(startTime);
                                       setSelectedStartDate(startTime);
                                       setConfig((pre) => ({
                                         ...pre,
