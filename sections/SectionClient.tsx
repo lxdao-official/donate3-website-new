@@ -57,10 +57,10 @@ export function SectionClient() {
     },
     {
       avatarSrc: '/test/popo.png',
-      name: 'POPOBadgeCN',
+      name: 'POPO digital badge',
       url: 'twitter.com/POPOBadgeCN',
       website: 'POPOBadgeCN',
-      description: 'Focus on 🇨🇳 Yuanverse digital marketing 🌱 , discover the latest offline activities in POPO Bubble, participate and receive exclusive digital badges. Create your own metaverse digital identity 🏃🏻',
+      description: 'Dive into our latest discoveries and explore a world of thrilling experiences. Join captivating events🎟️, and collect exclusive digital badges🫧. Let your imagination run wild in a realm of limitless possibilities. 🥳',
     },
   ];
 

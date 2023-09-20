@@ -12,7 +12,7 @@ export function DonateOverview({ data }: { data: { avatarSrc: string; name: stri
     <Box
       sx={{
         width: { xs: '360px', md: '360px', sm: '392px' },
-        height: '300px',
+        height: '436px',
         display: 'flex',
         flexDirection: 'column',
         padding: '35px',
