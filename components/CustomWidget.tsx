@@ -196,7 +196,7 @@ export default function CustomWidget() {
       console.info(cid, '🐻🐻cid🐻🐻');
       genInfoByCid(cid);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -282,9 +282,21 @@ export default function CustomWidget() {
     }
   };
 
+  const genSocialMedia = (i: Partial<ICustomWidget>) => {
+    let temp = { ...i };
+    if (temp?.twitter) {
+      temp.twitter = temp.twitter.replace('https://twitter.com/', '');
+    }
+    if (temp?.telegram) {
+      temp.telegram = temp.telegram.replace('https://t.me/', '');
+    }
+    return { ...temp };
+  };
+
   const setConfigAndForm = (i: Partial<ICustomWidget>) => {
-    setConfig((pre) => ({ ...pre, ...i }));
-    setFormValue(i);
+    let newVal = genSocialMedia(i);
+    setConfig((pre) => ({ ...pre, ...newVal }));
+    setFormValue(newVal);
   };
 
   // If specified, use the gateway
@@ -695,7 +707,6 @@ export default function CustomWidget() {
                           accountType: account,
                         }));
                         onChange(e);
-                        //console.log(value)
                       }}
                       name="radio-buttons-group"
                     >
@@ -1015,7 +1026,6 @@ export default function CustomWidget() {
                                     sx={{ backgroundColor: '#E2E8F0' }}
                                     onChange={(newValue) => {
                                       let startTime = dayjs(newValue).valueOf();
-                                      console.log(startTime);
                                       setSelectedStartDate(startTime);
                                       setConfig((pre) => ({
                                         ...pre,

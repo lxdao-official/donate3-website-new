@@ -16,7 +16,6 @@ export const convertIpfsToLink = (options: { ipfs: string; gateway: string; time
   }, timeout);
   xhr.onload = () => {
     if (xhr.status === 200) {
-      console.log(xhr, '🍑xhr🍑');
       clearTimeout(timer);
       callback(undefined, xhr.responseURL, xhr.response);
     } else {

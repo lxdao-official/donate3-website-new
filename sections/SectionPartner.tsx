@@ -49,7 +49,7 @@ export function SectionPartner() {
           minWidth: '100%',
         }}
       >
-        Our partners
+        Supportors
       </Typography>
 
       <Box

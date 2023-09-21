@@ -120,7 +120,6 @@ export function SectionHero() {
   const router = useRouter();
   return (
     <Box
-
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', lg: 'column' },
@@ -130,7 +129,6 @@ export function SectionHero() {
         mt: { xs: '30px', lg: '94px' },
         //zIndex:-1,
       }}
-
     >
       <CircleBg />
       <CircleBgg />
@@ -146,7 +144,7 @@ export function SectionHero() {
           zIndex: 2,
         }}
       >
-        Easy <MultiLine >donation</MultiLine>, More connection.
+        Easy <MultiLine>donations</MultiLine>, More connections, Better reputation.
       </Typography>
 
       <Typography
