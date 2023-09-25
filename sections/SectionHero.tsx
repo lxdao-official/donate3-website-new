@@ -177,7 +177,8 @@ export function SectionHero() {
         <StyledButton onClick={() => (window.location.href = `${window.location.origin}/demo`)}>Demo</StyledButton>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', mt: '27px' }}>
+      {/* Comment sponsor */}
+      {/* <Box sx={{ display: 'flex', alignItems: 'center', mt: '27px' }}>
         <Typography
           sx={{
             fontSize: '11px',
@@ -193,7 +194,7 @@ export function SectionHero() {
             return <Box key={item} component="img" title={item} src={`icons/support/${item}.svg`} sx={{ mr: 1 }} />;
           })}
         </List>
-      </Box>
+      </Box> */}
 
       <Box sx={{ height: '52px' }} />
       <Box sx={{ position: 'relative' }}>
