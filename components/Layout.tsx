@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import LXDAOFooter from './LXDAOFooter';
 import ConnectBtn from './ConnectBtn';
+import { Children } from 'react';
 
 function MyContainer({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
