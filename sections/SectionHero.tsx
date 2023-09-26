@@ -131,7 +131,7 @@ export function SectionHero() {
           zIndex: 2,
         }}
       >
-        Easy <MultiLine>donations</MultiLine>, and Better reputation in your Solana Network.
+        Easy <MultiLine>donations</MultiLine>, and Better reputation in Solana Network.
       </Typography>
 
       <Typography
