@@ -19,9 +19,7 @@ const ConnectBtn: FC = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div className="view">
-            <WalletMultiButton />
-          </div>
+          <WalletMultiButton />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
