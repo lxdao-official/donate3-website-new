@@ -103,19 +103,6 @@ const StyledButton2 = styled(Button)`
   }
 `;
 
-enum supportList {
-  ethereum = 'ethereum',
-  polygon = 'polygon',
-  optimism = 'optimism',
-  // gnosis = 'gnosis',
-  // avalanche = 'avalanche',
-  // fantom = 'fantom',
-  arbitrum = 'arbitrum',
-  // bsc = 'bsc',
-  linea = 'linea',
-  goerli = 'goerli',
-}
-
 export function SectionHero() {
   const router = useRouter();
   return (
@@ -125,8 +112,8 @@ export function SectionHero() {
         flexDirection: { xs: 'column', lg: 'column' },
         justifyContent: { xs: 'center', lg: 'center' },
         alignItems: 'center',
-        minHeight: { xs: '100vh', md: 'calc(100vh )' },
-        mt: { xs: '30px', lg: '94px' },
+        minHeight: { xs: '100vh', md: 'calc(100vh)' },
+        mt: { xs: '30px', lg: '0px' },
         //zIndex:-1,
       }}
     >
@@ -138,7 +125,7 @@ export function SectionHero() {
           fontWeight: 800,
           fontSize: { xs: '30px', sm: '54px', md: '72px' },
           lineHeight: { xs: '37px', md: '64px' },
-          color: '#000000',
+          color: '#000',
           textAlign: { xs: 'center', lg: 'center' },
           maxWidth: { xs: '100%', sm: '1240px' },
           zIndex: 2,
@@ -177,26 +164,7 @@ export function SectionHero() {
         <StyledButton onClick={() => (window.location.href = `${window.location.origin}/demo`)}>Demo</StyledButton>
       </Box>
 
-      {/* Comment sponsor */}
-      {/* <Box sx={{ display: 'flex', alignItems: 'center', mt: '27px' }}>
-        <Typography
-          sx={{
-            fontSize: '11px',
-            color: '#6F9492',
-            fontWeight: '500',
-            padding: '5px',
-          }}
-        >
-          Support:
-        </Typography>
-        <List sx={{ display: 'flex', flexDirection: 'row' }}>
-          {Object.keys(supportList).map((item) => {
-            return <Box key={item} component="img" title={item} src={`icons/support/${item}.svg`} sx={{ mr: 1 }} />;
-          })}
-        </List>
-      </Box> */}
-
-      <Box sx={{ height: '52px' }} />
+      <Box sx={{ height: '20vh' }} />
       <Box sx={{ position: 'relative' }}>
         <Box
           style={{
@@ -208,15 +176,6 @@ export function SectionHero() {
             opacity: 1,
             filter: 'blur(180px)',
             zIndex: -2,
-          }}
-        />
-        <Box
-          component="img"
-          src="/images/heroShow.png"
-          sx={{
-            zIndex: 0,
-            maxWidth: '1500px',
-            maxHeight: '100%',
           }}
         />
       </Box>

@@ -22,25 +22,6 @@ export function SectionClient() {
   }, []);
 
   const donateData = [
-    // {
-    //   avatarSrc: '/test/lxdao-logo.svg',
-    //   name: 'LXDAO',
-    //   website: 'lxdao.io',
-    //   description: 'LXDAO is an R&D-focused DAO in Web3',
-    // },
-    // {
-    //   avatarSrc: '/test/marry3-logo-rect.png',
-    //   name: 'marry3',
-    //   website: 'marry3.love',
-    //   description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
-    // },
-    // Add one more data entry as needed
-    // {
-    //   avatarSrc: '/test/mail3.svg',
-    //   name: 'mail3',
-    //   website: 'mail3.me',
-    //   description: 'Web3 natives deserve a better mail',
-    // },
     {
       avatarSrc: '/test/GasLockR.svg',
       name: 'GasLockR',
@@ -82,7 +63,7 @@ export function SectionClient() {
           lineHeight: { xs: '32px', md: '64px' },
           color: '#0F172A',
           textAlign: { xs: 'center', lg: 'center' },
-          mt: { xs: '30px', lg: '86' },
+          mt: { xs: '30px', lg: '0px' },
           mb: { xs: '30px', lg: '61px' },
         }}
       >
