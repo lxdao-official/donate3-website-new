@@ -4,7 +4,7 @@ export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE
 
 export const DEFAULT_CREATE_NAME = 'Donate3';
 export const DEFAULT_CREATE_COLOR = '#b9e927';
-export const DEFAULT_CREATE_ADDRESS = '0xe395B9bA2F93236489ac953146485C435D1A267B';
+export const DEFAULT_CREATE_ADDRESS = '0x6474e7794a14d1c928bc77e432c3283e70b53b0ad5255661750a06fadf1ee575';
 
 export enum AccountType {
   'EOA',

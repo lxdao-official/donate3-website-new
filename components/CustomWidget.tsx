@@ -45,6 +45,7 @@ import { useLottie } from 'lottie-react';
 import loadingAnimation from '../public/loading/donate3Loading.json';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import { Img3 } from '@lxdao/img3';
+import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 export interface ICustomWidget {
   type: number;
@@ -66,7 +67,7 @@ export interface ICustomWidget {
 }
 
 export default function CustomWidget() {
-  const { address } = useAccount();
+  const { account } = useWallet();
   const [loading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
   const [donationsCode, setDonationsCode] = useState<string>('');
@@ -122,12 +123,12 @@ export default function CustomWidget() {
   }, 300);
 
   useEffect(() => {
-    setValue('address', address as string);
+    setValue('address', account?.address as string);
     setConfig((pre) => ({
       ...pre,
-      address: address || DEFAULT_CREATE_ADDRESS,
+      address: account?.address || DEFAULT_CREATE_ADDRESS,
     }));
-  }, [address, setValue]);
+  }, [account, setValue]);
 
   const confirmBtnDisabled = useMemo(() => {
     return !config.color || !config.name || !config.address;
@@ -201,7 +202,7 @@ export default function CustomWidget() {
   };
 
   const handleClickConfirmBtn = () => {
-    const isAddress = (str: string) => /^0x[0-9a-fA-F]{40}$/.test(str);
+    const isAddress = (str: string) => /^0x[0-9a-fA-F]{64}$/.test(str);
     const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
     if (config.accountType === 0) {
       if (!(config.address && isAddress(config.address))) {
@@ -735,176 +736,48 @@ export default function CustomWidget() {
                           </Box>
                         }
                       />
-                      <FormControlLabel
-                        sx={{
-                          border: value == 0 ? '1px solid  #E2E8F0' : '1px solid #0F172A',
-                          borderRadius: '4px',
-                          background: ' #FFF',
-                          marginLeft: 0,
-                          marginRight: 0,
-                          padding: '16px 10px',
-                          marginBottom: '16px',
-                          paddingBottom: 5.25,
-                        }}
-                        value={1}
-                        control={<Radio color="default" />}
-                        label={
-                          <Box height={30}>
-                            <Typography variant="body1" sx={{ mt: { xs: '-30px', md: '0px' } }} lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
-                              Safe Account
-                            </Typography>
-                            <Typography variant="body2" lineHeight="26px" color="#64748B">
-                              Receive donation from any chain with different address.
-                            </Typography>
-                          </Box>
-                        }
-                      />
                     </RadioGroup>
                   </FormInput>
                 );
               }}
             />
-            {config.accountType === 0 ? (
-              <Controller
-                name={'address'}
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => {
-                  return (
-                    <FormInput title="Receive address" error={errors.address?.type}>
-                      <InputBase
-                        sx={{
-                          mt: 0,
-                          backgroundColor: 'var(--gray-300, #E2E8F0)',
-                          height: '40px',
-                          paddingX: '10px',
-                          borderRadius: '4px',
-                        }}
-                        value={value}
-                        onChange={(e: any) => {
-                          let address = e.target.value;
-                          setError('address', {});
-                          setConfig((pre) => ({
-                            ...pre,
-                            address: address,
-                          }));
+            <Controller
+              name={'address'}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <FormInput title="Receive address" error={errors.address?.type}>
+                    <InputBase
+                      sx={{
+                        mt: 0,
+                        backgroundColor: 'var(--gray-300, #E2E8F0)',
+                        height: '40px',
+                        paddingX: '10px',
+                        borderRadius: '4px',
+                      }}
+                      value={value}
+                      onChange={(e: any) => {
+                        let address = e.target.value;
+                        setError('address', {});
+                        setConfig((pre) => ({
+                          ...pre,
+                          address: address,
+                        }));
 
-                          if (!address.startsWith('0x')) {
-                            setError('address', { type: 'not address' });
-                          }
-                          if (address.length !== 42) {
-                            setError('address', { type: 'too long or too short' });
-                          }
-                          onChange(e);
-                        }}
-                      />
-                    </FormInput>
-                  );
-                }}
-              />
-            ) : (
-              <Box>
-                <Typography
-                  sx={{
-                    position: 'inherit',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    lineHeight: '26px',
-                    marginBottom: '10px',
-                  }}
-                >
-                  <span style={{ display: 'flex' }}>
-                    <span style={{ flex: 1 }}>Receive address</span>
-                    <span style={{ cursor: 'pointer' }} onClick={addAccountItem}>
-                      + Add
-                    </span>
-                  </span>
-                </Typography>
-
-                {!!errors.safeAccounts?.type && (
-                  <Typography
-                    sx={{
-                      fontWeight: '500',
-                      fontSize: '12px',
-                      lineHeight: '15px',
-                      px: '5px',
-                      mr: '3px',
-                      color: '#DC0202',
-                    }}
-                  >
-                    {errors.safeAccounts.type}
-                  </Typography>
-                )}
-
-                {!!config.safeAccounts?.length &&
-                  config.safeAccounts.map((item, index) => (
-                    <Box display={'flex'} key={'list' + index} mb={1}>
-                      <Box width={165} mr={1.5}>
-                        <Select
-                          fullWidth
-                          variant="standard"
-                          sx={{
-                            height: '40px',
-                            borderRadius: '4px',
-                            textIndent: '10px',
-                            backgroundColor: 'var(--gray-300, #E2E8F0)',
-                            '& svg': { verticalAlign: 'middle' },
-                          }}
-                          value={item.networkId || 1}
-                          onChange={(e) => {
-                            setConfig((pre) => {
-                              const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
-                              newSafeAccounts[index].networkId = ~~e.target.value;
-                              return { ...pre, safeAccounts: newSafeAccounts };
-                            });
-                          }}
-                        >
-                          {networks.map((item: { id: number; network: string; icon: any }) => (
-                            <MenuItem value={item.id} key={item.id}>
-                              <SvgIcon sx={{ borderRadius: '50%', mr: 1.25 }} component={item.icon} />
-                              {item.network}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </Box>
-                      <Box flex={1}>
-                        <InputBase
-                          sx={{
-                            mt: 0,
-                            width: '100%',
-                            backgroundColor: 'var(--gray-300, #E2E8F0)',
-                            height: '40px',
-                            paddingX: '10px',
-                            borderRadius: '4px',
-                          }}
-                          endAdornment={
-                            <InputAdornment
-                              sx={{
-                                height: '30px',
-                                mt: '5px',
-                                marginRight: '-10px',
-                                cursor: 'pointer',
-                              }}
-                              position="start"
-                            >
-                              <SvgIcon sx={{ cursor: 'pointer' }} onClick={() => handleDelete(index)} component={Delete} inheritViewBox />
-                            </InputAdornment>
-                          }
-                          value={item.address}
-                          onChange={(e: any) => {
-                            setError('safeAccounts', { type: '' });
-                            setConfig((pre) => {
-                              const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
-                              newSafeAccounts[index].address = e.target.value;
-                              return { ...pre, safeAccounts: newSafeAccounts };
-                            });
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  ))}
-              </Box>
-            )}
+                        if (!address.startsWith('0x')) {
+                          setError('address', { type: 'not address' });
+                        }
+                        if (address.length !== 42) {
+                          setError('address', { type: 'too long or too short' });
+                        }
+                        onChange(e);
+                      }}
+                    />
+                  </FormInput>
+                );
+              }}
+            />
 
             {/*{config.accountType === 0 ? (
 
@@ -913,175 +786,6 @@ export default function CustomWidget() {
                   <></>
               )}
               */}
-            <Box>
-              <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
-                  <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you want to set a funds-raised progress?</Typography>
-                  {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: '20px',
-                      lineHeight: '28px',
-                      width: '100%',
-                      flexShrink: 0,
-                    }}
-                  >
-                    Donation amount settings{' '}
-                  </Typography>
-
-                  <Box sx={{ mt: '31px' }}>
-                    <Controller
-                      name={'reason'}
-                      control={control}
-                      rules={{ required: false }}
-                      render={({ field: {} }) => {
-                        return (
-                          <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
-                            <TextField
-                              id="Challenges"
-                              multiline
-                              rows={4}
-                              //variant="filled"
-                              value={config?.reason}
-                              label="Type your donation reason and introduction"
-                              InputProps={
-                                {
-                                  //disableUnderline:true,
-                                  //sx={{border'0px'}}
-                                }
-                              }
-                              sx={{
-                                backgroundColor: '#E2E8F0',
-                              }}
-                              onChange={(e: any) => {
-                                let fundsReason = e.target.value;
-                                setConfig((pre) => ({
-                                  ...pre,
-                                  reason: fundsReason,
-                                }));
-                              }}
-                            />
-                          </FormInput>
-                        );
-                      }}
-                    />
-                    <Controller
-                      name={'fundsGoal'}
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field: { onChange, value } }) => {
-                        return (
-                          <FormInput
-                            title="Expected funds goal ( USDT-based)"
-                            error={errors.fundsGoal?.type}
-                            style={{
-                              marginBottom: '16px',
-                            }}
-                          >
-                            <InputBase
-                              sx={{
-                                mt: 0,
-                                backgroundColor: 'var(--gray-300, #E2E8F0)',
-                                height: '40px',
-                                paddingX: '10px',
-                                borderRadius: '4px',
-                              }}
-                              type="number"
-                              value={value}
-                              onChange={(e: any) => {
-                                let fundsGoal = e.target.value;
-                                setError('fundsGoal', {});
-                                if (fundsGoal < 0) {
-                                  setError('fundsGoal', { type: 'invalid Number less than 0' });
-                                  return;
-                                }
-                                setConfig((pre) => ({
-                                  ...pre,
-                                  fundsGoal: fundsGoal,
-                                }));
-                                onChange(e);
-                              }}
-                            />
-                          </FormInput>
-                        );
-                      }}
-                    />
-                    <Box sx={{ display: 'flex' }}>
-                      <Box>
-                        <Controller
-                          name={'startTime'}
-                          control={control}
-                          rules={{ required: true }}
-                          render={({}) => {
-                            return (
-                              <FormInput title="Start time" /*error={errors.name?.type}*/>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DatePicker
-                                    label="Select"
-                                    value={selectedStartDate}
-                                    sx={{ backgroundColor: '#E2E8F0' }}
-                                    onChange={(newValue) => {
-                                      let startTime = dayjs(newValue).valueOf();
-                                      setSelectedStartDate(startTime);
-                                      setConfig((pre) => ({
-                                        ...pre,
-                                        startTime: startTime,
-                                      }));
-                                    }}
-                                  />
-                                </LocalizationProvider>
-                              </FormInput>
-                            );
-                          }}
-                        />
-                      </Box>
-                      <Box sx={{ marginLeft: { md: '40px' } }}>
-                        <Controller
-                          name={'endTime'}
-                          control={control}
-                          rules={{ required: true }}
-                          render={({}) => {
-                            return (
-                              <FormInput title="End time" /*error={errors.name?.type}*/>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DatePicker
-                                    label="Select"
-                                    value={selectedEndDate}
-                                    sx={{ backgroundColor: '#E2E8F0' }}
-                                    onChange={(newValue) => {
-                                      let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
-
-                                      if (endTime < selectedStartDate!) {
-                                        alert('End Date Shold Bigger Than Start Date');
-                                        setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
-                                      } else {
-                                        setSelectedEndDate(endTime);
-                                        setConfig((pre) => ({
-                                          ...pre,
-                                          endTime: endTime,
-                                        }));
-                                      }
-                                    }}
-                                  />
-                                </LocalizationProvider>
-                              </FormInput>
-                            );
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Donate3Btn variant="contained" sx={{ justifyContent: 'center' }} onClick={handleChange('panel1')}>
-                    {' '}
-                    Cancle Set Progress-Account
-                  </Donate3Btn>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
           </Card>
 
           <div

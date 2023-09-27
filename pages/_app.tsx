@@ -12,6 +12,8 @@ import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { DONATE_SDK_URL } from '@/utils/const';
 import { Linea } from '@/utils/linea';
+import { AptosWalletAdapterProvider } from '@aptos-labs/wallet-adapter-react';
+import { PetraWallet } from 'petra-plugin-wallet-adapter';
 
 const { chains, publicClient } = configureChains(
   [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia, optimismGoerli],
@@ -54,39 +56,48 @@ const theme = createTheme({
   },
 });
 
+const wallets = [new PetraWallet()];
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <WagmiConfig config={wagmiConfig}>
-          <RainbowKitProvider chains={chains}>
-            <DefaultSeo
-              title="Donate3 - Make donate in web3 so easy"
-              description="Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5 minutes."
-              canonical="https://www.donate3.xyz/"
-              openGraph={{
-                url: 'https://www.donate3.xyz/',
-                siteName: 'Donate3',
-                images: [
-                  {
-                    url: ' https://www.donate3.xyz/logo.svg',
-                    alt: 'Donate3 logo',
-                    width: 46,
-                    height: 46,
-                  },
-                ],
-              }}
-              twitter={{
-                handle: '@donate3official',
-                site: '@Donate3',
-                cardType: 'summary_large_image',
-              }}
-            />
-            <Component {...pageProps} />
-            <Script src={DONATE_SDK_URL} />
-          </RainbowKitProvider>
-        </WagmiConfig>
-      </ThemeProvider>
+      <AptosWalletAdapterProvider
+        plugins={wallets}
+        onError={(error) => {
+          console.log('Custom error handling', error);
+        }}
+      >
+        <ThemeProvider theme={theme}>
+          <WagmiConfig config={wagmiConfig}>
+            <RainbowKitProvider chains={chains}>
+              <DefaultSeo
+                title="Donate3 - Make donate in web3 so easy"
+                description="Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5 minutes."
+                canonical="https://www.donate3.xyz/"
+                openGraph={{
+                  url: 'https://www.donate3.xyz/',
+                  siteName: 'Donate3',
+                  images: [
+                    {
+                      url: ' https://www.donate3.xyz/logo.svg',
+                      alt: 'Donate3 logo',
+                      width: 46,
+                      height: 46,
+                    },
+                  ],
+                }}
+                twitter={{
+                  handle: '@donate3official',
+                  site: '@Donate3',
+                  cardType: 'summary_large_image',
+                }}
+              />
+              <Component {...pageProps} />
+              <Script src={DONATE_SDK_URL} />
+            </RainbowKitProvider>
+          </WagmiConfig>
+        </ThemeProvider>
+      </AptosWalletAdapterProvider>
     </>
   );
 }
