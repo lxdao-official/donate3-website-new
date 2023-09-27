@@ -191,28 +191,28 @@ export default function CustomWidget() {
     }
   };
 
-  const handleClickConfirmBtn = () => {
-    const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
-    if (config.accountType === 0) {
-      if (!config.address) {
-        setError('address', { type: 'not address or too long or too short' });
-        return;
-      }
-    } else {
-      if (!(newSafeAccounts.length && newSafeAccounts.every((item) => item.address))) {
-        setError('safeAccounts', { type: 'not address or too long or too short' });
-        return;
-      }
-    }
-    setLoading(true);
-    const newConfig = { ...config };
-    if (newConfig.accountType) {
-      delete newConfig.address;
-    } else {
-      delete newConfig.safeAccounts;
-    }
-    storeInfoToNFTStorage(newConfig);
-  };
+  // const handleClickConfirmBtn = () => {
+  //   const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
+  //   if (config.accountType === 0) {
+  //     if (!config.address) {
+  //       setError('address', { type: 'not address or too long or too short' });
+  //       return;
+  //     }
+  //   } else {
+  //     if (!(newSafeAccounts.length && newSafeAccounts.every((item) => item.address))) {
+  //       setError('safeAccounts', { type: 'not address or too long or too short' });
+  //       return;
+  //     }
+  //   }
+  //   setLoading(true);
+  //   const newConfig = { ...config };
+  //   if (newConfig.accountType) {
+  //     delete newConfig.address;
+  //   } else {
+  //     delete newConfig.safeAccounts;
+  //   }
+  //   storeInfoToNFTStorage(newConfig);
+  // };
 
   const setAvatarToConfig = (avatar: string) => {
     setConfig((pre) => ({
