@@ -2,27 +2,26 @@ export const DONATE_SDK_LATEST_VERSION = '1.0.33';
 
 export const DONATE_SDK_URL = `/bundle-solana.js`;
 
-export const DEFAULT_CREATE_NAME = 'Donate3';
+export const DEFAULT_CREATE_NAME = 'Donate3-solana';
 export const DEFAULT_CREATE_COLOR = '#b9e927';
-export const DEFAULT_CREATE_ADDRESS = '0xe395B9bA2F93236489ac953146485C435D1A267B';
+export const DEFAULT_CREATE_ADDRESS = 'G6P6s2UgbNFFXrqEq7oCx48uP1abXWoZU86SaaTCnoGS';
 
 export enum AccountType {
-  'EOA',
-  'safeAccount',
+  'solana',
 }
 export enum AccountProgressType {
   'WithProgress',
   'WithoutProgress',
 }
-export interface SafeAccount {
-  networkId: number;
-  address: `0x${string}` | undefined;
-}
+// export interface SafeAccount {
+//   networkId: number;
+//   address: `0x${string}` | undefined;
+// }
 export const DEFAULT_CREATE_CONFIG = {
   type: 0,
   color: DEFAULT_CREATE_COLOR,
   name: DEFAULT_CREATE_NAME,
-  accountType: AccountType.EOA,
+  accountType: AccountType.solana,
   progressType: AccountProgressType.WithoutProgress,
   address: DEFAULT_CREATE_ADDRESS,
   safeAccounts: [{ networkId: 5, address: undefined }],
@@ -44,7 +43,7 @@ export enum EType {
 
 export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou';
 
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const ZERO_ADDRESS = '11111111111111111111111111111111';
 
 export const PRODUCTION_URL = 'https://www.donate3.xyz';
 
