@@ -11,10 +11,19 @@ import { ChromePicker } from 'react-color';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
 
+import Delete from '../public/icons/delete.svg';
+import Arbitrum from '../public/icons/networks/arbitrum.svg';
+import Ethereum from '../public/icons/networks/ethereum.svg';
+import Goerli from '../public/icons/networks/goerli.svg';
+import Linea from '../public/icons/networks/linea.svg';
+import Optimism from '../public/icons/networks/optimism.svg';
+// import Pgn from '../public/icons/networks/pgn.svg';
+import Polygon from '../public/icons/networks/polygon.svg';
+
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK, PRODUCTION_URL } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK, PRODUCTION_URL } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -65,9 +74,9 @@ export default function CustomWidget() {
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
-  // const [selectedStartDate, setSelectedStartDate] = useState<number>();
-  // const [selectedEndDate, setSelectedEndDate] = useState<number>();
-  // const [expanded, setExpanded] = useState<string | false>(false);
+  const [selectedStartDate, setSelectedStartDate] = useState<number>();
+  const [selectedEndDate, setSelectedEndDate] = useState<number>();
+  const [expanded, setExpanded] = useState<string | false>(false);
   const [commonLoading, setCommonLoading] = useState<boolean>(false);
 
   const options = {
@@ -80,22 +89,22 @@ export default function CustomWidget() {
   });
 
   //设置是否有进度
-  // const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-  //   setExpanded(isExpanded ? panel : false);
-  //   //1默认表示没有进度条
-  //   let progressType = 1;
-  //   if (isExpanded) {
-  //     progressType = 0;
-  //   } else {
-  //     alert('you have cancled set raised account with raised progress');
-  //     progressType = 1;
-  //   }
-  //   //设置是否带进度条
-  //   setConfig((pre) => ({
-  //     ...pre,
-  //     progressType: progressType,
-  //   }));
-  // };
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+    //1默认表示没有进度条
+    let progressType = 1;
+    if (isExpanded) {
+      progressType = 0;
+    } else {
+      alert('you have cancled set raised account with raised progress');
+      progressType = 1;
+    }
+    //设置是否带进度条
+    setConfig((pre) => ({
+      ...pre,
+      progressType: progressType,
+    }));
+  };
 
   const {
     control,
@@ -124,16 +133,16 @@ export default function CustomWidget() {
     return !config.color || !config.name || !config.address;
   }, [config]);
 
-  // const networks = [
-  //   { id: 1, network: 'Ethereum', icon: Ethereum },
-  //   { id: 5, network: 'Goerli', icon: Goerli },
-  //   { id: 10, network: 'Optimism', icon: Optimism },
-  //   { id: 42161, network: 'Arbitrum', icon: Arbitrum },
-  //   { id: 137, network: 'Polygon', icon: Polygon },
-  //   { id: 59144, network: 'Linea', icon: Linea },
-  //   { id: 420, network: 'Optimism Goerli', icon: Optimism },
-  //   // { id: 424, network: 'PGN', icon: Pgn },
-  // ];
+  const networks = [
+    { id: 1, network: 'Ethereum', icon: Ethereum },
+    { id: 5, network: 'Goerli', icon: Goerli },
+    { id: 10, network: 'Optimism', icon: Optimism },
+    { id: 42161, network: 'Arbitrum', icon: Arbitrum },
+    { id: 137, network: 'Polygon', icon: Polygon },
+    { id: 59144, network: 'Linea', icon: Linea },
+    { id: 420, network: 'Optimism Goerli', icon: Optimism },
+    // { id: 424, network: 'PGN', icon: Pgn },
+  ];
 
   const handleOpen = () => {
     setDisplayColorPicker(true);
@@ -191,15 +200,17 @@ export default function CustomWidget() {
     }
   };
 
+  // ETH Version ⬇️
   // const handleClickConfirmBtn = () => {
+  //   const isAddress = (str: string) => /^0x[0-9a-fA-F]{40}$/.test(str);
   //   const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
   //   if (config.accountType === 0) {
-  //     if (!config.address) {
+  //     if (!(config.address && isAddress(config.address))) {
   //       setError('address', { type: 'not address or too long or too short' });
   //       return;
   //     }
   //   } else {
-  //     if (!(newSafeAccounts.length && newSafeAccounts.every((item) => item.address))) {
+  //     if (!(newSafeAccounts.length && newSafeAccounts.every((item) => item.address && isAddress(item.address)))) {
   //       setError('safeAccounts', { type: 'not address or too long or too short' });
   //       return;
   //     }
@@ -213,6 +224,17 @@ export default function CustomWidget() {
   //   }
   //   storeInfoToNFTStorage(newConfig);
   // };
+
+  // Solana Version
+  // TODO: Ellen teacher helps helps me
+  const handleClickConfirmBtn = () => {
+    setLoading(true);
+    const newConfig = { ...config };
+    if (newConfig.accountType) {
+      delete newConfig.address;
+    }
+    storeInfoToNFTStorage(newConfig);
+  };
 
   const setAvatarToConfig = (avatar: string) => {
     setConfig((pre) => ({
@@ -228,21 +250,21 @@ export default function CustomWidget() {
     }));
   };
 
-  // const addAccountItem = () => {
-  //   const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
-  //   const lastItemAddress = newSafeAccounts[newSafeAccounts.length - 1].address;
-  //   if (!(lastItemAddress && lastItemAddress.startsWith('0x') && lastItemAddress.length === 42)) {
-  //     setError('safeAccounts', { type: 'not address or too long or too short' });
-  //     return;
-  //   }
-  //   if (!newSafeAccounts[newSafeAccounts.length - 1].address) {
-  //     return;
-  //   }
-  //   setConfig((pre) => {
-  //     newSafeAccounts.push({ networkId: networks[0].id, address: undefined });
-  //     return { ...pre, safeAccounts: newSafeAccounts };
-  //   });
-  // };
+  const addAccountItem = () => {
+    const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
+    const lastItemAddress = newSafeAccounts[newSafeAccounts.length - 1].address;
+    if (!(lastItemAddress && lastItemAddress.startsWith('0x') && lastItemAddress.length === 42)) {
+      setError('safeAccounts', { type: 'not address or too long or too short' });
+      return;
+    }
+    if (!newSafeAccounts[newSafeAccounts.length - 1].address) {
+      return;
+    }
+    setConfig((pre) => {
+      newSafeAccounts.push({ networkId: networks[0].id, address: undefined });
+      return { ...pre, safeAccounts: newSafeAccounts };
+    });
+  };
 
   const handleDelete = (index: number) => {
     if (index) {
@@ -712,6 +734,7 @@ export default function CustomWidget() {
                           marginBottom: '16px',
                           paddingBottom: 5.25,
                         }}
+                        //sx={{ border: '1px solid #0F172A', borderRadius: '4px', background: ' #FFF', marginLeft: 0, marginRight: 0, padding: '16px 10px', marginBottom: '16px', paddingBottom: 5.25 }}
                         control={<Radio color="default" />}
                         label={
                           <Box height={30}>
@@ -719,11 +742,36 @@ export default function CustomWidget() {
                               Solana Account
                             </Typography>
                             <Typography variant="body2" sx={{ lineHeight: '26px' }} color="#64748B">
-                              Receive donation from Solana network with same address.
+                              Receive donation from Solana with same address.
                             </Typography>
                           </Box>
                         }
                       />
+                      {/*                       
+                      <FormControlLabel
+                        sx={{
+                          border: value == 0 ? '1px solid  #E2E8F0' : '1px solid #0F172A',
+                          borderRadius: '4px',
+                          background: ' #FFF',
+                          marginLeft: 0,
+                          marginRight: 0,
+                          padding: '16px 10px',
+                          marginBottom: '16px',
+                          paddingBottom: 5.25,
+                        }}
+                        value={1}
+                        control={<Radio color="default" />}
+                        label={
+                          <Box height={30}>
+                            <Typography variant="body1" sx={{ mt: { xs: '-30px', md: '0px' } }} lineHeight="28px" fontWeight={600} color="#0F172A" mb={1}>
+                              Safe Account
+                            </Typography>
+                            <Typography variant="body2" lineHeight="26px" color="#64748B">
+                              Receive donation from any chain with different address.
+                            </Typography>
+                          </Box>
+                        }
+                      /> */}
                     </RadioGroup>
                   </FormInput>
                 );
@@ -754,12 +802,13 @@ export default function CustomWidget() {
                             address: address,
                           }));
 
-                          if (!address.startsWith('0x')) {
-                            setError('address', { type: 'not address' });
-                          }
-                          if (address.length !== 42) {
-                            setError('address', { type: 'too long or too short' });
-                          }
+                          // We don't use address checker in Solana address
+                          // if (!address.startsWith('0x')) {
+                          //   setError('address', { type: 'not address' });
+                          // }
+                          // if (address.length !== 42) {
+                          //   setError('address', { type: 'too long or too short' });
+                          // }
                           onChange(e);
                         }}
                       />
@@ -780,10 +829,272 @@ export default function CustomWidget() {
                 >
                   <span style={{ display: 'flex' }}>
                     <span style={{ flex: 1 }}>Receive address</span>
+                    {/* <span style={{ cursor: 'pointer' }} onClick={addAccountItem}>
+                      + Add
+                    </span> */}
                   </span>
                 </Typography>
+
+                {!!errors.safeAccounts?.type && (
+                  <Typography
+                    sx={{
+                      fontWeight: '500',
+                      fontSize: '12px',
+                      lineHeight: '15px',
+                      px: '5px',
+                      mr: '3px',
+                      color: '#DC0202',
+                    }}
+                  >
+                    {errors.safeAccounts.type}
+                  </Typography>
+                )}
+
+                {/* {!!config.safeAccounts?.length &&
+                  config.safeAccounts.map((item, index) => (
+                    <Box display={'flex'} key={'list' + index} mb={1}>
+                      <Box width={165} mr={1.5}>
+                        <Select
+                          fullWidth
+                          variant="standard"
+                          sx={{
+                            height: '40px',
+                            borderRadius: '4px',
+                            textIndent: '10px',
+                            backgroundColor: 'var(--gray-300, #E2E8F0)',
+                            '& svg': { verticalAlign: 'middle' },
+                          }}
+                          value={item.networkId || 1}
+                          onChange={(e) => {
+                            setConfig((pre) => {
+                              const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
+                              newSafeAccounts[index].networkId = ~~e.target.value;
+                              return { ...pre, safeAccounts: newSafeAccounts };
+                            });
+                          }}
+                        >
+                          {networks.map((item: { id: number; network: string; icon: any }) => (
+                            <MenuItem value={item.id} key={item.id}>
+                              <SvgIcon sx={{ borderRadius: '50%', mr: 1.25 }} component={item.icon} />
+                              {item.network}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Box>
+                      <Box flex={1}>
+                        <InputBase
+                          sx={{
+                            mt: 0,
+                            width: '100%',
+                            backgroundColor: 'var(--gray-300, #E2E8F0)',
+                            height: '40px',
+                            paddingX: '10px',
+                            borderRadius: '4px',
+                          }}
+                          endAdornment={
+                            <InputAdornment
+                              sx={{
+                                height: '30px',
+                                mt: '5px',
+                                marginRight: '-10px',
+                                cursor: 'pointer',
+                              }}
+                              position="start"
+                            >
+                              <SvgIcon sx={{ cursor: 'pointer' }} onClick={() => handleDelete(index)} component={Delete} inheritViewBox />
+                            </InputAdornment>
+                          }
+                          value={item.address}
+                          onChange={(e: any) => {
+                            setError('safeAccounts', { type: '' });
+                            setConfig((pre) => {
+                              const newSafeAccounts = pre.safeAccounts ? [...pre.safeAccounts] : [];
+                              newSafeAccounts[index].address = e.target.value;
+                              return { ...pre, safeAccounts: newSafeAccounts };
+                            });
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  ))} */}
               </Box>
             )}
+
+            {/*{config.accountType === 0 ? (
+
+
+              /* ) : (
+                  <></>
+              )}
+              */}
+            {/* <Box>
+              <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+                  <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you want to set a funds-raised progress?</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: '20px',
+                      lineHeight: '28px',
+                      width: '100%',
+                      flexShrink: 0,
+                    }}
+                  >
+                    Donation amount settings{' '}
+                  </Typography>
+
+                  <Box sx={{ mt: '31px' }}>
+                    <Controller
+                      name={'reason'}
+                      control={control}
+                      rules={{ required: false }}
+                      render={({ field: {} }) => {
+                        return (
+                          <FormInput title="Challenges I am facing">
+                            <TextField
+                              id="Challenges"
+                              multiline
+                              rows={4}
+                              //variant="filled"
+                              value={config?.reason}
+                              label="Type your donation reason and introduction"
+                              InputProps={
+                                {
+                                  //disableUnderline:true,
+                                  //sx={{border'0px'}}
+                                }
+                              }
+                              sx={{
+                                backgroundColor: '#E2E8F0',
+                              }}
+                              onChange={(e: any) => {
+                                let fundsReason = e.target.value;
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  reason: fundsReason,
+                                }));
+                              }}
+                            />
+                          </FormInput>
+                        );
+                      }}
+                    />
+                    <Controller
+                      name={'fundsGoal'}
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field: { onChange, value } }) => {
+                        return (
+                          <FormInput
+                            title="Expected funds goal ( USDT-based)"
+                            error={errors.fundsGoal?.type}
+                            style={{
+                              marginBottom: '16px',
+                            }}
+                          >
+                            <InputBase
+                              sx={{
+                                mt: 0,
+                                backgroundColor: 'var(--gray-300, #E2E8F0)',
+                                height: '40px',
+                                paddingX: '10px',
+                                borderRadius: '4px',
+                              }}
+                              type="number"
+                              value={value}
+                              onChange={(e: any) => {
+                                let fundsGoal = e.target.value;
+                                setError('fundsGoal', {});
+                                if (fundsGoal < 0) {
+                                  setError('fundsGoal', { type: 'invalid Number less than 0' });
+                                  return;
+                                }
+                                setConfig((pre) => ({
+                                  ...pre,
+                                  fundsGoal: fundsGoal,
+                                }));
+                                onChange(e);
+                              }}
+                            />
+                          </FormInput>
+                        );
+                      }}
+                    />
+                    <Box sx={{ display: 'flex' }}>
+                      <Box>
+                        <Controller
+                          name={'startTime'}
+                          control={control}
+                          rules={{ required: true }}
+                          render={({}) => {
+                            return (
+                              <FormInput title="Start time">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DatePicker
+                                    label="Select"
+                                    value={selectedStartDate}
+                                    sx={{ backgroundColor: '#E2E8F0' }}
+                                    onChange={(newValue) => {
+                                      let startTime = dayjs(newValue).valueOf();
+                                      setSelectedStartDate(startTime);
+                                      setConfig((pre) => ({
+                                        ...pre,
+                                        startTime: startTime,
+                                      }));
+                                    }}
+                                  />
+                                </LocalizationProvider>
+                              </FormInput>
+                            );
+                          }}
+                        />
+                      </Box>
+                      <Box sx={{ marginLeft: { md: '40px' } }}>
+                        <Controller
+                          name={'endTime'}
+                          control={control}
+                          rules={{ required: true }}
+                          render={({}) => {
+                            return (
+                              <FormInput title="End time">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DatePicker
+                                    label="Select"
+                                    value={selectedEndDate}
+                                    sx={{ backgroundColor: '#E2E8F0' }}
+                                    onChange={(newValue) => {
+                                      let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
+
+                                      if (endTime < selectedStartDate!) {
+                                        alert('End Date Shold Bigger Than Start Date');
+                                        setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
+                                      } else {
+                                        setSelectedEndDate(endTime);
+                                        setConfig((pre) => ({
+                                          ...pre,
+                                          endTime: endTime,
+                                        }));
+                                      }
+                                    }}
+                                  />
+                                </LocalizationProvider>
+                              </FormInput>
+                            );
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Donate3Btn variant="contained" sx={{ justifyContent: 'center' }} onClick={handleChange('panel1')}>
+                    {' '}
+                    Cancle Set Progress-Account
+                  </Donate3Btn>
+                </AccordionDetails>
+              </Accordion>
+            </Box> */}
           </Card>
 
           <div
