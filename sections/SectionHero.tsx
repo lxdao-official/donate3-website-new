@@ -159,7 +159,7 @@ export function SectionHero() {
         }}
       >
         <StyledButton2 onClick={() => router.push('/create')}>Set up now</StyledButton2>
-        <StyledButton2 onClick={() => router.push('/dashboard')}>Dashboard</StyledButton2>
+        {/* <StyledButton2 onClick={() => router.push('/dashboard')}>Dashboard</StyledButton2> */}
 
         <StyledButton onClick={() => (window.location.href = `${window.location.origin}/demo`)}>Demo</StyledButton>
       </Box>
