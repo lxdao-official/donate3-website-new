@@ -41,7 +41,7 @@ export enum EType {
   'embed',
 }
 
-export const DEFAULT_CID = 'bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou';
+export const DEFAULT_CID = 'bafkreiav5wlxi5dwlg74747mtsqmpkfuuykbmhwvn7ibmtpa3uydtu57m4';
 
 export const ZERO_ADDRESS = '11111111111111111111111111111111';
 
