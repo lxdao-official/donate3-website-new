@@ -38,7 +38,7 @@ import API from '../common/API';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#f1f0f5',
-    color: '#B5B5C3',
+    color: '#0f172a',
     fontSize: '12px',
     fontWeight: 700,
     padding: 0,
@@ -48,6 +48,20 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+const ITextField = styled(TextField)({
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#0f172a',
+  },
+  '& .MuiOutlinedInput-root': {
+    '&:hover fieldset': {
+      borderColor: '#0f172a',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#0f172a',
+    },
+  },
+});
 
 type Address = `0x${string}`;
 
@@ -506,33 +520,33 @@ export default function Dashboard() {
       </Backdrop>
 
       <Stack>
-        <Typography variant="h4" color="#44443F">
+        <Typography variant="h5" color="#44443F" fontWeight="bold">
           Dashboard
         </Typography>
       </Stack>
 
       <Box display={'flex'} width={'100%'} gap={3} mb={3} mt={4.75}>
         <Box flex={1}>
-          <TextField size="small" fullWidth label="Donator address" value={donator} onChange={(e) => handleChangeInput(e, 'donator')} />
+          <ITextField size="small" fullWidth label="Donator address" value={donator} onChange={(e) => handleChangeInput(e, 'donator')} />
         </Box>
         <Box flex={1}>
-          <TextField size="small" fullWidth label="Receiver address or CID" value={receiveOrCid} onChange={(e) => handleChangeInput(e, 'receiveOrCid')} />
+          <ITextField size="small" fullWidth label="Receiver address or CID" value={receiveOrCid} onChange={(e) => handleChangeInput(e, 'receiveOrCid')} />
         </Box>
       </Box>
 
       <Box display={'flex'} gap={3}>
         <Box flex={1}>
-          <TextField size="small" fullWidth label="Message" value={message} onChange={(e) => handleChangeInput(e, 'message')} />
+          <ITextField size="small" fullWidth label="Message" value={message} onChange={(e) => handleChangeInput(e, 'message')} />
         </Box>
 
         <FormControl sx={{ flex: 1 }}>
           <InputLabel id="chian-label" sx={{ mt: -1 }}>
             Chain
           </InputLabel>
-          <Select labelId="chian-label" fullWidth multiple size="small" value={selectChainIds} onChange={handleChangeSelectChainId} input={<OutlinedInput label="Name" sx={{ height: '40px', overflow: 'hidden' }} />} MenuProps={MenuProps}>
+          <Select labelId="chian-label" margin="dense" fullWidth multiple size="small" value={selectChainIds} onChange={handleChangeSelectChainId} input={<OutlinedInput label="china" margin="dense" sx={{ height: '36px', overflow: 'hidden', borderColor: '#ca4321' }} />} MenuProps={MenuProps}>
             {networks.map(({ name, id }) => (
               <MenuItem key={id} value={id}>
-                <SvgIcon sx={{ mr: 1 }} component={icons[id]} />
+                <SvgIcon sx={{ mr: 1, overflow: 'hidden', borderRadius: '50%' }} component={icons[id]} />
                 {name}
               </MenuItem>
             ))}
@@ -541,17 +555,17 @@ export default function Dashboard() {
       </Box>
 
       <Box mt={3}>
-        <SearchButton size="large" variant="contained" onClick={handleSearch}>
+        <SearchButton size="large" sx={{ textTransform: 'capitalize' }} variant="contained" onClick={handleSearch}>
           Search
         </SearchButton>
-        <Button size="large" sx={{ color: '#0F172A', ml: 2 }} variant="text" onClick={handleReset}>
+        <Button size="large" sx={{ color: '#0F172A', ml: 2, textTransform: 'capitalize' }} variant="text" onClick={handleReset}>
           Reset
         </Button>
       </Box>
 
-      <Stack mt="60px">
-        <Stack justifyContent="space-between" alignItems="center" direction="row" mb="26px">
-          <Typography color="#3E4343" fontWeight="600">
+      <Stack mt="30px">
+        <Stack justifyContent="space-between" alignItems="center" direction="row" mb="12px">
+          <Typography color="#3E4343" fontWeight="600" fontSize={28}>
             Details
           </Typography>
 
@@ -559,6 +573,7 @@ export default function Dashboard() {
             sx={{
               width: '100px',
               color: '#0F172A',
+              textTransform: 'capitalize',
             }}
             onClick={downloadFile}
           >
@@ -567,9 +582,9 @@ export default function Dashboard() {
           </Button>
         </Stack>
 
-        <TableContainer component={Paper} sx={{ boxShadow: 'none', maxWidth: '100%', overflow: 'hidden' }}>
+        <TableContainer component={Paper} sx={{ boxShadow: 'none', maxWidth: '100%', overflow: 'hidden', background: 'transparent' }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHead sx={{ backgroundColor: '#f1f0f5', height: '38px' }}>
+            <TableHead sx={{ backgroundColor: '#f1f0f5', height: '56px' }}>
               <TableRow>
                 <StyledTableCell align="center">Donator</StyledTableCell>
                 <StyledTableCell align="center">Receiver</StyledTableCell>
@@ -596,65 +611,59 @@ export default function Dashboard() {
                     },
                   }}
                 >
-                  <StyledTableCell align="center" component="th" scope="row">
-                    <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
-                      <Tooltip title={row?.from} placement="bottom">
-                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + 'address/' + row?.from} target="_blank">
-                          <Typography>{row?.from.slice(0, 5) + '...' + row?.from.slice(-5, -1)}</Typography>
-                        </Link>
-                      </Tooltip>
-                    </Stack>
+                  <StyledTableCell component="th" scope="row">
+                    <Tooltip title={row?.from} placement="bottom">
+                      <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + 'address/' + row?.from} target="_blank">
+                        <Typography>{row?.from.slice(0, 5) + '...' + row?.from.slice(-5, -1)}</Typography>
+                      </Link>
+                    </Tooltip>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center" component="th" scope="row">
-                    <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
-                      <Tooltip title={row?.to} placement="bottom">
-                        <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + 'address/' + row?.to} target="_blank">
-                          <Typography>{row?.to.slice(0, 5) + '...' + row?.to.slice(-5, -1)}</Typography>
-                        </Link>
-                      </Tooltip>
-                    </Stack>
+                  <StyledTableCell component="th" scope="row">
+                    <Tooltip title={row?.to} placement="bottom">
+                      <Link underline="none" href={coinType[row?.chainId as unknown as string]?.coin[0].explorer + 'address/' + row?.to} target="_blank">
+                        <Typography>{row?.to.slice(0, 5) + '...' + row?.to.slice(-5, -1)}</Typography>
+                      </Link>
+                    </Tooltip>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center" component="th" scope="row">
-                    <Stack direction="row" justifyContent="center" alignItems="center" gap={1.5}>
-                      <Typography>{formatTimestamp(row?.timestamp)}</Typography>
-                    </Stack>
+                  <StyledTableCell component="th" scope="row">
+                    <Typography>{formatTimestamp(row?.timestamp)}</Typography>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
-                    <Stack direction="row" gap={1.5} justifyContent="center">
+                  <StyledTableCell component="th" scope="row">
+                    <Stack direction="row" gap={1.5}>
                       <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.icon} />
                       <Typography>{coinType[row?.chainId.toString()]?.name}</Typography>
                     </Stack>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
-                    <Stack direction="row" gap={1.5} justifyContent="center">
+                  <StyledTableCell>
+                    <Stack direction="row" gap={1.5}>
                       <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.coin[0]?.icon} />
                       <Typography>{`${coinType[row?.chainId.toString()]?.coin[0]?.name}\n`}</Typography>
                     </Stack>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
-                    <Stack direction={'column'} alignItems="center">
+                  <StyledTableCell>
+                    <Stack direction={'column'}>
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
                         {`${w2e(Number(row?.money))}`}
                       </Typography>
                     </Stack>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center" sx={{ width: '140px' }}>
-                    <Stack direction={'column'} alignItems="center">
-                      <Typography whiteSpace="break-spaces" align="right" lineHeight={'24px'}>
+                  <StyledTableCell component="th" scope="row">
+                    <Tooltip title={row?.message} placement="bottom">
+                      <Typography lineHeight={'24px'} sx={{ width: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {row?.message}
                       </Typography>
-                    </Stack>
+                    </Tooltip>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
-                    <Stack direction={'column'} alignItems="center">
-                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                  <StyledTableCell>
+                    <Stack direction={'column'}>
+                      <Typography whiteSpace="pre" lineHeight={'14px'}>
                         <Link underline="none" href={coinType[row?.chainId]?.coin[0].eas + 'attestation/view/' + row?.uid} target="_blank">
                           {row?.uid ? row?.uid?.slice(0, 5) + '...' + row?.uid?.slice(-5) : ''}
                         </Link>
@@ -662,9 +671,9 @@ export default function Dashboard() {
                     </Stack>
                   </StyledTableCell>
 
-                  <StyledTableCell align="center">
-                    <Stack direction={'column'} alignItems="center">
-                      <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
+                  <StyledTableCell>
+                    <Stack direction={'column'}>
+                      <Typography whiteSpace="pre" lineHeight={'14px'}>
                         <Link underline="none" href={coinType[row?.chainId.toString()]?.coin[0].explorer + 'tx/' + row?.transactionHash} target="_blank">
                           {row?.transactionHash?.slice(0, 5) + '...' + row?.transactionHash?.slice(-5, -1)}
                         </Link>
