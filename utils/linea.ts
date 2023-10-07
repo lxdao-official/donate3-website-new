@@ -30,10 +30,7 @@ export const Linea: Chain = {
       name: 'Etherscan',
       url: 'https://lineascan.build',
     },
-    blockscout: {
-      name: 'Blockscout',
-      url: 'https://explorer.linea.build',
-    },
+
   },
   contracts: {
     multicall3: {

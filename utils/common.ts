@@ -37,7 +37,7 @@ export const getDonateSrcDoc = (cid: string) => {
 };
 
 export const getDynamicDonateUrl = (info: Partial<ICustomWidget>) => {
-  const { accountType, address, avatar, color, description, name, safeAccounts, telegram, twitter, type } = info;
+  const { accountType, address, avatar, color, description, name, telegram, twitter, type } = info;
   return `<div 
      data-donate3-type='${EType[type!]}'
      data-donate3-to-address='${address}'
@@ -45,7 +45,6 @@ export const getDynamicDonateUrl = (info: Partial<ICustomWidget>) => {
      data-donate3-title='${name}'
      data-donate3-demo='true'
      data-donate3-avatar='${avatar || ''}'
-     data-donate3-safeAccounts='${safeAccounts && JSON.stringify(safeAccounts)}'
     ></div>
     <script src='${DONATE_SDK_URL}'></script>`;
 };
@@ -72,9 +71,9 @@ const decodeImage = (image: string) => {
             : rects.match(/.{1,4}/g)) === null || _a === void 0
           ? void 0
           : _a.map((rect: string) => [
-              parseInt(rect.substring(0, 2), 16),
-              parseInt(rect.substring(2, 4), 16),
-            ])) !== null && _b !== void 0
+            parseInt(rect.substring(0, 2), 16),
+            parseInt(rect.substring(2, 4), 16),
+          ])) !== null && _b !== void 0
         ? _b
         : [],
   };
@@ -110,8 +109,7 @@ const buildSVG = (
         // Do not push rect if transparent
         if (colorIndex !== 0) {
           svgRects.push(
-            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
-              currentY * 10
+            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${currentY * 10
             }" fill="#${hexColor}" />`,
           );
         }

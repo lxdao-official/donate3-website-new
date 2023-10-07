@@ -456,16 +456,12 @@ export default function Dashboard() {
               timeout: 4000,
             });
             // cid bafkreibnfk3tnrmqpgn2b3ynqo7lp7wcolrynuspq54o2dwp25dshmmmou
-            const { address, safeAccounts } = info;
+            const { address } = info;
             const toAddressArr: Address[] = [];
             if (address) {
               toAddressArr.push(address as Address);
             }
-            if (safeAccounts?.length) {
-              safeAccounts.forEach((item) => {
-                item.address && toAddressArr.push(item.address);
-              });
-            }
+
             tos = toAddressArr;
             setChangePageArgs((preArgs) => ({ ...preArgs, tos: toAddressArr }));
           } catch (e) {

@@ -23,7 +23,7 @@ import Polygon from '../public/icons/networks/polygon.svg';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
-import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, SafeAccount, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK, PRODUCTION_URL } from '@/utils/const';
+import { DEFAULT_CREATE_ADDRESS, DEFAULT_CREATE_CONFIG, DONATE_SDK_URL, AccountType, EType, AccountProgressType, DEFAULT_PREVIOUS_LINK, PRODUCTION_URL } from '@/utils/const';
 import CreateTitle from './create/Title';
 import { getDonatePreviewSrcDoc, getDonateUrl, getDynamicDonateUrl, throttle } from '@/utils/common';
 import FormInput from './create/FormInput';
@@ -250,30 +250,9 @@ export default function CustomWidget() {
     }));
   };
 
-  const addAccountItem = () => {
-    const newSafeAccounts = config.safeAccounts ? [...config.safeAccounts] : [];
-    const lastItemAddress = newSafeAccounts[newSafeAccounts.length - 1].address;
-    if (!(lastItemAddress && lastItemAddress.startsWith('0x') && lastItemAddress.length === 42)) {
-      setError('safeAccounts', { type: 'not address or too long or too short' });
-      return;
-    }
-    if (!newSafeAccounts[newSafeAccounts.length - 1].address) {
-      return;
-    }
-    setConfig((pre) => {
-      newSafeAccounts.push({ networkId: networks[0].id, address: undefined });
-      return { ...pre, safeAccounts: newSafeAccounts };
-    });
-  };
 
-  const handleDelete = (index: number) => {
-    if (index) {
-      const newSafeAccounts = config.safeAccounts?.filter((item, i) => i !== index);
-      setConfig((pre) => {
-        return { ...pre, safeAccounts: newSafeAccounts };
-      });
-    }
-  };
+
+
 
   const setFormValue = (i: Partial<ICustomWidget>) => {
     // EType
@@ -725,7 +704,7 @@ export default function CustomWidget() {
                       <FormControlLabel
                         value={0}
                         sx={{
-                          border: value == 1 ? '1px solid  #E2E8F0' : '1px solid #0F172A',
+                          border: value != AccountType.solana ? '1px solid  #E2E8F0' : '1px solid #0F172A',
                           borderRadius: '4px',
                           background: ' #FFF',
                           marginLeft: 0,

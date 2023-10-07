@@ -140,7 +140,6 @@ const DonateTo: NextPage = () => {
               <DonatedCardWithProgress
                 info={{
                   address: info?.address!,
-                  safeAccounts: info?.safeAccounts!,
                   accountType: info?.accountType!,
                   fundsGoal: info?.fundsGoal!,
                   startTime: info?.startTime!,
@@ -152,14 +151,12 @@ const DonateTo: NextPage = () => {
               <DonatedCard
                 info={{
                   address: info?.address!,
-                  safeAccounts: info?.safeAccounts!,
                   accountType: info?.accountType!,
                 }}
               />
             )}
           </Box>
 
-          {!!(info?.accountType !== 1) && <SafeAccounts accounts={info?.safeAccounts} handleCopy={handleCopy} />}
 
           <PersonalIntroduction
             info={{
