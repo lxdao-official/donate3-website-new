@@ -7,7 +7,6 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, sepolia, WagmiConfig } from 'wagmi';
 import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora, arbitrumGoerli, optimismGoerli } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { DONATE_SDK_URL } from '@/utils/const';
@@ -22,9 +21,7 @@ import { clusterApiUrl } from '@solana/web3.js';
 
 const { chains, publicClient } = configureChains(
   [mainnet, optimism, Linea, polygon, arbitrum, goerli, polygonMumbai, sepolia, optimismGoerli],
-  // [mainnet, polygon, optimism, arbitrum, zora],
   [
-    // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider(),
   ]
 );
