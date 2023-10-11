@@ -1,6 +1,6 @@
 export const DONATE_SDK_LATEST_VERSION = '1.0.33';
 
-export const DONATE_SDK_URL = `/bundle-solana.js`;
+export const DONATE_SDK_URL = `/bundle.js`;
 
 export const DEFAULT_CREATE_NAME = 'Donate3-solana';
 export const DEFAULT_CREATE_COLOR = '#b9e927';
