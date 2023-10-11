@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useAccount } from 'wagmi';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem, TextareaAutosize, Backdrop } from '@mui/material';
@@ -66,7 +66,7 @@ export interface ICustomWidget {
 }
 
 export default function CustomWidget() {
-  const { address } = useAccount();
+  const { publicKey } = useWallet();
   const [loading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
   const [donationsCode, setDonationsCode] = useState<string>('');
@@ -122,12 +122,12 @@ export default function CustomWidget() {
   }, 300);
 
   useEffect(() => {
-    setValue('address', address as string);
+    setValue('address', publicKey?.toBase58() as string);
     setConfig((pre) => ({
       ...pre,
-      address: address || DEFAULT_CREATE_ADDRESS,
+      address: publicKey?.toBase58() || DEFAULT_CREATE_ADDRESS,
     }));
-  }, [address, setValue]);
+  }, [publicKey, setValue]);
 
   const confirmBtnDisabled = useMemo(() => {
     return !config.color || !config.name || !config.address;
