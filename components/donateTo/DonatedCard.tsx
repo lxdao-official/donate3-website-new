@@ -54,7 +54,7 @@ const DonatedCard = ({ info }: IDonatedCardProps) => {
   const getRankingListCallBack = useCallback(() => {
     const params = genDonatesRankingParamsCB();
     if (params?.address && params?.chainId) {
-      queryDonatesRanking(params!);
+      // queryDonatesRanking(params!);
     }
   }, [genDonatesRankingParamsCB]);
 
