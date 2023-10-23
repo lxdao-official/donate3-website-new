@@ -1,7 +1,7 @@
 import React, { ElementType } from 'react';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon } from 'wagmi/chains';
+import { mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, sepolia } from 'wagmi/chains';
 // import Donate3Btn from './Donate3Btn';
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
 import { useLottie } from 'lottie-react';
@@ -20,6 +20,7 @@ import loadingAnimation from '../public/loading/donate3Loading.json';
 import Arbitrum from '@/public/icons/networks/arbitrum.svg';
 import Ethereum from '@/public/icons/networks/ethereum.svg';
 import Goerli from '@/public/icons/networks/goerli.svg';
+import Sepolia from '@/public/icons/networks/ethereum.svg';
 import Linea from '@/public/icons/networks/linea.svg';
 import Optimism from '@/public/icons/networks/optimism.svg';
 // import Pgn from '@/public/icons/networks/pgn.svg';
@@ -103,7 +104,7 @@ const w2e = (w: number) => {
   return (w / 1000_000_000_000_000_000).toFixed(4);
 };
 
-const networks = [mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea];
+const networks = [mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea, sepolia];
 
 const icons: { [key: string]: ElementType } = {
   '1': Ethereum,
@@ -113,6 +114,7 @@ const icons: { [key: string]: ElementType } = {
   '137': Polygon,
   '59144': Linea,
   '420': Optimism,
+  '11155111': Sepolia,
   // {  '424': Pgn },
 };
 
