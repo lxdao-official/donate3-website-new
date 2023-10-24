@@ -31,6 +31,8 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import API from '../common/API';
+
+import { formatUnits, parseUnits } from 'viem';
 // import { json } from 'stream/consumers';
 
 // const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_EHTERSCAN_API_KEY;
@@ -100,8 +102,8 @@ function formatTimestamp(timestamp: string) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-const w2e = (w: number) => {
-  return (w / 1000_000_000_000_000_000).toFixed(4);
+const w2e = (w: string, decimals: number) => {
+  return parseFloat(formatUnits(BigInt(w), decimals)).toFixed(4);
 };
 
 const networks = [mainnet, goerli, optimism, optimismGoerli, arbitrum, polygon, linea];
@@ -741,7 +743,7 @@ export default function Dashboard() {
                   <StyledTableCell align="center">
                     <Stack direction={'column'} alignItems="center">
                       <Typography whiteSpace="pre" align="right" lineHeight={'14px'}>
-                        {`${w2e(Number(row?.money))}`}
+                        {`${w2e(row?.money.toString() ?? '0', coinType[row?.chainId.toString()]?.coin.find((item) => item.name === row?.erc20)?.decimals ?? 18)}`}
                       </Typography>
                     </Stack>
                   </StyledTableCell>
