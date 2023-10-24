@@ -63,9 +63,11 @@ export default function App({ Component, pageProps }: AppProps) {
             <DefaultSeo
               title="Donate3 - Make donate in web3 so easy"
               description="Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5 minutes."
-              canonical="https://www.donate3.xyz/"
+              canonical="https://www.donate3.xyz/donate3"
               openGraph={{
-                url: 'https://www.donate3.xyz/',
+                url: 'https://www.donate3.xyz/donate3',
+                title: 'Donate3 - Make donate in web3 so easy',
+                description: 'Donate3 is a web3 donation tool. It enables public goods and creators to set up donations in just 5 minutes.',
                 siteName: 'Donate3',
                 images: [
                   {
@@ -81,6 +83,12 @@ export default function App({ Component, pageProps }: AppProps) {
                 site: '@Donate3',
                 cardType: 'summary_large_image',
               }}
+              additionalLinkTags={[
+                {
+                  rel: 'icon',
+                  href: 'https://www.donate3.xyz/logo.svg',
+                },
+              ]}
             />
             <Component {...pageProps} />
             <Script src={DONATE_SDK_URL} />

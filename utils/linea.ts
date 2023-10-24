@@ -30,6 +30,7 @@ export const Linea: Chain = {
       name: 'Etherscan',
       url: 'https://lineascan.build',
     },
+    // @ts-ignore
     blockscout: {
       name: 'Blockscout',
       url: 'https://explorer.linea.build',
