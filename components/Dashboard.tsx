@@ -56,6 +56,7 @@ interface Coin {
   icon: string;
   explorer: string;
   eas: string;
+  decimals?: number;
 }
 
 interface CoinList {
@@ -65,7 +66,7 @@ interface CoinList {
 interface Chain {
   name: string;
   icon: string;
-  coin: CoinList;
+  coin: Coin[];
 }
 
 interface ChainList {
@@ -172,110 +173,210 @@ export default function Dashboard() {
     '80001': {
       name: 'Polygon Mumbai',
       icon: '/icons/support/polygon.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
           explorer: 'https://mumbai.polygonscan.com/',
-          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          eas: '',
+          decimals: 18,
         },
-      },
+      ],
     },
     '137': {
       name: 'Polygon',
       icon: '/icons/support/polygon.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'MATIC',
           icon: '/icons/support/polygon.svg',
           explorer: 'https://polygonscan.com/',
-          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          eas: '',
+          decimals: 18,
         },
-      },
+        {
+          name: 'USDC',
+          icon: '/icons/support/usdc.png',
+          explorer: 'https://polygonscan.com/',
+          eas: '',
+          decimals: 6,
+        },
+        {
+          name: 'USDT',
+          icon: '/icons/support/usdt.png',
+          explorer: 'https://polygonscan.com/',
+          eas: '',
+          decimals: 6,
+        },
+      ],
     },
     '5': {
       name: 'ETH Goerli',
       icon: '/icons/support/ethereum.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/ethereum.svg',
           explorer: 'https://goerli.etherscan.io/',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'WETH',
+          icon: '/icons/support/weth.svg',
+          explorer: 'https://goerli.etherscan.io/',
+          eas: 'https://sepolia.easscan.org/',
+          decimals: 18,
+        },
+      ],
     },
     '1': {
       name: 'Ethereum',
       icon: '/icons/support/ethereum.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/ethereum.svg',
-          explorer: 'https://etherscan.io/tx/',
-          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          explorer: 'https://etherscan.io/',
+          eas: 'https://easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'USDC',
+          icon: '/icons/support/usdc.png',
+          explorer: 'https://etherscan.io/',
+          eas: 'https://easscan.org/',
+          decimals: 6,
+        },
+        {
+          name: 'USDT',
+          icon: '/icons/support/usdt.png',
+          explorer: 'https://etherscan.io/',
+          eas: 'https://easscan.org/',
+          decimals: 6,
+        },
+      ],
     },
     '10': {
       name: 'Optimism',
       icon: '/icons/support/optimism.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/optimism.svg',
-          explorer: 'https://optimistic.etherscan.io/tx/',
-          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          explorer: 'https://optimistic.etherscan.io/',
+          eas: 'https://optimism.easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'USDC',
+          icon: '/icons/support/usdc.png',
+          explorer: 'https://optimistic.etherscan.io/',
+          eas: 'https://optimism.easscan.org/',
+          decimals: 6,
+        },
+        {
+          name: 'USDT',
+          icon: '/icons/support/usdt.png',
+          explorer: 'https://optimistic.etherscan.io/',
+          eas: 'https://optimism.easscan.org/',
+          decimals: 6,
+        },
+      ],
     },
     '42161': {
       name: 'Arbitrum',
       icon: '/icons/support/arbitrum.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/arbitrum.svg',
-          explorer: 'https://arbiscan.io/tx/',
-          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          explorer: 'https://arbiscan.io/',
+          eas: 'https://arbitrum.easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'USDC',
+          icon: '/icons/support/usdc.png',
+          explorer: 'https://arbiscan.io/',
+          eas: 'https://arbitrum.easscan.org/',
+          decimals: 6,
+        },
+        {
+          name: 'USDT',
+          icon: '/icons/support/usdt.png',
+          explorer: 'https://arbiscan.io/',
+          eas: 'https://arbitrum.easscan.org/',
+          decimals: 6,
+        },
+      ],
     },
     '59144': {
       name: 'Linea',
       icon: '/icons/support/linea.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/linea.svg',
-          explorer: 'https://lineascan.build/tx',
-          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          explorer: 'https://lineascan.build/',
+          eas: 'https://linea.easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'WETH',
+          icon: '/icons/support/weth.svg',
+          explorer: 'https://lineascan.build/',
+          eas: 'https://linea.easscan.org/',
+          decimals: 18,
+        },
+      ],
     },
     '11155111': {
       name: 'Sepolia',
       icon: '/icons/support/ethereum.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/ethereum.svg',
-          explorer: 'https://goerli.etherscan.io/',
+          explorer: 'https://sepolia.etherscan.io/',
           eas: 'https://sepolia.easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'UNI',
+          icon: '/icons/support/uni.png',
+          explorer: 'https://sepolia.etherscan.io/',
+          eas: 'https://sepolia.easscan.org/',
+          decimals: 18,
+        },
+        {
+          name: 'WETH',
+          icon: '/icons/support/weth.png',
+          explorer: 'https://sepolia.etherscan.io/',
+          eas: 'https://sepolia.easscan.org/',
+          decimals: 18,
+        },
+      ],
     },
     '420': {
       name: 'Optimistic Goerli',
       icon: '/icons/support/optimism.svg',
-      coin: {
-        0: {
+      coin: [
+        {
           name: 'ETH',
           icon: '/icons/support/optimism.svg',
-          explorer: 'https://goerli-optimism.etherscan.io//',
+          explorer: 'https://goerli-optimism.etherscan.io/',
           eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          decimals: 18,
         },
-      },
+        {
+          name: 'WETH',
+          icon: '/icons/support/weth.svg',
+          explorer: 'https://goerli-optimism.etherscan.io/',
+          eas: 'https://optimism-goerli-bedrock.easscan.org/',
+          decimals: 18,
+        },
+      ],
     },
   };
 
@@ -338,6 +439,7 @@ export default function Dashboard() {
       .then((result) => {
         const { data } = result;
         if (data.code === 200 && data.message === 'success') {
+          console.log(data);
           const total = data?.data?.total;
           setPageCount(Math.ceil(total / perPageCount));
           setRows(data?.data?.content);
@@ -631,8 +733,8 @@ export default function Dashboard() {
 
                   <StyledTableCell align="center">
                     <Stack direction="row" gap={1.5} justifyContent="center">
-                      <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.coin[0]?.icon} />
-                      <Typography>{`${coinType[row?.chainId.toString()]?.coin[0]?.name}\n`}</Typography>
+                      <Box width="24px" component={'img'} src={coinType[row?.chainId.toString()]?.coin.find((item) => item.name === row?.erc20)?.icon ?? coinType[row?.chainId.toString()]?.coin[0].icon} />
+                      <Typography>{`${row?.erc20}\n`}</Typography>
                     </Stack>
                   </StyledTableCell>
 
