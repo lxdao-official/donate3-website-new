@@ -4,10 +4,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DefaultSeo } from 'next-seo';
 
 import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { connectorsForWallets, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, sepolia, WagmiConfig } from 'wagmi';
+import { JoyIdWallet } from '@joyid/rainbowkit';
 import { mainnet, polygon, polygonMumbai, goerli, optimism, arbitrum, zora, arbitrumGoerli, optimismGoerli } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Script from 'next/script';
 import { DONATE_SDK_URL } from '@/utils/const';
@@ -22,15 +22,31 @@ const { chains, publicClient } = configureChains(
   ]
 );
 
-const { connectors } = getDefaultWallets({
+const wallet = getDefaultWallets({
   appName: 'Donate3',
   projectId: '489bba152ca535ae826ee62070ffcdfc',
   chains,
-});
+}).connectors();
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors,
+  connectors: [
+    ...wallet,
+    ...connectorsForWallets([
+      {
+        groupName: 'Recommended',
+        wallets: [
+          JoyIdWallet({
+            chains,
+            options: {
+              name: 'Donate3',
+              logo: 'https://fav.farm/🆔',
+            },
+          }),
+        ],
+      },
+    ])(),
+  ],
   publicClient,
 });
 
