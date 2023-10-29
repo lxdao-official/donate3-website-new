@@ -17,6 +17,10 @@ export function SectionPartner() {
       url: 'infura.io',
     },
     {
+      icon: '/icons/JoyID.svg',
+      url: 'joy.id',
+    },
+    {
       icon: '/icons/linea.svg',
       url: 'linea.build',
     },
