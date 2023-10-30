@@ -40,8 +40,8 @@ const wagmiConfig = createConfig({
             chains,
             options: {
               name: 'Donate3',
-              logo: 'https://fav.farm/🆔',
-              joyidAppURL:'https://app.joy.id'
+              logo: 'https://www.donate3.xyz/logo-big.png',
+              joyidAppURL: 'https://app.joy.id'
             },
           }),
         ],

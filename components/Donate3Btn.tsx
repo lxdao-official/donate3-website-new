@@ -36,7 +36,7 @@ export default function Donate3Btn({ children, variant, sx, onClick, disabled, l
         boxShadow: variant == 'contained' ? '4px 4px 0px rgba(186, 206, 204, 0.9);' : ' 4px 4px 0px rgba(211, 255, 37, 0.9);',
         color: '#44443F',
         fontWeight: '600',
-        textTransform: 'capitalize',
+        textTransform: 'lowercase',
         width: 'full',
         bgcolor: '#fff',
         ...sx,
