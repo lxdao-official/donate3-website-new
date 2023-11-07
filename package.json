@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@ethersproject/solidity": "^5.7.0",
     "@iconify/react": "^4.1.1",
-    "@joyid/rainbowkit": "^0.1.0",
+    "@joyid/rainbowkit": "^0.1.1",
     "@lxdao/img3": "^1.1.0",
     "@lxdao/uploader3": "^1.2.2",
     "@lxdao/uploader3-connector": "^1.0.1",
