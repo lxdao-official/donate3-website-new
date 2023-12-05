@@ -41,7 +41,7 @@ const wagmiConfig = createConfig({
             options: {
               name: 'Donate3',
               logo: 'https://www.donate3.xyz/logo-big.png',
-              joyidAppURL: 'https://app.joy.id'
+              joyidAppURL: 'https://app.joy.id',
             },
           }),
         ],

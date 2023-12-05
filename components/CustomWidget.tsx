@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import { ChromePicker } from 'react-color';
 import Image from 'next/image';
 import { NFTStorage, Blob } from 'nft.storage';
-
+import ConnectBtn from './ConnectBtn';
 import Donate3Btn from './Donate3Btn';
 import PreviewFile from './PreviewFile';
 import PreviewWrapper from './PreviewWrapper';
@@ -221,7 +221,9 @@ export default function CustomWidget() {
     } else {
       delete newConfig.safeAccounts;
     }
-    storeInfoToNFTStorage(newConfig);
+
+    console.log(newConfig);
+    // storeInfoToNFTStorage(newConfig);
   };
 
   const setAvatarToConfig = (avatar: string) => {
@@ -340,7 +342,7 @@ export default function CustomWidget() {
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '50%' }} flex={1}>
           {/* Previous Configuration */}
-          <Card title="Previous Configuration">
+          {/* <Card title="Previous Configuration">
             <Controller
               name={'previousCid'}
               control={control}
@@ -391,7 +393,7 @@ export default function CustomWidget() {
                 Your original configuration will appear in the table below.
               </div>
             </div>
-          </Card>
+          </Card> */}
 
           {/* Style in your website */}
           <Card
@@ -689,7 +691,7 @@ export default function CustomWidget() {
                 );
               }}
             />
-            <Controller
+            {/* <Controller
               name={'accountType'}
               control={control}
               rules={{ required: true }}
@@ -763,7 +765,7 @@ export default function CustomWidget() {
                   </FormInput>
                 );
               }}
-            />
+            /> */}
             {config.accountType === 0 ? (
               <Controller
                 name={'address'}
@@ -780,6 +782,7 @@ export default function CustomWidget() {
                           paddingX: '10px',
                           borderRadius: '4px',
                         }}
+                        disabled={true}
                         value={value}
                         onChange={(e: any) => {
                           let address = e.target.value;
@@ -906,182 +909,177 @@ export default function CustomWidget() {
               </Box>
             )}
 
-            {/*{config.accountType === 0 ? (
-
-
-              /* ) : (
-                  <></>
-              )}
-              */}
-            <Box>
-              <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
-                  <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you want to set a funds-raised progress?</Typography>
-                  {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: '20px',
-                      lineHeight: '28px',
-                      width: '100%',
-                      flexShrink: 0,
-                    }}
-                  >
-                    Donation amount settings{' '}
-                  </Typography>
-
-                  <Box sx={{ mt: '31px' }}>
-                    <Controller
-                      name={'reason'}
-                      control={control}
-                      rules={{ required: false }}
-                      render={({ field: {} }) => {
-                        return (
-                          <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
-                            <TextField
-                              id="Challenges"
-                              multiline
-                              rows={4}
-                              //variant="filled"
-                              value={config?.reason}
-                              label="Type your donation reason and introduction"
-                              InputProps={
-                                {
-                                  //disableUnderline:true,
-                                  //sx={{border'0px'}}
-                                }
-                              }
-                              sx={{
-                                backgroundColor: '#E2E8F0',
-                              }}
-                              onChange={(e: any) => {
-                                let fundsReason = e.target.value;
-                                setConfig((pre) => ({
-                                  ...pre,
-                                  reason: fundsReason,
-                                }));
-                              }}
-                            />
-                          </FormInput>
-                        );
+            {false && (
+              <Box>
+                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+                    <Typography sx={{ width: '100%', flexShrink: 0 }}>Do you want to set a funds-raised progress?</Typography>
+                    {/*<Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>*/}
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography
+                      variant="h3"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: '20px',
+                        lineHeight: '28px',
+                        width: '100%',
+                        flexShrink: 0,
                       }}
-                    />
-                    <Controller
-                      name={'fundsGoal'}
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field: { onChange, value } }) => {
-                        return (
-                          <FormInput
-                            title="Expected funds goal ( USDT-based)"
-                            error={errors.fundsGoal?.type}
-                            style={{
-                              marginBottom: '16px',
-                            }}
-                          >
-                            <InputBase
-                              sx={{
-                                mt: 0,
-                                backgroundColor: 'var(--gray-300, #E2E8F0)',
-                                height: '40px',
-                                paddingX: '10px',
-                                borderRadius: '4px',
-                              }}
-                              type="number"
-                              value={value}
-                              onChange={(e: any) => {
-                                let fundsGoal = e.target.value;
-                                setError('fundsGoal', {});
-                                if (fundsGoal < 0) {
-                                  setError('fundsGoal', { type: 'invalid Number less than 0' });
-                                  return;
-                                }
-                                setConfig((pre) => ({
-                                  ...pre,
-                                  fundsGoal: fundsGoal,
-                                }));
-                                onChange(e);
-                              }}
-                            />
-                          </FormInput>
-                        );
-                      }}
-                    />
-                    <Box sx={{ display: 'flex' }}>
-                      <Box>
-                        <Controller
-                          name={'startTime'}
-                          control={control}
-                          rules={{ required: true }}
-                          render={({}) => {
-                            return (
-                              <FormInput title="Start time" /*error={errors.name?.type}*/>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DatePicker
-                                    label="Select"
-                                    value={selectedStartDate}
-                                    sx={{ backgroundColor: '#E2E8F0' }}
-                                    onChange={(newValue) => {
-                                      let startTime = dayjs(newValue).valueOf();
-                                      setSelectedStartDate(startTime);
-                                      setConfig((pre) => ({
-                                        ...pre,
-                                        startTime: startTime,
-                                      }));
-                                    }}
-                                  />
-                                </LocalizationProvider>
-                              </FormInput>
-                            );
-                          }}
-                        />
-                      </Box>
-                      <Box sx={{ marginLeft: { md: '40px' } }}>
-                        <Controller
-                          name={'endTime'}
-                          control={control}
-                          rules={{ required: true }}
-                          render={({}) => {
-                            return (
-                              <FormInput title="End time" /*error={errors.name?.type}*/>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DatePicker
-                                    label="Select"
-                                    value={selectedEndDate}
-                                    sx={{ backgroundColor: '#E2E8F0' }}
-                                    onChange={(newValue) => {
-                                      let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
+                    >
+                      Donation amount settings{' '}
+                    </Typography>
 
-                                      if (endTime < selectedStartDate!) {
-                                        alert('End Date Shold Bigger Than Start Date');
-                                        setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
-                                      } else {
-                                        setSelectedEndDate(endTime);
+                    <Box sx={{ mt: '31px' }}>
+                      <Controller
+                        name={'reason'}
+                        control={control}
+                        rules={{ required: false }}
+                        render={({ field: {} }) => {
+                          return (
+                            <FormInput title="Challenges I am facing" /*error={errors.name?.type}*/>
+                              <TextField
+                                id="Challenges"
+                                multiline
+                                rows={4}
+                                //variant="filled"
+                                value={config?.reason}
+                                label="Type your donation reason and introduction"
+                                InputProps={
+                                  {
+                                    //disableUnderline:true,
+                                    //sx={{border'0px'}}
+                                  }
+                                }
+                                sx={{
+                                  backgroundColor: '#E2E8F0',
+                                }}
+                                onChange={(e: any) => {
+                                  let fundsReason = e.target.value;
+                                  setConfig((pre) => ({
+                                    ...pre,
+                                    reason: fundsReason,
+                                  }));
+                                }}
+                              />
+                            </FormInput>
+                          );
+                        }}
+                      />
+                      <Controller
+                        name={'fundsGoal'}
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field: { onChange, value } }) => {
+                          return (
+                            <FormInput
+                              title="Expected funds goal ( USDT-based)"
+                              error={errors.fundsGoal?.type}
+                              style={{
+                                marginBottom: '16px',
+                              }}
+                            >
+                              <InputBase
+                                sx={{
+                                  mt: 0,
+                                  backgroundColor: 'var(--gray-300, #E2E8F0)',
+                                  height: '40px',
+                                  paddingX: '10px',
+                                  borderRadius: '4px',
+                                }}
+                                type="number"
+                                value={value}
+                                onChange={(e: any) => {
+                                  let fundsGoal = e.target.value;
+                                  setError('fundsGoal', {});
+                                  if (fundsGoal < 0) {
+                                    setError('fundsGoal', { type: 'invalid Number less than 0' });
+                                    return;
+                                  }
+                                  setConfig((pre) => ({
+                                    ...pre,
+                                    fundsGoal: fundsGoal,
+                                  }));
+                                  onChange(e);
+                                }}
+                              />
+                            </FormInput>
+                          );
+                        }}
+                      />
+                      <Box sx={{ display: 'flex' }}>
+                        <Box>
+                          <Controller
+                            name={'startTime'}
+                            control={control}
+                            rules={{ required: true }}
+                            render={({}) => {
+                              return (
+                                <FormInput title="Start time" /*error={errors.name?.type}*/>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                      label="Select"
+                                      value={selectedStartDate}
+                                      sx={{ backgroundColor: '#E2E8F0' }}
+                                      onChange={(newValue) => {
+                                        let startTime = dayjs(newValue).valueOf();
+                                        setSelectedStartDate(startTime);
                                         setConfig((pre) => ({
                                           ...pre,
-                                          endTime: endTime,
+                                          startTime: startTime,
                                         }));
-                                      }
-                                    }}
-                                  />
-                                </LocalizationProvider>
-                              </FormInput>
-                            );
-                          }}
-                        />
+                                      }}
+                                    />
+                                  </LocalizationProvider>
+                                </FormInput>
+                              );
+                            }}
+                          />
+                        </Box>
+                        <Box sx={{ marginLeft: { md: '40px' } }}>
+                          <Controller
+                            name={'endTime'}
+                            control={control}
+                            rules={{ required: true }}
+                            render={({}) => {
+                              return (
+                                <FormInput title="End time" /*error={errors.name?.type}*/>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                      label="Select"
+                                      value={selectedEndDate}
+                                      sx={{ backgroundColor: '#E2E8F0' }}
+                                      onChange={(newValue) => {
+                                        let endTime = dayjs(newValue).valueOf(); // 使用新的选定日期值
+
+                                        if (endTime < selectedStartDate!) {
+                                          alert('End Date Shold Bigger Than Start Date');
+                                          setSelectedEndDate(selectedEndDate); // 恢复之前的结束日期值
+                                        } else {
+                                          setSelectedEndDate(endTime);
+                                          setConfig((pre) => ({
+                                            ...pre,
+                                            endTime: endTime,
+                                          }));
+                                        }
+                                      }}
+                                    />
+                                  </LocalizationProvider>
+                                </FormInput>
+                              );
+                            }}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                  <Donate3Btn variant="contained" sx={{ justifyContent: 'center' }} onClick={handleChange('panel1')}>
-                    {' '}
-                    Cancle Set Progress-Account
-                  </Donate3Btn>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
+                    <Donate3Btn variant="contained" sx={{ justifyContent: 'center' }} onClick={handleChange('panel1')}>
+                      {' '}
+                      Cancle Set Progress-Account
+                    </Donate3Btn>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            )}
           </Card>
 
           <div
@@ -1089,9 +1087,13 @@ export default function CustomWidget() {
               marginBottom: '18px',
             }}
           >
-            <Donate3Btn loadingButton loading={loading} onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
-              Confirm
-            </Donate3Btn>
+            {address ? (
+              <Donate3Btn loadingButton loading={loading} onClick={handleClickConfirmBtn} variant="contained" disabled={confirmBtnDisabled}>
+                Confirm
+              </Donate3Btn>
+            ) : (
+              <ConnectBtn />
+            )}
             <div
               style={{
                 fontSize: '14px',
