@@ -737,7 +737,7 @@ export default function CustomWidget() {
                         paddingX: '10px',
                         borderRadius: '4px',
                       }}
-                      value={value ?? config.twitter}
+                      value={config.twitter?.replace('https://twitter.com/', '') ?? value}
                       startAdornment={
                         <InputAdornment position="start">
                           <Image src="/icons/twitter-new.svg" alt="twitter" width="24" height="24" />
@@ -777,7 +777,7 @@ export default function CustomWidget() {
                           <Image src="/icons/telegram-new.svg" alt="telegram" width="24" height="24" />
                         </InputAdornment>
                       }
-                      value={value ?? config.telegram}
+                      value={config.telegram?.replace('https://t.me/', '') ?? value}
                       onChange={(e: any) => {
                         setError('telegram', {});
                         setConfig((pre) => ({
