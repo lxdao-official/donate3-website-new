@@ -22,7 +22,7 @@ import SafeAccounts from '@/components/donateTo/SafeAccounts';
 
 const DonateTo: NextPage = () => {
   const router = useRouter();
-  const cid = router.query?.cid as string;
+  const address = router.query?.address as string;
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -36,13 +36,17 @@ const DonateTo: NextPage = () => {
   });
 
   const [showProgress, setShowProgress] = useState(1);
-  // If specified, use the gateway
-  const getInfoFromIpfs = async (cid: string) => {
+
+  const getInfoFromIpfs = async (address: string) => {
     try {
-      const info = await getFasterIpfsLink({
-        ipfs: `https://nftstorage.link/ipfs/${cid}`,
-        timeout: 4000,
-      });
+      const info = (
+        await (
+          await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_NEW}settings/${address}`, {
+            method: 'GET',
+          })
+        ).json()
+      ).data;
+      console.log(info);
       setInfo(info);
       info && setLoading(false);
       /*设置progress卡片渲染*/
@@ -55,11 +59,11 @@ const DonateTo: NextPage = () => {
   };
 
   useEffect(() => {
-    cid && getInfoFromIpfs(cid);
-  }, [cid]);
+    address && getInfoFromIpfs(address);
+  }, [address]);
 
   const handleDonateBtn = () => {
-    window.location.href = `${window.location.origin}/demo?cid=${cid}`;
+    window.location.href = `${window.location.origin}/demo?address=${address}`;
   };
 
   const handleCopy = (text: string) => {
@@ -79,7 +83,7 @@ const DonateTo: NextPage = () => {
     <>
       <NextSeo
         openGraph={{
-          url: 'https://www.donate3.xyz/donateTo?cid=',
+          url: 'https://www.donate3.xyz/donateTo?address=',
           title: `Donate3 -  Donate to`,
           description: 'can donate to everyone',
         }}

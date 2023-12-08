@@ -1,5 +1,10 @@
+'use client';
 import { Box, Typography } from '@mui/material';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Pagination, Navigation } from 'swiper/modules';
 import React, { useEffect, useState } from 'react';
 import { DonateOverview } from '../components/DonateOverview';
 import styled from 'styled-components';
@@ -22,25 +27,25 @@ export function SectionClient() {
   }, []);
 
   const donateData = [
-    // {
-    //   avatarSrc: '/test/lxdao-logo.svg',
-    //   name: 'LXDAO',
-    //   website: 'lxdao.io',
-    //   description: 'LXDAO is an R&D-focused DAO in Web3',
-    // },
-    // {
-    //   avatarSrc: '/test/marry3-logo-rect.png',
-    //   name: 'marry3',
-    //   website: 'marry3.love',
-    //   description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
-    // },
+    {
+      avatarSrc: '/test/lxdao-logo.svg',
+      name: 'LXDAO',
+      website: 'lxdao.io',
+      description: 'LXDAO is an R&D-focused DAO in Web3',
+    },
+    {
+      avatarSrc: '/test/marry3-logo-rect.png',
+      name: 'marry3',
+      website: 'marry3.love',
+      description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
+    },
     // Add one more data entry as needed
-    // {
-    //   avatarSrc: '/test/mail3.svg',
-    //   name: 'mail3',
-    //   website: 'mail3.me',
-    //   description: 'Web3 natives deserve a better mail',
-    // },
+    {
+      avatarSrc: '/test/mail3.svg',
+      name: 'mail3',
+      website: 'mail3.me',
+      description: 'Web3 natives deserve a better mail',
+    },
     {
       avatarSrc: '/test/GasLockR.svg',
       name: 'GasLockR',
@@ -63,7 +68,14 @@ export function SectionClient() {
       description: 'Dive into our latest discoveries and explore a world of thrilling experiences. Join captivating events🎟️, and collect exclusive digital badges🫧. Let your imagination run wild in a realm of limitless possibilities. 🥳',
     },
   ];
+  const groupedData = donateData.reduce((acc: any[], curr, index) => {
+    const groupIndex = Math.floor(index / 3);
 
+    acc[groupIndex] = [...(acc[groupIndex] || []), curr];
+
+    return acc;
+  }, []);
+  console.log(groupedData);
   return (
     <Box
       sx={{
@@ -146,28 +158,42 @@ export function SectionClient() {
       >
         Showcase
       </Typography>
-
       <Box
         sx={{
-          display: 'flex',
           mt: { xs: '30px', lg: '105px' },
           mb: { xs: '30px', lg: '139px' },
-          alignItems: 'center',
-          flexDirection: { xs: 'column', lg: 'row' },
           maxWidth: {
             lg: '100%',
           },
-          overflowX: {
-            lg: 'scroll',
-          },
-          '::-webkit-scrollbar': {
-            display: 'none',
-          },
         }}
       >
-        {donateData.map((data, index) => (
-          <DonateOverview key={index} data={data} />
-        ))}
+        <Swiper pagination={true} navigation={true} modules={[Pagination, Navigation]}>
+          {groupedData.map((group: any[], groupIndex) => (
+            <SwiperSlide key={groupIndex}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: { xs: 'column', lg: 'row' },
+                  maxWidth: {
+                    lg: '100%',
+                  },
+                  overflowX: {
+                    lg: 'scroll',
+                  },
+                  '::-webkit-scrollbar': {
+                    display: 'none',
+                  },
+                }}
+              >
+                {group.map((data, index) => (
+                  <DonateOverview key={index} data={data} />
+                ))}
+              </Box>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </Box>
     </Box>
   );

@@ -28,8 +28,8 @@ export const getDonatePreviewSrcDoc = (element: string) => {
   return `<html><head></head><body style="padding-top: 30px;">${element}</body></html>`;
 };
 
-export const getDonateUrl = (cid: string, isSrcDoc?: boolean) => {
-  return `<div data-donate3-cid="${cid}" ${isSrcDoc ? 'data-donate3-demo="true"' : ''}></div><script src="${DONATE_SDK_URL}"></script>`;
+export const getDonateUrl = (address: string, isSrcDoc?: boolean) => {
+  return `<div data-donate3-address="${address}" ${isSrcDoc ? 'data-donate3-demo="true"' : ''}></div><script src="${DONATE_SDK_URL}"></script>`;
 };
 
 export const getDonateSrcDoc = (cid: string) => {
@@ -64,38 +64,16 @@ const decodeImage = (image: string) => {
   return {
     paletteIndex,
     bounds,
-    rects:
-      (_b =
-        (_a =
-          rects === null || rects === void 0
-            ? void 0
-            : rects.match(/.{1,4}/g)) === null || _a === void 0
-          ? void 0
-          : _a.map((rect: string) => [
-              parseInt(rect.substring(0, 2), 16),
-              parseInt(rect.substring(2, 4), 16),
-            ])) !== null && _b !== void 0
-        ? _b
-        : [],
+    rects: (_b = (_a = rects === null || rects === void 0 ? void 0 : rects.match(/.{1,4}/g)) === null || _a === void 0 ? void 0 : _a.map((rect: string) => [parseInt(rect.substring(0, 2), 16), parseInt(rect.substring(2, 4), 16)])) !== null && _b !== void 0 ? _b : [],
   };
 };
 
-const getRectLength = (
-  currentX: number,
-  drawLength: number,
-  rightBound: number,
-) => {
+const getRectLength = (currentX: number, drawLength: number, rightBound: number) => {
   const remainingPixelsInLine = rightBound - currentX;
-  return drawLength <= remainingPixelsInLine
-    ? drawLength
-    : remainingPixelsInLine;
+  return drawLength <= remainingPixelsInLine ? drawLength : remainingPixelsInLine;
 };
 
-const buildSVG = (
-  parts: EncodedImage[],
-  paletteColors: any,
-  bgColor: string,
-) => {
+const buildSVG = (parts: EncodedImage[], paletteColors: any, bgColor: string) => {
   const svgWithoutEndTag = parts.reduce((result: any, part) => {
     const svgRects: string[] = [];
     const { bounds, rects } = decodeImage(part.data);
@@ -109,11 +87,7 @@ const buildSVG = (
       while (length > 0) {
         // Do not push rect if transparent
         if (colorIndex !== 0) {
-          svgRects.push(
-            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
-              currentY * 10
-            }" fill="#${hexColor}" />`,
-          );
+          svgRects.push(`<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${currentY * 10}" fill="#${hexColor}" />`);
         }
         currentX += length;
         if (currentX === bounds.right) {

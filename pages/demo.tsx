@@ -4,24 +4,24 @@ import type { NextPage } from 'next';
 import { Box } from '@mui/material';
 
 import { Layout } from '@/components/Layout';
-import { DEFAULT_CID } from '@/utils/const';
+import { DEFAULT_ADDRESS } from '@/utils/const';
 import { useEffect, useState } from 'react';
 
 const Demo: NextPage = () => {
-  const [cid, setCid] = useState(DEFAULT_CID);
+  const [address, setAddress] = useState(DEFAULT_ADDRESS);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // browser code
 
       const paramArr = new URLSearchParams(window.location.search);
-      const cid = paramArr.get('cid') || DEFAULT_CID;
-      setCid(cid);
+      const cid = paramArr.get('address') || DEFAULT_ADDRESS;
+      setAddress(cid);
     }
   }, []);
 
   return (
-    <Layout style={{maxWidth:'1512px'}} >
+    <Layout style={{ maxWidth: '1512px' }}>
       <div
         style={{
           padding: '20px 0',
@@ -41,7 +41,7 @@ const Demo: NextPage = () => {
             margin: '0 auto',
           }}
         >
-          <div data-donate3-cid={cid}></div>
+          <div data-donate3-cid={address}></div>
         </Box>
       </div>
     </Layout>

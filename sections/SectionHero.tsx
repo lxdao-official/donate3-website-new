@@ -144,7 +144,7 @@ export function SectionHero() {
           zIndex: 2,
         }}
       >
-        Easy <MultiLine>donations</MultiLine>, More connections, Better reputation.
+        Easy <MultiLine>donations</MultiLine>, More connection.
       </Typography>
 
       <Typography
@@ -172,9 +172,8 @@ export function SectionHero() {
         }}
       >
         <StyledButton2 onClick={() => router.push('/create')}>Set up now</StyledButton2>
-        <StyledButton2 onClick={() => router.push('/dashboard')}>Dashboard</StyledButton2>
-
         <StyledButton onClick={() => (window.location.href = `${window.location.origin}/demo`)}>Demo</StyledButton>
+        <StyledButton onClick={() => router.push('/dashboard')}>Dashboard</StyledButton>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', mt: '27px' }}>

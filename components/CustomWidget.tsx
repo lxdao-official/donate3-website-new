@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -23,6 +24,7 @@ import Card from './create/Card';
 import CodeRegion from './create/CodeRegion';
 import DescEditor from './create/DescEditor';
 import PreviewRegion from './create/PreviewRegion';
+import { useSignMessage } from 'wagmi';
 
 import Delete from '../public/icons/delete.svg';
 import Arbitrum from '../public/icons/networks/arbitrum.svg';
@@ -45,6 +47,7 @@ import { useLottie } from 'lottie-react';
 import loadingAnimation from '../public/loading/donate3Loading.json';
 import { getFasterIpfsLink } from '@/utils/ipfsTools';
 import { Img3 } from '@lxdao/img3';
+import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit';
 
 export interface ICustomWidget {
   type: number;
@@ -78,7 +81,7 @@ export default function CustomWidget() {
   const [selectedEndDate, setSelectedEndDate] = useState<number>();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [commonLoading, setCommonLoading] = useState<boolean>(false);
-
+  const { openConnectModal } = useConnectModal();
   const options = {
     animationData: loadingAnimation,
     loop: true,
@@ -116,7 +119,18 @@ export default function CustomWidget() {
     defaultValues: DEFAULT_CREATE_CONFIG,
   });
   const [config, setConfig] = useState<Partial<ICustomWidget>>(DEFAULT_CREATE_CONFIG);
-
+  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+    message: JSON.stringify({
+      type: config.type,
+      address: config.address,
+      color: config.color,
+      name: config.name,
+      avatar: config.avatar,
+      description: config.description,
+      twitter: config.twitter,
+      telegram: config.telegram,
+    }),
+  });
   const setColorThrottle = throttle((color) => {
     setConfig((pre) => ({ ...pre, color: color }));
   }, 300);
@@ -127,6 +141,22 @@ export default function CustomWidget() {
       ...pre,
       address: address || DEFAULT_CREATE_ADDRESS,
     }));
+    if (address) {
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_NEW}settings/${address}`).then((settings) => {
+        console.log(settings);
+        settings.json().then((json) => {
+          console.log('json', json);
+          if (json.data) {
+            setConfig((prev) => {
+              return {
+                ...prev,
+                ...json.data,
+              };
+            });
+          }
+        });
+      });
+    }
   }, [address, setValue]);
 
   const confirmBtnDisabled = useMemo(() => {
@@ -155,8 +185,8 @@ export default function CustomWidget() {
     setDonationsCode(code);
   };
 
-  const genDonationsLink = (cid: string) => {
-    setDonationsLink(`${window.location.origin}/donateTo?cid=${cid}`);
+  const genDonationsLink = (address: string) => {
+    setDonationsLink(`${window.location.origin}/donateTo?address=${address}`);
   };
 
   const genPreviewSrcDoc = (l: string) => {
@@ -167,16 +197,20 @@ export default function CustomWidget() {
     return getDonateUrl(cid, isSrcDoc);
   };
 
-  const genInfoByCid = (cid: string) => {
-    setLoading(false);
-    genDonationsCode(genUrl(cid));
-    genDonationsLink(cid);
+  const genInfoByCid = (address: string) => {
+    genDonationsCode(genUrl(address));
+    genDonationsLink(address);
   };
 
   useEffect(() => {
     genPreviewSrcDoc(getDynamicDonateUrl(config));
   }, [config]);
 
+  useEffect(() => {
+    if (!address) {
+      openConnectModal?.();
+    }
+  }, [address, openConnectModal]);
   const storeInfoToNFTStorage = async (data: Partial<ICustomWidget>) => {
     const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '' });
     const blobData = new Blob(
@@ -222,9 +256,76 @@ export default function CustomWidget() {
       delete newConfig.safeAccounts;
     }
 
-    console.log(newConfig);
+    try {
+      signMessage({
+        message: JSON.stringify({
+          type: config.type,
+          address: config.address,
+          color: config.color,
+          name: config.name,
+          avatar: config.avatar,
+          description: config.description,
+          twitter: config.twitter,
+          telegram: config.telegram,
+        }),
+      });
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
     // storeInfoToNFTStorage(newConfig);
   };
+
+  useEffect(() => {
+    if (data) {
+      console.log('data', data);
+
+      console.log(
+        'config',
+        JSON.stringify({
+          type: config.type,
+          address: config.address,
+          color: config.color,
+          name: config.name,
+          avatar: config.avatar,
+          description: config.description,
+          twitter: config.twitter,
+          telegram: config.telegram,
+        })
+      );
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_NEW}settings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: JSON.stringify({
+            type: config.type,
+            address: config.address,
+            color: config.color,
+            name: config.name,
+            avatar: config.avatar,
+            description: config.description,
+            twitter: config.twitter,
+            telegram: config.telegram,
+          }),
+          signature: data,
+          address: address,
+        }),
+      })
+        .then((data) => {
+          if (data.status === 201) {
+            genInfoByCid(address ?? '');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [data]);
 
   const setAvatarToConfig = (avatar: string) => {
     setConfig((pre) => ({
@@ -419,7 +520,7 @@ export default function CustomWidget() {
                           onChange(e);
                         }}
                         value={0}
-                        current={value}
+                        current={config.type ? config.type : 0}
                         title="Floating button"
                         imgUrl="../images/widget_button.jpg"
                       />
@@ -432,7 +533,7 @@ export default function CustomWidget() {
                           onChange(e);
                         }}
                         value={1}
-                        current={value}
+                        current={config.type}
                         title="Normal button"
                         imgUrl="../images/widget_hyperlink.png"
                       />
@@ -457,7 +558,7 @@ export default function CustomWidget() {
                             height: '24px',
                             cursor: 'pointer',
                             borderRadius: '3px',
-                            backgroundColor: value,
+                            backgroundColor: config.color ?? value,
                             marginRight: '10px',
                           }}
                           onClick={handleOpen}
@@ -501,7 +602,7 @@ export default function CustomWidget() {
                       paddingX: '10px',
                       borderRadius: '4px',
                     }}
-                    value={value}
+                    value={config.color ?? value}
                     onChange={(e: any) => {
                       setError('color', {});
                       if (!e.target.value) {
@@ -557,7 +658,7 @@ export default function CustomWidget() {
                         setFile(file);
                       }}
                     >
-                      {config?.previousCid ? (
+                      {config?.avatar ?? config?.previousCid ? (
                         <Img3 style={{ height: '98px', width: '98px' }} src={config?.avatar!} alt="previousCid" />
                       ) : (
                         <PreviewWrapper style={{ height: '98px', width: '98px' }}>{file ? <PreviewFile file={file} setAvatar={setAvatarToConfig} /> : <Icon icon={'material-symbols:cloud-upload'} color={'#65a2fa'} fontSize={60} />}</PreviewWrapper>
@@ -583,7 +684,7 @@ export default function CustomWidget() {
                         paddingX: '10px',
                         borderRadius: '4px',
                       }}
-                      value={value}
+                      value={value == 'Donate3' ? config.name : value}
                       onChange={(e: any) => {
                         let name = e.target.value;
                         setError('name', {});
@@ -636,7 +737,7 @@ export default function CustomWidget() {
                         paddingX: '10px',
                         borderRadius: '4px',
                       }}
-                      value={value}
+                      value={value ?? config.twitter}
                       startAdornment={
                         <InputAdornment position="start">
                           <Image src="/icons/twitter-new.svg" alt="twitter" width="24" height="24" />
@@ -676,7 +777,7 @@ export default function CustomWidget() {
                           <Image src="/icons/telegram-new.svg" alt="telegram" width="24" height="24" />
                         </InputAdornment>
                       }
-                      value={value}
+                      value={value ?? config.telegram}
                       onChange={(e: any) => {
                         setError('telegram', {});
                         setConfig((pre) => ({
