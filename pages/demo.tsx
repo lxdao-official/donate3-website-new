@@ -41,7 +41,7 @@ const Demo: NextPage = () => {
             margin: '0 auto',
           }}
         >
-          <div data-donate3-cid={address}></div>
+          <div data-donate3-address={address}></div>
         </Box>
       </div>
     </Layout>
