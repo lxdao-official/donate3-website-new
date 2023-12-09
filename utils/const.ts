@@ -2,7 +2,7 @@ export const DONATE_SDK_LATEST_VERSION = '1.0.44';
 
 // export const DONATE_SDK_URL = `https://cdn.jsdelivr.net/npm/donate3-sdk@${DONATE_SDK_LATEST_VERSION}/dist/webpack/bundle.js`;
 
-export const DONATE_SDK_URL = '/bundle.js';
+export const DONATE_SDK_URL = '/webpack/bundle.js';
 export const DEFAULT_CREATE_NAME = 'Donate3';
 export const DEFAULT_CREATE_COLOR = '#b9e927';
 export const DEFAULT_CREATE_ADDRESS = '0xe395B9bA2F93236489ac953146485C435D1A267B';
