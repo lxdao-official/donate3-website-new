@@ -156,6 +156,13 @@ export default function CustomWidget() {
           }
         });
       });
+    } else {
+      setConfig((prev) => {
+        return {
+          ...prev,
+          ...DEFAULT_CREATE_CONFIG,
+        };
+      });
     }
   }, [address, setValue]);
 
