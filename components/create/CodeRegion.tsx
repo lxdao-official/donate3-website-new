@@ -64,7 +64,21 @@ const CodeRegion = ({ code, link, enslink = undefined }: ICodeRegionProps) => {
         background: '#FFF',
       }}
     >
-      {codeCards!?.length > 0 ? codeCards!.map(({ title, content, btnText, btnImg, type }) => <CodeCard title={title} content={content} btnText={btnText} btnImg={btnImg} key={btnImg} type={type} />) : <></>}
+      {codeCards!?.length > 0 ? (
+        codeCards!?.length == 3 ? (
+          <>
+            <CodeCard title={codeCards![0].title} content={codeCards![0].content} btnText={codeCards![0].btnText} btnImg={codeCards![0].btnImg} type={codeCards![0].type}></CodeCard>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingLeft: '24px' }}>
+              <CodeCard title={codeCards![1].title} content={codeCards![1].content} btnText={codeCards![1].btnText} btnImg={codeCards![1].btnImg} type={codeCards![1].type} half={true}></CodeCard>
+              <CodeCard title={codeCards![2].title} content={codeCards![2].content} btnText={codeCards![2].btnText} btnImg={codeCards![2].btnImg} type={codeCards![2].type} half={true}></CodeCard>
+            </div>
+          </>
+        ) : (
+          codeCards!.map(({ title, content, btnText, btnImg, type }) => <CodeCard title={title} content={content} btnText={btnText} btnImg={btnImg} key={btnImg} type={type} />)
+        )
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <></>

@@ -10,6 +10,8 @@ export interface ICodeCardProps {
   btnText: string;
   btnImg: string;
   type: keyof typeof CODE_TYPE;
+
+  half?: boolean;
 }
 
 export enum CODE_TYPE {
@@ -17,7 +19,7 @@ export enum CODE_TYPE {
   link,
 }
 
-const CodeCard = ({ title, content, btnText, btnImg, type }: ICodeCardProps) => {
+const CodeCard = ({ title, content, btnText, btnImg, type, half = false }: ICodeCardProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleClickGoPageBtn = () => {
@@ -25,7 +27,7 @@ const CodeCard = ({ title, content, btnText, btnImg, type }: ICodeCardProps) => 
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: half ? '100%' : '48%' }}>
       <FormInput
         title={title}
         style={{
@@ -35,7 +37,7 @@ const CodeCard = ({ title, content, btnText, btnImg, type }: ICodeCardProps) => 
         <Box
           sx={{
             width: '100%',
-            height: '263px',
+            height: half ? '110px' : '263px',
             border: '1px dashed var(--gray-400, #CBD5E1)',
             borderRadius: '4px',
             wordBreak: 'break-all',
