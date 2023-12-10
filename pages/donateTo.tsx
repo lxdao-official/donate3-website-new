@@ -16,15 +16,20 @@ import loadingAnimation from '../public/loading/donate3Loading.json';
 import DonatedCardWithProgress from '@/components/donateTo/DonatedCardWithProgress';
 
 import SafeAccounts from '@/components/donateTo/SafeAccounts';
+import { useEnsAddress } from 'wagmi';
 // import dayjs from 'dayjs';
 
 // import { useMediaQuery } from '@mui/material'; // 导入useMediaQuery钩子函数
 
 const DonateTo: NextPage = () => {
   const router = useRouter();
-  const address = router.query?.address as string;
+  const queryAddress = router.query?.address as string;
   const [info, setInfo] = useState<Partial<ICustomWidget>>();
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { data: address } = useEnsAddress({
+    name: queryAddress?.includes('.eth') ? queryAddress : null,
+  });
 
   const options = {
     animationData: loadingAnimation,
@@ -59,11 +64,15 @@ const DonateTo: NextPage = () => {
   };
 
   useEffect(() => {
-    address && getInfoFromIpfs(address);
-  }, [address]);
+    if (address) {
+      getInfoFromIpfs(address);
+    } else if (queryAddress) {
+      getInfoFromIpfs(queryAddress);
+    }
+  }, [queryAddress, address]);
 
   const handleDonateBtn = () => {
-    window.location.href = `${window.location.origin}/demo?address=${address}`;
+    window.location.href = `${window.location.origin}/demo?address=${address ?? queryAddress}`;
   };
 
   const handleCopy = (text: string) => {

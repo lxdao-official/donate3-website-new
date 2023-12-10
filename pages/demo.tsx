@@ -6,17 +6,25 @@ import { Box } from '@mui/material';
 import { Layout } from '@/components/Layout';
 import { DEFAULT_ADDRESS } from '@/utils/const';
 import { useEffect, useState } from 'react';
+import { useEnsAddress } from 'wagmi';
 
 const Demo: NextPage = () => {
-  const [address, setAddress] = useState(DEFAULT_ADDRESS);
-
+  const [queryAddress, setQueryAddress] = useState<string | null>();
+  const [ensAddress, setEnsAddress] = useState<string | null>();
+  const { data: address } = useEnsAddress({
+    name: ensAddress,
+  });
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // browser code
 
       const paramArr = new URLSearchParams(window.location.search);
-      const cid = paramArr.get('address') || DEFAULT_ADDRESS;
-      setAddress(cid);
+      const address = paramArr.get('address') || DEFAULT_ADDRESS;
+      if (address.includes('.eth')) {
+        setEnsAddress(address);
+      } else {
+        setQueryAddress(address);
+      }
     }
   }, []);
 
@@ -41,7 +49,7 @@ const Demo: NextPage = () => {
             margin: '0 auto',
           }}
         >
-          <div data-donate3-address={address}></div>
+          {(address ?? queryAddress) && <div data-donate3-address={address ?? queryAddress}></div>}
         </Box>
       </div>
     </Layout>
