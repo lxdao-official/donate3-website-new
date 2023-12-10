@@ -8,9 +8,10 @@ import CodeCard, { CODE_TYPE, ICodeCardProps } from './CodeCard';
 interface ICodeRegionProps {
   code: string;
   link: string;
+  enslink?: string;
 }
 
-const CodeRegion = ({ code, link }: ICodeRegionProps) => {
+const CodeRegion = ({ code, link, enslink = undefined }: ICodeRegionProps) => {
   const [codeCards, setCodeCards] = useState<ICodeCardProps[]>();
 
   useEffect(() => {
@@ -33,7 +34,24 @@ const CodeRegion = ({ code, link }: ICodeRegionProps) => {
       ];
       setCodeCards(cards!);
     }
-  }, [code, link]);
+
+    if (enslink) {
+      let ens = {
+        title: 'Need a ens link to accept donations?',
+        content: enslink,
+        btnText: 'Copy Link',
+        btnImg: '/images/link.svg',
+        type: CODE_TYPE[1] as keyof typeof CODE_TYPE,
+      };
+      setCodeCards((prev) => {
+        if (prev) {
+          return [...prev, ens];
+        } else {
+          return [ens];
+        }
+      });
+    }
+  }, [code, link, enslink]);
 
   return code && link ? (
     <div
