@@ -1,11 +1,12 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import { getNounsBase64 } from '@/utils/common';
 
-export function DonateOverview({ data }: { data: { avatarSrc: string; name: string; website: string; description: string; url: string } }) {
-  const { avatarSrc, name, website, description, url } = data;
+export function DonateOverview({ data }: { data: { avatar: string; name: string; address: string; description: string } }) {
+  const { avatar, name, address, description } = data;
 
   const handleClickOverviewCard = () => {
-    website && window.open(`https://${url}`, '_blank');
+    address && window.open(`${window.location.origin}/donateTo?address=${address}`, '_blank');
   };
 
   return (
@@ -34,7 +35,7 @@ export function DonateOverview({ data }: { data: { avatarSrc: string; name: stri
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box
           component="img"
-          src={avatarSrc}
+          src={avatar != '' ? avatar : `data:image/svg+xml;base64,${getNounsBase64(address)}`}
           alt="Avatar"
           style={{
             borderRadius: '50%',
@@ -68,7 +69,7 @@ export function DonateOverview({ data }: { data: { avatarSrc: string; name: stri
               textDecoration: 'none',
             }}
           >
-            {website}
+            {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '...'}
           </Typography>
         </Box>
       </Box>
@@ -88,7 +89,7 @@ export function DonateOverview({ data }: { data: { avatarSrc: string; name: stri
           whiteSpace: 'normal',
         }}
       >
-        {description}
+        <div dangerouslySetInnerHTML={{ __html: description }} />
       </Typography>
     </Box>
   );

@@ -26,55 +26,29 @@ export function SectionClient() {
     };
   }, []);
 
-  const donateData = [
-    {
-      avatarSrc: '/test/lxdao-logo.svg',
-      name: 'LXDAO',
-      website: 'lxdao.io',
-      description: 'LXDAO is an R&D-focused DAO in Web3',
-    },
-    {
-      avatarSrc: '/test/marry3-logo-rect.png',
-      name: 'marry3',
-      website: 'marry3.love',
-      description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
-    },
-    // Add one more data entry as needed
-    {
-      avatarSrc: '/test/mail3.svg',
-      name: 'mail3',
-      website: 'mail3.me',
-      description: 'Web3 natives deserve a better mail',
-    },
-    {
-      avatarSrc: '/test/GasLockR.svg',
-      name: 'GasLockR',
-      url: 'gaslockr.xyz',
-      website: 'gaslockr.xyz',
-      description: 'The first trustless GasFi protocol designed for EVM-based chains',
-    },
-    {
-      avatarSrc: '/test/Coleisawesome1.jpg',
-      name: 'Coleisawesome1',
-      website: 'ColehasSwag123',
-      url: 'twitter.com/ColehasSwag123',
-      description: 'Promoter Of Promising Projects',
-    },
-    {
-      avatarSrc: '/test/popo.png',
-      name: 'POPO digital badge',
-      url: 'twitter.com/POPOBadgeCN',
-      website: 'POPOBadgeCN',
-      description: 'Dive into our latest discoveries and explore a world of thrilling experiences. Join captivating events🎟️, and collect exclusive digital badges🫧. Let your imagination run wild in a realm of limitless possibilities. 🥳',
-    },
-  ];
-  const groupedData = donateData.reduce((acc: any[], curr, index) => {
-    const groupIndex = Math.floor(index / 3);
+  const [donateData, setDonateData] = useState<[]>([]);
 
-    acc[groupIndex] = [...(acc[groupIndex] || []), curr];
-
-    return acc;
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_NEW}settings`)
+      .then((data) => {
+        data.json().then((d) => {
+          if (d.code === 200) {
+            setDonateData(d.data);
+          }
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }, []);
+  const groupedData =
+    donateData?.reduce((acc: any[], curr, index) => {
+      const groupIndex = Math.floor(index / 3);
+
+      acc[groupIndex] = [...(acc[groupIndex] || []), curr];
+
+      return acc;
+    }, []) ?? [];
   console.log(groupedData);
   return (
     <Box
