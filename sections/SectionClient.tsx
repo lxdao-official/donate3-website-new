@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import React, { useEffect, useState } from 'react';
 import { DonateOverview } from '../components/DonateOverview';
 import styled from 'styled-components';
@@ -43,7 +43,7 @@ export function SectionClient() {
   }, []);
   const groupedData =
     donateData?.reduce((acc: any[], curr, index) => {
-      const groupIndex = Math.floor(index / 3);
+      const groupIndex = Math.floor(index / 6);
 
       acc[groupIndex] = [...(acc[groupIndex] || []), curr];
 
@@ -134,30 +134,49 @@ export function SectionClient() {
       </Typography>
       <Box
         sx={{
-          mt: { xs: '30px', lg: '105px' },
-          mb: { xs: '30px', lg: '139px' },
+          mt: '30px',
+          mb: '30px',
           maxWidth: {
-            lg: '100%',
+            xs: '360px',
+            lg: '1800px',
           },
         }}
       >
-        <Swiper pagination={true} navigation={true} modules={[Pagination, Navigation]}>
+        <Swiper
+          autoplay={{
+            delay: 800,
+            disableOnInteraction: false,
+          }}
+          loop={true}
+          pagination={true}
+          navigation={true}
+          modules={[Pagination, Navigation, Autoplay]}
+        >
           {groupedData.map((group: any[], groupIndex) => (
             <SwiperSlide key={groupIndex}>
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: { xs: 'column', lg: 'row' },
-                  maxWidth: {
-                    lg: '100%',
+                  display: {
+                    xs: 'flex',
+                    lg: 'grid',
                   },
+                  gridTemplateColumns: {
+                    lg: 'repeat(3, 1fr)',
+                  },
+                  flexDirection: {
+                    xs: 'column',
+                  },
+                  gap: '40px',
+                  mt: { xs: '30px', lg: '105px' },
+                  mb: { xs: '30px', lg: '139px' },
                   overflowX: {
                     lg: 'scroll',
                   },
                   '::-webkit-scrollbar': {
                     display: 'none',
+                  },
+                  maxWidth: {
+                    lg: '100%',
                   },
                 }}
               >
