@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import React, { useEffect, useState } from 'react';
 import { DonateOverview } from '../components/DonateOverview';
 import styled from 'styled-components';
@@ -26,55 +26,29 @@ export function SectionClient() {
     };
   }, []);
 
-  const donateData = [
-    {
-      avatarSrc: '/test/lxdao-logo.svg',
-      name: 'LXDAO',
-      website: 'lxdao.io',
-      description: 'LXDAO is an R&D-focused DAO in Web3',
-    },
-    {
-      avatarSrc: '/test/marry3-logo-rect.png',
-      name: 'marry3',
-      website: 'marry3.love',
-      description: 'Witness your Love in Web3 and get the Soulbound NFT Certificate on the chain',
-    },
-    // Add one more data entry as needed
-    {
-      avatarSrc: '/test/mail3.svg',
-      name: 'mail3',
-      website: 'mail3.me',
-      description: 'Web3 natives deserve a better mail',
-    },
-    {
-      avatarSrc: '/test/GasLockR.svg',
-      name: 'GasLockR',
-      url: 'gaslockr.xyz',
-      website: 'gaslockr.xyz',
-      description: 'The first trustless GasFi protocol designed for EVM-based chains',
-    },
-    {
-      avatarSrc: '/test/Coleisawesome1.jpg',
-      name: 'Coleisawesome1',
-      website: 'ColehasSwag123',
-      url: 'twitter.com/ColehasSwag123',
-      description: 'Promoter Of Promising Projects',
-    },
-    {
-      avatarSrc: '/test/popo.png',
-      name: 'POPO digital badge',
-      url: 'twitter.com/POPOBadgeCN',
-      website: 'POPOBadgeCN',
-      description: 'Dive into our latest discoveries and explore a world of thrilling experiences. Join captivating events🎟️, and collect exclusive digital badges🫧. Let your imagination run wild in a realm of limitless possibilities. 🥳',
-    },
-  ];
-  const groupedData = donateData.reduce((acc: any[], curr, index) => {
-    const groupIndex = Math.floor(index / 3);
+  const [donateData, setDonateData] = useState<[]>([]);
 
-    acc[groupIndex] = [...(acc[groupIndex] || []), curr];
-
-    return acc;
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_NEW}settings`)
+      .then((data) => {
+        data.json().then((d) => {
+          if (d.code === 200) {
+            setDonateData(d.data);
+          }
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }, []);
+  const groupedData =
+    donateData?.reduce((acc: any[], curr, index) => {
+      const groupIndex = Math.floor(index / 6);
+
+      acc[groupIndex] = [...(acc[groupIndex] || []), curr];
+
+      return acc;
+    }, []) ?? [];
   console.log(groupedData);
   return (
     <Box
@@ -160,30 +134,49 @@ export function SectionClient() {
       </Typography>
       <Box
         sx={{
-          mt: { xs: '30px', lg: '105px' },
-          mb: { xs: '30px', lg: '139px' },
+          mt: '30px',
+          mb: '30px',
           maxWidth: {
-            lg: '100%',
+            xs: '360px',
+            lg: '1800px',
           },
         }}
       >
-        <Swiper pagination={true} navigation={true} modules={[Pagination, Navigation]}>
+        <Swiper
+          autoplay={{
+            delay: 800,
+            disableOnInteraction: false,
+          }}
+          loop={true}
+          pagination={true}
+          navigation={true}
+          modules={[Pagination, Navigation, Autoplay]}
+        >
           {groupedData.map((group: any[], groupIndex) => (
             <SwiperSlide key={groupIndex}>
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: { xs: 'column', lg: 'row' },
-                  maxWidth: {
-                    lg: '100%',
+                  display: {
+                    xs: 'flex',
+                    lg: 'grid',
                   },
+                  gridTemplateColumns: {
+                    lg: 'repeat(3, 1fr)',
+                  },
+                  flexDirection: {
+                    xs: 'column',
+                  },
+                  gap: '40px',
+                  mt: { xs: '30px', lg: '105px' },
+                  mb: { xs: '30px', lg: '139px' },
                   overflowX: {
                     lg: 'scroll',
                   },
                   '::-webkit-scrollbar': {
                     display: 'none',
+                  },
+                  maxWidth: {
+                    lg: '100%',
                   },
                 }}
               >

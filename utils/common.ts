@@ -3,7 +3,7 @@ import { DONATE_SDK_URL, EType } from './const';
 import { ICustomWidget } from '@/components/CustomWidget';
 import { getNounData, getPseudorandomPart, ImageData } from '@nouns/assets';
 import { EncodedImage } from '@nouns/assets/dist/types';
-import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
+import { encodePacked, keccak256 } from 'viem';
 const { bgcolors, palette, images } = ImageData;
 const { bodies, accessories, heads, glasses } = images;
 
@@ -106,7 +106,7 @@ const buildSVG = (parts: EncodedImage[], paletteColors: any, bgColor: string) =>
 };
 
 export const getNounsBase64 = (address: string) => {
-  const pseudorandomness = solidityKeccak256(['address'], [address]);
+  const pseudorandomness = keccak256(encodePacked(['address'], [address as `0x${string}`]));
   const seed = {
     background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
     body: getPseudorandomPart(pseudorandomness, bodies.length, 48),

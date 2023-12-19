@@ -11,7 +11,6 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@ethersproject/solidity": "^5.7.0",
     "@iconify/react": "^4.1.1",
     "@joyid/rainbowkit": "^0.1.1",
     "@lxdao/img3": "^1.1.0",
@@ -48,7 +47,6 @@
     "react-color": "2.17.3",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
-    "react-slick": "^0.29.0",
     "styled-components": "^6.0.5",
     "suneditor": "^2.45.1",
     "suneditor-react": "^3.6.1",
@@ -59,7 +57,6 @@
     "wagmi": "^1.4.5"
   },
   "devDependencies": {
-    "@types/react-color": "^3.0.6",
-    "@types/react-slick": "^0.23.10"
+    "@types/react-color": "^3.0.6"
   }
 }

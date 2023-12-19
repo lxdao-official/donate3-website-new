@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useAccount } from 'wagmi';
+import { useAccount, useEnsName } from 'wagmi';
 import { CroppedFile, SelectedFile, UploadFile, UploadResult, Uploader3 } from '@lxdao/uploader3';
 import { Icon } from '@iconify/react';
 import { Box, InputBase, InputAdornment, Radio, Typography, RadioGroup, FormControlLabel, Select, MenuItem, TextareaAutosize, Backdrop } from '@mui/material';
@@ -74,6 +74,7 @@ export default function CustomWidget() {
   const [file, setFile] = useState<UploadResult | CroppedFile | UploadFile | SelectedFile | null>();
   const [donationsCode, setDonationsCode] = useState<string>('');
   const [donationsLink, setDonationsLink] = useState<string>('');
+  const [donationsEnsLink, setDonationsEnsLink] = useState<string>('');
   const [previewSrcDoc, setPreviewSrcDoc] = useState<string>('');
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
@@ -82,6 +83,9 @@ export default function CustomWidget() {
   const [expanded, setExpanded] = useState<string | false>(false);
   const [commonLoading, setCommonLoading] = useState<boolean>(false);
   const { openConnectModal } = useConnectModal();
+  const { data: ensName } = useEnsName({
+    address: address,
+  });
   const options = {
     animationData: loadingAnimation,
     loop: true,
@@ -142,6 +146,7 @@ export default function CustomWidget() {
       address: address || DEFAULT_CREATE_ADDRESS,
     }));
     if (address) {
+      genInfoByCid(address ?? '', ensName ?? undefined);
       fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_NEW}settings/${address}`).then((settings) => {
         console.log(settings);
         settings.json().then((json) => {
@@ -196,6 +201,14 @@ export default function CustomWidget() {
     setDonationsLink(`${window.location.origin}/donateTo?address=${address}`);
   };
 
+  const genDonationsEnsLink = (ens?: string | null) => {
+    if (ens) {
+      setDonationsEnsLink(`${window.location.origin}/donateTo?address=${ens}`);
+    } else {
+      setDonationsEnsLink('');
+    }
+  };
+
   const genPreviewSrcDoc = (l: string) => {
     setPreviewSrcDoc(getDonatePreviewSrcDoc(l));
   };
@@ -204,9 +217,10 @@ export default function CustomWidget() {
     return getDonateUrl(cid, isSrcDoc);
   };
 
-  const genInfoByCid = (address: string) => {
+  const genInfoByCid = (address: string, ensName?: string | null) => {
     genDonationsCode(genUrl(address));
     genDonationsLink(address);
+    genDonationsEnsLink(ensName);
   };
 
   useEffect(() => {
@@ -218,6 +232,10 @@ export default function CustomWidget() {
       openConnectModal?.();
     }
   }, [address, openConnectModal]);
+
+  useEffect(() => {
+    genDonationsEnsLink(ensName);
+  }, [ensName]);
   const storeInfoToNFTStorage = async (data: Partial<ICustomWidget>) => {
     const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN || '' });
     const blobData = new Blob(
@@ -235,7 +253,7 @@ export default function CustomWidget() {
     try {
       const cid = await client.storeBlob(blobData);
       console.info(cid, '🐻🐻cid🐻🐻');
-      genInfoByCid(cid);
+      genInfoByCid(cid, ensName ?? undefined);
     } catch (error) {
       console.error(error);
     }
@@ -322,7 +340,7 @@ export default function CustomWidget() {
       })
         .then((data) => {
           if (data.status === 201) {
-            genInfoByCid(address ?? '');
+            genInfoByCid(address ?? '', ensName ?? undefined);
           }
         })
         .catch((err) => {
@@ -1218,7 +1236,7 @@ export default function CustomWidget() {
       </Box>
 
       {/* code */}
-      <CodeRegion code={donationsCode} link={donationsLink} />
+      <CodeRegion code={donationsCode} link={donationsLink} enslink={donationsEnsLink} />
     </>
   );
 }

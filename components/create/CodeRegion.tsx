@@ -8,9 +8,10 @@ import CodeCard, { CODE_TYPE, ICodeCardProps } from './CodeCard';
 interface ICodeRegionProps {
   code: string;
   link: string;
+  enslink?: string;
 }
 
-const CodeRegion = ({ code, link }: ICodeRegionProps) => {
+const CodeRegion = ({ code, link, enslink = undefined }: ICodeRegionProps) => {
   const [codeCards, setCodeCards] = useState<ICodeCardProps[]>();
 
   useEffect(() => {
@@ -33,7 +34,24 @@ const CodeRegion = ({ code, link }: ICodeRegionProps) => {
       ];
       setCodeCards(cards!);
     }
-  }, [code, link]);
+
+    if (enslink) {
+      let ens = {
+        title: 'Need a ens link to accept donations?',
+        content: enslink,
+        btnText: 'Copy Link',
+        btnImg: '/images/link.svg',
+        type: CODE_TYPE[1] as keyof typeof CODE_TYPE,
+      };
+      setCodeCards((prev) => {
+        if (prev) {
+          return [...prev, ens];
+        } else {
+          return [ens];
+        }
+      });
+    }
+  }, [code, link, enslink]);
 
   return code && link ? (
     <div
@@ -46,7 +64,21 @@ const CodeRegion = ({ code, link }: ICodeRegionProps) => {
         background: '#FFF',
       }}
     >
-      {codeCards!?.length > 0 ? codeCards!.map(({ title, content, btnText, btnImg, type }) => <CodeCard title={title} content={content} btnText={btnText} btnImg={btnImg} key={btnImg} type={type} />) : <></>}
+      {codeCards!?.length > 0 ? (
+        codeCards!?.length == 3 ? (
+          <>
+            <CodeCard title={codeCards![0].title} content={codeCards![0].content} btnText={codeCards![0].btnText} btnImg={codeCards![0].btnImg} type={codeCards![0].type}></CodeCard>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingLeft: '24px' }}>
+              <CodeCard title={codeCards![1].title} content={codeCards![1].content} btnText={codeCards![1].btnText} btnImg={codeCards![1].btnImg} type={codeCards![1].type} half={true}></CodeCard>
+              <CodeCard title={codeCards![2].title} content={codeCards![2].content} btnText={codeCards![2].btnText} btnImg={codeCards![2].btnImg} type={codeCards![2].type} half={true}></CodeCard>
+            </div>
+          </>
+        ) : (
+          codeCards!.map(({ title, content, btnText, btnImg, type }) => <CodeCard title={title} content={content} btnText={btnText} btnImg={btnImg} key={btnImg} type={type} />)
+        )
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <></>
